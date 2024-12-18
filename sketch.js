@@ -16,23 +16,28 @@ function draw() {
   handleSceneSwitching();
 }
 
+function switchToNextScene() {
+  currentScene.close();
+  currentScene = nextScene;
+}
+
 function handleSceneSwitching() {
   // If we don't want to change scenes, leave the function
   if (!nextScene) return;
   
   // If we haven't set a transition, simply switch the scenes directly
   if (!transition) {
-    nextScene.start();
-    currentScene.close();
-    currentScene = nextScene;
+    switchToNextScene();
+    currentScene.start();
     nextScene = null;
     return;
   }
   
-  // If the transition is complete, reset all values
+  // If the transition is complete, reset all values and begin the new scene
   if (transition.isDone()) {
-    transition = null;
+    currentScene.start();
     nextScene = null;
+    transition = null;
     return;
   }
 
@@ -58,9 +63,9 @@ function windowResized() {
 
 // Alternates between scenes when clicking the mouse
 function mousePressed() {
-  if (currentScene instanceof MainMenuScene) nextScene = new AchievementScene();
+  if (currentScene instanceof MainMenuScene) nextSceneClass = new AchievementScene();
   else {
-    nextScene = new MainMenuScene();
+    nextSceneClass = new MainMenuScene();
     transition = new FadeTransition();
   }
 }
