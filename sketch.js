@@ -5,7 +5,7 @@ let transition;
 function setup() {
   windowResized();
 
-  currentScene = new MainMenuScene();
+  currentScene = new LevelScene();
 }
 
 function draw() {
@@ -63,9 +63,9 @@ function windowResized() {
 
 // Alternates between scenes when clicking the mouse
 function mousePressed() {
-  if (currentScene instanceof MainMenuScene) nextSceneClass = new AchievementScene();
+  if (currentScene instanceof MainMenuScene) nextScene = new AchievementScene();
   else {
-    nextSceneClass = new MainMenuScene();
+    nextScene = new MainMenuScene();
     transition = new FadeTransition();
   }
 }

@@ -16,7 +16,7 @@ class FadeTransition extends Transition {
         rect(0,0,width,height);
 
         // Increase or decrease the alpha based on whether we're fading in or out
-        let direction = this.hasSwitchedScenes ? 1 : -1;
+        let direction = this.hasSwitchedScenes ? -1 : 1;
         this.alpha += this.fadeSpeed * direction;
     }
 

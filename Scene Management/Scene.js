@@ -1,7 +1,7 @@
 // Defines structure of each scene implementation
 class Scene {
     constructor() {
-        preload();
+        this.preload();
     }
 
     preload() {} // Called before start to load necessary files
