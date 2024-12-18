@@ -1,6 +1,8 @@
 class LevelScene extends Scene {
     constructor() {
         super();
+
+        this.player = new Player();
     }
 
     draw() {
@@ -9,5 +11,7 @@ class LevelScene extends Scene {
         textSize(30);
         textAlign(CENTER, CENTER);
         text('Level', width/2, height/6);
+
+        this.player.draw();
     }
 }
