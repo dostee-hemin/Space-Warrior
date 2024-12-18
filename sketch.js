@@ -1,5 +1,6 @@
 let currentScene;
 let nextScene;
+let transition;
 
 function setup() {
   windowResized();
@@ -10,13 +11,33 @@ function setup() {
 function draw() {
   background(200);
 
-  // Switch scenes if the next one is selected
-  if(nextScene) {
+  currentScene.draw();
+
+  handleSceneSwitching();
+}
+
+function handleSceneSwitching() {
+  // If we don't want to change scenes, leave the function
+  if (!nextScene) return;
+  
+  // If we haven't set a transition, simply switch the scenes directly
+  if (!transition) {
+    nextScene.start();
+    currentScene.close();
     currentScene = nextScene;
     nextScene = null;
+    return;
+  }
+  
+  // If the transition is complete, reset all values
+  if (transition.isDone()) {
+    transition = null;
+    nextScene = null;
+    return;
   }
 
-  currentScene.draw();
+  // Display the transition on top of the sketch
+  transition.draw();
 }
 
 function windowResized() {
@@ -38,5 +59,8 @@ function windowResized() {
 // Alternates between scenes when clicking the mouse
 function mousePressed() {
   if (currentScene instanceof MainMenuScene) nextScene = new AchievementScene();
-  else nextScene = new MainMenuScene();
+  else {
+    nextScene = new MainMenuScene();
+    transition = new FadeTransition();
+  }
 }
