@@ -3,14 +3,14 @@ class Player {
         this.baseHealth = 100;
         this.health = this.baseHealth;
 
-        this.position = new p5.Vector(width/2, height-height/5);
-        this.velocity = new p5.Vector();
-        this.targetVelocity = new p5.Vector();
+        this.position = createVector(width/2, height-height/5);
+        this.velocity = createVector();
+        this.targetVelocity = createVector();
         this.maxSpeed = 4;  // In pixels per frame
         
         this.hitbox  = {'type': 'rect', 'w': 10, 'h': 20};
 
-        this.dashDirection = new p5.Vector();
+        this.dashDirection = createVector();
         this.dashDuration = 150;        // In milliseconds
         this.dashStartTime;             // In milliseconds
 
@@ -115,6 +115,22 @@ class Player {
                 break;
             case RIGHT_ARROW:
                 this.setTargetVelocity('x', 1);
+                break;
+        }
+
+        switch(key) {
+            case ' ':
+                // If the space bar is double clicked, perform the special ability
+                if (isDoubleClick()) {
+                    // Special ability goes here
+                }
+                // If the space bar is simply clicked once, shoot a bullet
+                else {
+                    let x = this.position.x;
+                    let y = this.position.y;
+                    let angle = -HALF_PI;
+                    attacks.push(new PlayerBullet(x, y, angle));
+                }
                 break;
         }
     }

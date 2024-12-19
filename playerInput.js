@@ -11,7 +11,7 @@ function mousePressed() {
 
 let previousKey;
 let previousKeyTimePressed;    // In milliseconds
-let doubleClickTime = 300;     // In milliseconds
+let doubleClickTime = 200;     // In milliseconds
 
 function keyPressed() {
     currentScene.keyPressed();
