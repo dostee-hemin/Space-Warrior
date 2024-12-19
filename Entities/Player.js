@@ -13,8 +13,6 @@ class Player {
         this.dashDirection = new p5.Vector();
         this.dashDuration = 150;        // In milliseconds
         this.dashStartTime;             // In milliseconds
-        this.previousKey;
-        this.previousKeyTimePressed;    // In milliseconds
 
         // Angles to rotate the ship according to the velocity direction
         this.rotationMatrix = [
@@ -79,8 +77,8 @@ class Player {
 
     // Function to utilize the arrow keys to activate dashes and set the target velocity
     setTargetVelocity(direction, amount) {
-        // If the player has pressed the same key as last time and pressed it quickly (less than 300ms), they have activated a dash
-        if (keyCode == this.previousKey && millis() - this.previousKeyTimePressed < 300) {
+        // If the player double clicked one of the arrow keys, they have activated a dash
+        if (isDoubleClick()) {
             // Set the x or y direction of the dash
             if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
@@ -101,10 +99,6 @@ class Player {
         }
         // Make sure to scale the velocity to match the max speed
         this.targetVelocity.setMag(this.maxSpeed);
-
-        // Record this key and the time it was pressed to test for dashes in the future
-        this.previousKeyTimePressed = millis();
-        this.previousKey = keyCode;
     }
 
     keyPressed() {
