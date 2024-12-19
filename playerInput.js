@@ -1,4 +1,6 @@
 function mousePressed() {
+    if (mouseButton != RIGHT) return;
+
     // Alternates between scenes when clicking the mouse
     if (currentScene instanceof MainMenuScene) nextScene = new AchievementScene();
     else {

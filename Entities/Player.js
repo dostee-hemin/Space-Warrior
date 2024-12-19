@@ -15,6 +15,14 @@ class Player {
         this.dashStartTime;             // In milliseconds
         this.previousKey;
         this.previousKeyTimePressed;    // In milliseconds
+
+        // Angles to rotate the ship according to the velocity direction
+        this.rotationMatrix = [
+            [-30, 0, 30],
+            [-60, 0, 60],
+            [20, 0, -20]
+        ]
+        this.rotation = 0;
     }
 
     display() {
@@ -22,6 +30,13 @@ class Player {
         push();
         translate(this.position.x, this.position.y);
         scale(this.isDashing() ? 0.8 : 1);
+        let i=1, j=1;
+        if(this.targetVelocity.x < 0) i = 0;
+        else if (this.targetVelocity.x > 0) i = 2;
+        if(this.targetVelocity.y < 0) j = 0;
+        else if (this.targetVelocity.y > 0) j = 2;
+        this.rotation = lerp(this.rotation, radians(this.rotationMatrix[j][i]), 0.3);
+        rotate(this.rotation);
 
         // Draw the ship as a triangle
         fill(255);
@@ -67,7 +82,7 @@ class Player {
         // If the player has pressed the same key as last time and pressed it quickly (less than 300ms), they have activated a dash
         if (keyCode == this.previousKey && millis() - this.previousKeyTimePressed < 300) {
             // Set the x or y direction of the dash
-            if (direction == 'x') this.dashDirection.direction = amount;
+            if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
             this.dashDirection.mult(this.maxSpeed*2);
 
@@ -84,6 +99,8 @@ class Player {
             if(this.targetVelocity.x != 0) this.targetVelocity.x *= 1 / Math.abs(this.targetVelocity.x);
             this.targetVelocity.y = amount;
         }
+        // Make sure to scale the velocity to match the max speed
+        this.targetVelocity.setMag(this.maxSpeed);
 
         // Record this key and the time it was pressed to test for dashes in the future
         this.previousKeyTimePressed = millis();
@@ -106,8 +123,6 @@ class Player {
                 this.setTargetVelocity('x', 1);
                 break;
         }
-        // Make sure to scale the velocity to match the max speed
-        this.targetVelocity.setMag(this.maxSpeed);
     }
 
     keyReleased() {
