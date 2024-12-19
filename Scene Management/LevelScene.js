@@ -12,6 +12,15 @@ class LevelScene extends Scene {
         textAlign(CENTER, CENTER);
         text('Level', width/2, height/6);
 
-        this.player.draw();
+        this.player.update();
+        this.player.display();
+    }
+
+    keyPressed() {
+        this.player.keyPressed();
+    }
+    
+    keyReleased() {
+        this.player.keyReleased();
     }
 }
