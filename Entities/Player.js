@@ -14,6 +14,10 @@ class Player {
         this.dashDuration = 150;        // In milliseconds
         this.dashStartTime;             // In milliseconds
 
+        this.chargeTime = 1000;         // In milliseconds
+        this.maxChargeStrength = 4;
+        this.chargedStrength = 0;
+
         // Angles to rotate the ship according to the velocity direction
         this.rotationMatrix = [
             [-30, 0, 30],
@@ -42,6 +46,12 @@ class Player {
         strokeWeight(2);
         triangle(-20,20,0,-20,20,20);
 
+        if(this.chargedStrength != 0) {
+            stroke(0,0,200);
+            strokeWeight(10+this.chargedStrength*5);
+            point(0,-this.hitbox.h);
+        }
+
         // Draw the hitbox of the ship for debug purposes (only if not dashing)
         if(!this.isDashing()) {
             stroke(255,0,0,150);
@@ -68,6 +78,23 @@ class Player {
         // Remain within canvas borders
         this.position.x = constrain(this.position.x, this.hitbox.w/2, width-this.hitbox.w/2);
         this.position.y = constrain(this.position.y, this.hitbox.h/2, height-this.hitbox.h/2);
+
+        // Find out how long the player has been holding the space bar (if at all)
+        let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar
+        // If the player has held the space bar, set the charge strength of the next attack based on how long they've held it
+        if(spaceKeyHeldDuration) {
+            this.chargedStrength = min(int(spaceKeyHeldDuration / this.chargeTime), 4);
+        } 
+        // Once the player lets go of the space bar and a charge has been made, launch either a charged attack or laser based on the strength
+        else if (this.chargedStrength != 0) {
+            let x = this.position.x;
+            let y = this.position.y;
+            if (this.chargedStrength == this.maxChargeStrength) attacks.push(new Laser(x, y)); 
+            else attacks.push(new ChargedBullet(x, y, this.chargedStrength));
+            
+            // Reset the charged strength for the next attack
+            this.chargedStrength = 0;
+        }
     }
 
     // Returns true if the player has activated a dash
@@ -129,7 +156,7 @@ class Player {
                     let x = this.position.x;
                     let y = this.position.y;
                     let angle = -HALF_PI;
-                    attacks.push(new PlayerBullet(x, y, angle));
+                    attacks.push(new SimpleBullet(x, y, angle));
                 }
                 break;
         }

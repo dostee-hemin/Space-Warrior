@@ -1,9 +1,10 @@
 class Bullet extends Attack {
-    constructor(x, y, launchAngle, isFriendly) {
+    constructor(x, y, launchAngle, speed, isFriendly) {
         super(isFriendly);
 
+        this.speed = speed;
         this.position = createVector(x,y);
-        this.velocity = p5.Vector.fromAngle(launchAngle);
+        this.velocity = p5.Vector.fromAngle(launchAngle).mult(this.speed);
     }
 
     update() {
