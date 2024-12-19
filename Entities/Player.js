@@ -3,18 +3,20 @@ class Player {
         this.baseHealth = 100;
         this.health = this.baseHealth;
 
-        this.position = new p5.Vector(width/2, height-height/5);
-        this.velocity = new p5.Vector();
-        this.targetVelocity = new p5.Vector();
+        this.position = createVector(width/2, height-height/5);
+        this.velocity = createVector();
+        this.targetVelocity = createVector();
         this.maxSpeed = 4;  // In pixels per frame
         
         this.hitbox  = {'type': 'rect', 'w': 10, 'h': 20};
 
-        this.dashDirection = new p5.Vector();
+        this.dashDirection = createVector();
         this.dashDuration = 150;        // In milliseconds
         this.dashStartTime;             // In milliseconds
-        this.previousKey;
-        this.previousKeyTimePressed;    // In milliseconds
+
+        this.chargeTime = 1000;         // In milliseconds
+        this.maxChargeStrength = 4;
+        this.chargedStrength = 0;
 
         // Angles to rotate the ship according to the velocity direction
         this.rotationMatrix = [
@@ -23,6 +25,9 @@ class Player {
             [20, 0, -20]
         ]
         this.rotation = 0;
+
+        this.hasUsedSpecialAbility = false;
+        this.specialAbilityClass = FreezeWave;
     }
 
     display() {
@@ -43,6 +48,12 @@ class Player {
         stroke(0);
         strokeWeight(2);
         triangle(-20,20,0,-20,20,20);
+
+        if(this.chargedStrength != 0) {
+            stroke(0,0,200);
+            strokeWeight(10+this.chargedStrength*5);
+            point(0,-this.hitbox.h);
+        }
 
         // Draw the hitbox of the ship for debug purposes (only if not dashing)
         if(!this.isDashing()) {
@@ -70,6 +81,23 @@ class Player {
         // Remain within canvas borders
         this.position.x = constrain(this.position.x, this.hitbox.w/2, width-this.hitbox.w/2);
         this.position.y = constrain(this.position.y, this.hitbox.h/2, height-this.hitbox.h/2);
+
+        // Find out how long the player has been holding the space bar (if at all)
+        let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar
+        // If the player has held the space bar, set the charge strength of the next attack based on how long they've held it
+        if(spaceKeyHeldDuration) {
+            this.chargedStrength = min(int(spaceKeyHeldDuration / this.chargeTime), 4);
+        } 
+        // Once the player lets go of the space bar and a charge has been made, launch either a charged attack or laser based on the strength
+        else if (this.chargedStrength != 0) {
+            let x = this.position.x;
+            let y = this.position.y;
+            if (this.chargedStrength == this.maxChargeStrength) attacks.push(new Laser(x, y)); 
+            else attacks.push(new ChargedBullet(x, y, this.chargedStrength));
+            
+            // Reset the charged strength for the next attack
+            this.chargedStrength = 0;
+        }
     }
 
     // Returns true if the player has activated a dash
@@ -79,8 +107,8 @@ class Player {
 
     // Function to utilize the arrow keys to activate dashes and set the target velocity
     setTargetVelocity(direction, amount) {
-        // If the player has pressed the same key as last time and pressed it quickly (less than 300ms), they have activated a dash
-        if (keyCode == this.previousKey && millis() - this.previousKeyTimePressed < 300) {
+        // If the player double clicked one of the arrow keys, they have activated a dash
+        if (isDoubleClick()) {
             // Set the x or y direction of the dash
             if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
@@ -101,10 +129,6 @@ class Player {
         }
         // Make sure to scale the velocity to match the max speed
         this.targetVelocity.setMag(this.maxSpeed);
-
-        // Record this key and the time it was pressed to test for dashes in the future
-        this.previousKeyTimePressed = millis();
-        this.previousKey = keyCode;
     }
 
     keyPressed() {
@@ -121,6 +145,25 @@ class Player {
                 break;
             case RIGHT_ARROW:
                 this.setTargetVelocity('x', 1);
+                break;
+        }
+
+        switch(key) {
+            case ' ':
+                // If the space bar is double clicked, perform the special ability
+                if (isDoubleClick()) {
+                    if(!this.hasUsedSpecialAbility) {
+                        attacks.push(new this.specialAbilityClass(this.position.x, this.position.y));
+                        this.hasUsedSpecialAbility = true;
+                    }
+                }
+                // If the space bar is simply clicked once, shoot a bullet
+                else {
+                    let x = this.position.x;
+                    let y = this.position.y;
+                    let angle = -HALF_PI;
+                    attacks.push(new SimpleBullet(x, y, angle));
+                }
                 break;
         }
     }
