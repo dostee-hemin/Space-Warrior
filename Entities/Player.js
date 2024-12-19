@@ -25,6 +25,9 @@ class Player {
             [20, 0, -20]
         ]
         this.rotation = 0;
+
+        this.hasUsedSpecialAbility = false;
+        this.specialAbilityClass = FreezeWave;
     }
 
     display() {
@@ -149,7 +152,10 @@ class Player {
             case ' ':
                 // If the space bar is double clicked, perform the special ability
                 if (isDoubleClick()) {
-                    // Special ability goes here
+                    if(!this.hasUsedSpecialAbility) {
+                        attacks.push(new this.specialAbilityClass(this.position.x, this.position.y));
+                        this.hasUsedSpecialAbility = true;
+                    }
                 }
                 // If the space bar is simply clicked once, shoot a bullet
                 else {
