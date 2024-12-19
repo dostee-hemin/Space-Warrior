@@ -1,5 +1,7 @@
-class Player {
+class Player extends Entity {
     constructor() {
+        super();
+        
         this.baseHealth = 100;
         this.health = this.baseHealth;
 

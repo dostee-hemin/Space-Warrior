@@ -60,3 +60,13 @@ function windowResized() {
   // If it's the first time running this function, create a new canvas. Otherwise, resize the existing canvas
   frameCount == 0 ? createCanvas(newSize.w, newSize.h) : resizeCanvas(newSize.w, newSize.h);
 }
+
+// Function to return the distance sqaured between two x and y points
+function distSq(x1, y1, x2, y2) {
+  return (x1 - x2) ** 2 + (y1 - y2) ** 2;
+}
+
+// Function to return the distance sqaured between two vectors
+function distSqVector(v1, v2) {
+  return distSq(v1.x, v1.y, v2.x, v2.y);
+}
