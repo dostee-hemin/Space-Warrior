@@ -5,7 +5,7 @@ let transition;
 function setup() {
   windowResized();
 
-  currentScene = new MainMenuScene();
+  currentScene = new LevelScene();
 }
 
 function draw() {
@@ -59,13 +59,4 @@ function windowResized() {
 
   // If it's the first time running this function, create a new canvas. Otherwise, resize the existing canvas
   frameCount == 0 ? createCanvas(newSize.w, newSize.h) : resizeCanvas(newSize.w, newSize.h);
-}
-
-// Alternates between scenes when clicking the mouse
-function mousePressed() {
-  if (currentScene instanceof MainMenuScene) nextSceneClass = new AchievementScene();
-  else {
-    nextSceneClass = new MainMenuScene();
-    transition = new FadeTransition();
-  }
 }
