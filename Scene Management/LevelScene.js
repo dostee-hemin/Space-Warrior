@@ -6,7 +6,7 @@ class LevelScene extends Scene {
         super();
 
         this.player = new Player();
-        new SmallTroopGroup(5);
+        new TroopGroup(10, SmallTroop, HorizontalBarsPath);
     }
 
     draw() {

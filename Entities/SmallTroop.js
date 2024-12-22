@@ -1,9 +1,9 @@
 class SmallTroop extends Troop {
-    constructor(x, y, pathToFollow, timeToWait) {
-        super(x, y, pathToFollow, timeToWait);
+    constructor(x, y, pathToFollow, orderInGroup) {
+        super(x, y, pathToFollow, orderInGroup*200);
 
         this.baseHealth = 1;
-        this.speed = 5;
+        this.speed = 3;
         this.health = this.baseHealth;
 
         this.hitbox = {'type': 'circle', 'r': 10};

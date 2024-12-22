@@ -17,7 +17,7 @@ class Troop extends Entity {
         let nextPoint = this.pathToFollow[this.currentTargetPoint];
         let direction = p5.Vector.sub(nextPoint, this.position);
         direction.setMag(this.speed);
-        this.velocity.lerp(direction, 0.3);
+        this.velocity.lerp(direction, 0.6);
         this.position.add(this.velocity);
 
         if(distSqVector(this.position,nextPoint) < 5*5) {
