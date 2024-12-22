@@ -1,12 +1,13 @@
 let attacks = [];
 let entities = [];
+let player;
 
 class LevelScene extends Scene {
     constructor() {
         super();
 
-        this.player = new Player();
-        new TroopGroup(10, MediumTroop, HorizontalBarsPath);
+        player = new Player();
+        new TroopGroup(1, LargeTroop, HorizontalLinePath);
     }
 
     draw() {
@@ -19,7 +20,7 @@ class LevelScene extends Scene {
 
         for (let i=entities.length-1; i>=0; i--) {
             let entity = entities[i];
-            if(entity == this.player) continue;
+            if(entity == player) continue;
             
             entity.update();
             entity.display();
@@ -28,8 +29,8 @@ class LevelScene extends Scene {
             if (entity.isFinished()) entities.splice(i,1);
         }
         
-        this.player.update();
-        this.player.display();
+        player.update();
+        player.display();
         
         for (let i=attacks.length-1; i>=0; i--) {
             let attack = attacks[i];
@@ -50,10 +51,10 @@ class LevelScene extends Scene {
     }
 
     keyPressed() {
-        this.player.keyPressed();
+        player.keyPressed();
     }
     
     keyReleased() {
-        this.player.keyReleased();
+        player.keyReleased();
     }
 }

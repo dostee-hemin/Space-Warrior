@@ -1,27 +1,39 @@
 class Laser extends Attack {
-    constructor(x, y) {
-        super(true);
+    constructor(parentEntity, direction, lifetime) {
+        super(direction == -1);
 
-        this.position = createVector(x, y);
-        this.lifetime = 200; //In milliseconds
+        this.parentEntity = parentEntity;
+        this.position = createVector(this.parentEntity.position.x, this.parentEntity.position.y);
+        this.lifetime = lifetime; //In milliseconds
         this.laserWidth = 20;
+        this.direction = direction;
         this.startTime = millis();
         this.damage = 5;
     }
 
     display() {
         for(let i=0; i<4; i++) {
-            stroke(0,0,150+i*20, this.lifetime - (millis()-this.startTime));
+            if(this.direction == -1) stroke(0,0,150+i*20, this.lifetime - (millis()-this.startTime));
+            else stroke(150+i*20, 0, 0, this.lifetime - (millis()-this.startTime));
+            let endY = this.direction == 1 ? height : 0;
             strokeWeight(this.laserWidth-i*2);
-            line(this.position.x, this.position.y, this.position.x, 0);
+            line(this.position.x, this.position.y, this.position.x, endY);
         }
+    }
+
+    update() {
+        this.position = this.parentEntity.position.copy();
     }
 
     isFinished() {
         return millis() - this.startTime > this.lifetime;
     }
 
-    collidesWith(entity) {
-        return this.position.y > entity.position.y && Math.abs(this.position.x - entity.position.x) <= this.laserWidth;
+    // Depending on whether the laser is upwards or downwards, check for collision
+    collidesWith(entity) {        
+        return ((this.direction == 1) ? 
+                this.position.y < entity.position.y :
+                this.position.y > entity.position.y ) && 
+                Math.abs(this.position.x - entity.position.x) <= this.laserWidth;
     }
 }

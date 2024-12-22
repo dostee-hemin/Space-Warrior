@@ -7,7 +7,6 @@ class MediumTroop extends Troop {
     }
 
     display() {
-        // Draw a small circle for the troop
         fill(255);
         stroke(0);
         strokeWeight(2);

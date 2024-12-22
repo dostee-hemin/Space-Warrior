@@ -99,7 +99,7 @@ class Player extends Entity {
         else if (this.chargedStrength != 0) {
             let x = this.position.x;
             let y = this.position.y;
-            if (this.chargedStrength == this.maxChargeStrength) new Laser(x, y); 
+            if (this.chargedStrength == this.maxChargeStrength) new Laser(this, -1, 100); 
             else new ChargedBullet(x, y, this.chargedStrength);
             
             // Reset the charged strength for the next attack
