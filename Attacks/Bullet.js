@@ -5,16 +5,37 @@ class Bullet extends Attack {
         this.speed = speed;
         this.position = createVector(x,y);
         this.velocity = p5.Vector.fromAngle(launchAngle).mult(this.speed);
+        this.damage = 1;
+        this.hitsLeft = 1;
     }
 
     update() {
         this.position.add(this.velocity);
     }
 
+    interact(entity) {
+        super.interact(entity);
+
+        this.hitsLeft--;
+        
+        if (this.hitsLeft == 0) {
+            this.destroy();
+        }
+    }
+
     isFinished() {
         // Once the bullet leaves the canvas bounds, it's ready to be removed
-        return this.position.x < 0 || this.position.x > width ||
+        return super.isFinished() || this.position.x < 0 || this.position.x > width ||
                this.position.y < 0 || this.position.y > height;
+    }
+
+    collidesWith(entity) {
+        switch(entity.hitbox.type) {
+            case 'circle':
+                return distSq(this.position.x, this.position.y, entity.position.x, entity.position.y) < entity.hitbox.r**2;
+            case 'rect':
+                return pointInRect(this.position.x, this.position.y, entity.position.x, entity.position.y, entity.hitbox.w, entity.hitbox.h);
+        }
     }
 
     display() {
@@ -25,6 +46,6 @@ class Bullet extends Attack {
         point(this.position.x, this.position.y);
 
         strokeWeight(2);
-        line(this.position.x, this.position.y, this.position.x - this.velocity.x, this.position.y - this.velocity.y);
+        line(this.position.x, this.position.y, this.position.x - this.velocity.x, this.position.y - this.velocity.y*3);
     }
 }
