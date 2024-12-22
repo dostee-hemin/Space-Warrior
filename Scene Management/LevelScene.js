@@ -8,6 +8,13 @@ class LevelScene extends Scene {
 
         player = new Player();
         this.hasPlayerEnteredScene = false;
+        this.shipEntranceAnimation = 0;
+        this.UIEntranceAnimation = 0;
+        p5.tween.manager.addTween(this)
+            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
+            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
+            .startTween()
+
         this.wave = new Wave();
     }
 
@@ -33,7 +40,7 @@ class LevelScene extends Scene {
         }
         
         if(!this.hasPlayerEnteredScene) {
-            player.position.y = lerp(player.position.y, height-200, 0.05);
+            player.position.y = height+600 - this.shipEntranceAnimation*800;
             if(player.position.y < height-199) this.hasPlayerEnteredScene = true;
         }
         else player.update();
@@ -55,6 +62,14 @@ class LevelScene extends Scene {
             // Remove the attack once it's done
             if (attack.isFinished()) attacks.splice(i,1);
         }
+
+
+         // Draw a health bar for the player in the bottom left corner
+         player.displayHealthBar(120, height+100-this.UIEntranceAnimation*125, 200, 20, CORNER);
+         stroke(0);
+         strokeWeight(3);
+         noFill();
+         rect(20, height+100-this.UIEntranceAnimation*135, 200, 20);
     }
 
     keyPressed() {

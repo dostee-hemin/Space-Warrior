@@ -64,13 +64,6 @@ class Player extends Entity {
             rectMode(CENTER);
             rect(this.position.x,this.position.y,this.hitbox.w, this.hitbox.h);
         }
-
-        // Draw a health bar for the player in the bottom left corner
-        this.displayHealthBar(120, height-25, 200, 20, CORNER);
-        stroke(0);
-        strokeWeight(3);
-        noFill();
-        rect(20, height-35, 200, 20);
     }
 
     update() {
