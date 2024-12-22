@@ -6,7 +6,7 @@ class SmallTroop extends Troop {
         this.speed = 3;
         this.health = this.baseHealth;
 
-        this.hitbox = {'type': 'circle', 'r': 10};
+        this.hitbox = {'type': 'circle', 'r': 15};
     }
 
     display() {

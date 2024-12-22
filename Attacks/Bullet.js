@@ -13,8 +13,14 @@ class Bullet extends Attack {
 
     isFinished() {
         // Once the bullet leaves the canvas bounds, it's ready to be removed
-        return this.position.x < 0 || this.position.x > width ||
+        return super.isFinished() || this.position.x < 0 || this.position.x > width ||
                this.position.y < 0 || this.position.y > height;
+    }
+
+    collidesWith(entity) {
+        if(entity.hitbox.type == 'circle') {
+            return distSq(this.position.x, this.position.y, entity.position.x, entity.position.y) < entity.hitbox.r**2;
+        }
     }
 
     display() {

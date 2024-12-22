@@ -4,4 +4,10 @@ class SimpleBullet extends Bullet {
 
         this.damage = 1;
     }
+
+    interact(entity) {
+        super.interact(entity);
+
+        this.destroy();
+    }
 }

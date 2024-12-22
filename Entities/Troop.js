@@ -25,7 +25,10 @@ class Troop extends Entity {
         }
     }
 
-    isFinished() {
-        return false;
+    applyEffect(effect) {
+        if(effect.type == 'freeze') {
+            this.startTime = millis();
+            this.timeToWait = effect.duration;
+        }
     }
 }

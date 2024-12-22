@@ -10,14 +10,20 @@ class ChargedBullet extends Bullet {
         fill(0,0,200,50);
         stroke(0,0,200,150);
         strokeWeight(5+this.hitsLeft)
-        circle(this.position.x,this.position.y, 30+this.hitsLeft*5);
+        circle(this.position.x,this.position.y, 20+this.hitsLeft*8);
     }
 
     update() {
         this.position.y -= this.speed;
     }
 
-    isFinished() {
-        return super.isFinished() || this.hitsLeft == 0;
+    interact(entity) {
+        super.interact(entity);
+
+        this.hitsLeft--;
+        
+        if (this.hitsLeft == 0) {
+            this.destroy();
+        }
     }
 }
