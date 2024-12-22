@@ -2,7 +2,7 @@ class Player extends Entity {
     constructor() {
         super(true);
         
-        this.baseHealth = 100;
+        this.baseHealth = 20;
         this.health = this.baseHealth;
 
         this.position = createVector(width/2, height-height/5);
@@ -67,6 +67,9 @@ class Player extends Entity {
             rectMode(CENTER);
             rect(this.position.x,this.position.y,this.hitbox.w, this.hitbox.h);
         }
+
+        // Draw a health bar for the player in the bottom left corner
+        this.displayHealthBar(120, height-25, 200, 20, CORNER);
     }
 
     update() {

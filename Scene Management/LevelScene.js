@@ -47,19 +47,6 @@ class LevelScene extends Scene {
             // Remove the attack once it's done
             if (attack.isFinished()) attacks.splice(i,1);
         }
-
-        // Draw a health bar for the player in the bottom left corner
-        fill(255,0,0); 
-        noStroke();
-        rectMode(CORNER);
-        rect(20, height-40, 200, 20);
-        fill(0,255,0);
-        rect(20, height-40, max(0, map(this.player.health, 0, this.player.baseHealth, 0, 200)), 20);
-        stroke(0);
-        strokeWeight(3);
-        noFill();
-        rect(20, height-40, 200, 20);
-
     }
 
     keyPressed() {
