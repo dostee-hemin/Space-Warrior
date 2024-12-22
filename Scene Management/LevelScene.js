@@ -8,9 +8,12 @@ class LevelScene extends Scene {
 
         player = new Player();
         this.hasPlayerEnteredScene = false;
+        this.wave = new Wave();
     }
 
     draw() {
+        this.wave.draw();
+
         // Draw the title as "Level"
         fill(0);
         noStroke();
