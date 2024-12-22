@@ -26,8 +26,12 @@ class Troop extends Entity {
     }
     
     display() {
+        let offset = 0;
+        if (this.hitbox.type == 'circle') offset = this.hitbox.r*2;
+        else if (this.hitbox.type == 'rect') offset = this.hitbox.h;
+        
         if (this.health != this.startingHealth)
-            this.displayHealthBar(this.position.x, this.position.y-this.hitbox.r*2, this.startingHealth*5, 5, CENTER);
+            this.displayHealthBar(this.position.x, this.position.y-offset, this.startingHealth*5, 5, CENTER);
     }
 
     applyEffect(effect) {
