@@ -21,4 +21,16 @@ class SmallTroop extends Troop {
         fill(255,0,0,50);
         circle(this.position.x, this.position.y, this.hitbox.r);
     }
+
+    update() {
+        super.update();
+
+        if(random(1) < 0.01) {
+            this.shoot();
+        }
+    }
+
+    shoot() {
+        new Bullet(this.position.x, this.position.y, HALF_PI, 4, false);
+    }
 }

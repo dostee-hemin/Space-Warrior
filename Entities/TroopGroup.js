@@ -6,8 +6,7 @@ class TroopGroup {
 
     // Loop through 
     for (let i=0; i<numberOfTroops; i++) {
-      let troop = new troopClassType(this.spawnPoint.x, this.spawnPoint.y, this.pathToFollow, i);
-      entities.push(troop);
+      new troopClassType(this.spawnPoint.x, this.spawnPoint.y, this.pathToFollow, i);
     }
   }
 }

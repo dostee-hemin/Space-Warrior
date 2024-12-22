@@ -1,6 +1,6 @@
 class Player extends Entity {
     constructor() {
-        super();
+        super(true);
         
         this.baseHealth = 100;
         this.health = this.baseHealth;
@@ -57,15 +57,16 @@ class Player extends Entity {
             point(0,-this.hitbox.h);
         }
 
+        pop();
+
         // Draw the hitbox of the ship for debug purposes (only if not dashing)
         if(!this.isDashing()) {
             stroke(255,0,0,150);
             strokeWeight(1);
             fill(255,0,0,50);
             rectMode(CENTER);
-            rect(0,0,this.hitbox.w, this.hitbox.h);
+            rect(this.position.x,this.position.y,this.hitbox.w, this.hitbox.h);
         }
-        pop();
     }
 
     update() {
@@ -94,8 +95,8 @@ class Player extends Entity {
         else if (this.chargedStrength != 0) {
             let x = this.position.x;
             let y = this.position.y;
-            if (this.chargedStrength == this.maxChargeStrength) attacks.push(new Laser(x, y)); 
-            else attacks.push(new ChargedBullet(x, y, this.chargedStrength));
+            if (this.chargedStrength == this.maxChargeStrength) new Laser(x, y); 
+            else new ChargedBullet(x, y, this.chargedStrength);
             
             // Reset the charged strength for the next attack
             this.chargedStrength = 0;
@@ -105,6 +106,10 @@ class Player extends Entity {
     // Returns true if the player has activated a dash
     isDashing() {
         return this.dashDirection.x != 0 || this.dashDirection.y != 0;
+    }
+
+    canCollideWithAttacks() {
+        return !this.isDashing();
     }
 
     // Function to utilize the arrow keys to activate dashes and set the target velocity
@@ -155,7 +160,7 @@ class Player extends Entity {
                 // If the space bar is double clicked, perform the special ability
                 if (isDoubleClick()) {
                     if(!this.hasUsedSpecialAbility) {
-                        attacks.push(new this.specialAbilityClass(this.position.x, this.position.y));
+                        new this.specialAbilityClass(this.position.x, this.position.y);
                         this.hasUsedSpecialAbility = true;
                     }
                 }
@@ -164,7 +169,7 @@ class Player extends Entity {
                     let x = this.position.x;
                     let y = this.position.y;
                     let angle = -HALF_PI;
-                    attacks.push(new SimpleBullet(x, y, angle));
+                    new Bullet(x, y, angle, 8, true);
                 }
                 break;
         }

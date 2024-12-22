@@ -6,7 +6,7 @@ class LevelScene extends Scene {
         super();
 
         this.player = new Player();
-        new TroopGroup(10, SmallTroop, RandomPath);
+        new TroopGroup(10, SmallTroop, HorizontalBarsPath);
     }
 
     draw() {
@@ -19,6 +19,7 @@ class LevelScene extends Scene {
 
         for (let i=entities.length-1; i>=0; i--) {
             let entity = entities[i];
+            if(entity == this.player) continue;
             
             entity.update();
             entity.display();
@@ -36,12 +37,10 @@ class LevelScene extends Scene {
             attack.update();
             attack.display();
             
-            if (attack.isFriendly) {
-                for(let j=0; j<entities.length; j++) {
-                    let entity = entities[j];
-                    if(attack.hits(entity)) {
-                        attack.interact(entity);
-                    }
+            for(let j=0; j<entities.length; j++) {
+                let entity = entities[j];
+                if(attack.hits(entity)) {
+                    attack.interact(entity);
                 }
             }
 

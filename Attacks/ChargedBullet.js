@@ -16,14 +16,4 @@ class ChargedBullet extends Bullet {
     update() {
         this.position.y -= this.speed;
     }
-
-    interact(entity) {
-        super.interact(entity);
-
-        this.hitsLeft--;
-        
-        if (this.hitsLeft == 0) {
-            this.destroy();
-        }
-    }
 }

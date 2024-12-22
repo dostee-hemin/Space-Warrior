@@ -6,6 +6,8 @@ class Attack {
         this.effect = {};
 
         this.entitesHit = [];
+        
+        attacks.push(this);
     }
 
     display() {}         // Called to draw the attack on the canvas
@@ -14,6 +16,8 @@ class Attack {
     // Called to check if the attack has hit a given entity for the first time
     hits(entity) {
         if(this.entitesHit.includes(entity)) return false;
+        if(this.isFriendly == entity.isFriendly) return false;
+        if(!entity.canCollideWithAttacks()) return false;
         
         if(this.collidesWith(entity)) {
             this.entitesHit.push(entity);
