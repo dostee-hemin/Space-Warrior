@@ -15,11 +15,37 @@ class LevelScene extends Scene {
             .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
             .startTween()
 
-        this.wave = new Wave();
+        this.waves = [];
+        this.waveStructures = [{
+            waitDuration: 4000,
+            troops: [
+                {type: 'small', amount: 5, path: 'XP'},
+                {type: 'medium', amount: 3, path: 'HBP'},
+            ]
+        },
+        {
+            waitDuration: 2000,
+            troops: [
+                {type: 'small', amount: 10, path: 'RP'},
+            ]
+        }];
+        this.currentWaveIndex = 0;
+        this.currentWave = null;
+        this.canAddTroops = true;
     }
 
     draw() {
-        this.wave.draw();
+        if(this.UIEntranceAnimation == 1) {
+            if (this.canAddTroops) {
+                if(this.currentWaveIndex >= this.waveStructures.length) {
+                    console.log('Level completed!');
+                } else this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
+            }
+            this.canAddTroops = entities.length == 1 && this.currentWave.hasReleasedTroops();
+            this.currentWave.draw();
+        }
+
+
 
         // Draw the title as "Level"
         fill(0);
@@ -65,11 +91,11 @@ class LevelScene extends Scene {
 
 
          // Draw a health bar for the player in the bottom left corner
-         player.displayHealthBar(120, height+100-this.UIEntranceAnimation*125, 200, 20, CORNER);
+         player.displayHealthBar(20+this.UIEntranceAnimation*100, height-25, this.UIEntranceAnimation * 200, 20, CORNER);
          stroke(0);
-         strokeWeight(3);
+         strokeWeight(this.UIEntranceAnimation*3);
          noFill();
-         rect(20, height+100-this.UIEntranceAnimation*135, 200, 20);
+         rect(20, height-35, this.UIEntranceAnimation * 200, 20);
     }
 
     keyPressed() {
