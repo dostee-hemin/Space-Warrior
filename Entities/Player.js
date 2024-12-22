@@ -2,7 +2,7 @@ class Player extends Entity {
     constructor() {
         super(20, true);
 
-        this.position = createVector(width/2, height-height/5);
+        this.position = createVector(width/2, height+1000);
         this.velocity = createVector();
         this.targetVelocity = createVector();
         this.maxSpeed = 4;  // In pixels per frame

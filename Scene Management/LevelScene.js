@@ -7,7 +7,7 @@ class LevelScene extends Scene {
         super();
 
         player = new Player();
-        new TroopGroup(1, LargeTroop, HorizontalLinePath);
+        this.hasPlayerEnteredScene = false;
     }
 
     draw() {
@@ -29,7 +29,11 @@ class LevelScene extends Scene {
             if (entity.isFinished()) entities.splice(i,1);
         }
         
-        player.update();
+        if(!this.hasPlayerEnteredScene) {
+            player.position.y = lerp(player.position.y, height-200, 0.05);
+            if(player.position.y < height-199) this.hasPlayerEnteredScene = true;
+        }
+        else player.update();
         player.display();
         
         for (let i=attacks.length-1; i>=0; i--) {
@@ -51,10 +55,14 @@ class LevelScene extends Scene {
     }
 
     keyPressed() {
+        if(!this.hasPlayerEnteredScene) return;
+        
         player.keyPressed();
     }
     
     keyReleased() {
+        if(!this.hasPlayerEnteredScene) return;
+
         player.keyReleased();
     }
 }
