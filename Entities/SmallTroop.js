@@ -1,12 +1,11 @@
 class SmallTroop extends Troop {
     constructor(x, y, pathToFollow, orderInGroup) {
-        super(x, y, pathToFollow, orderInGroup*200);
+        super(x, y, 5, pathToFollow, orderInGroup*300);
 
-        this.baseHealth = 1;
-        this.speed = 3;
+        this.speed = 2;
         this.health = this.baseHealth;
 
-        this.hitbox = {'type': 'circle', 'r': 15};
+        this.hitbox = {'type': 'circle', 'r': 10};
     }
 
     display() {
@@ -14,12 +13,14 @@ class SmallTroop extends Troop {
         fill(255);
         stroke(0);
         strokeWeight(2);
-        circle(this.position.x, this.position.y, this.hitbox.r*2);
+        circle(this.position.x, this.position.y, this.hitbox.r*3);
         
         stroke(255,0,0,150);
         strokeWeight(1);
         fill(255,0,0,50);
-        circle(this.position.x, this.position.y, this.hitbox.r);
+        circle(this.position.x, this.position.y, this.hitbox.r*2);
+
+        super.display();
     }
 
     update() {
