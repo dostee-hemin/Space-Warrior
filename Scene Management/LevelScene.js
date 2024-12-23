@@ -6,15 +6,10 @@ class LevelScene extends Scene {
     constructor() {
         super();
 
-        player = new Player();
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
-        p5.tween.manager.addTween(this)
-            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
-            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
-            .startTween()
-
+        
         this.waves = [];
         this.waveStructures = [{
             waitDuration: 0,
@@ -25,12 +20,29 @@ class LevelScene extends Scene {
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
-
+    
         this.endPanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
+    
+        let homeButton = createButton("Home", -100, this.endPanel.h/2 - 145, 200, 50);
+        homeButton.onPress = () => {
+            nextScene = new MainMenuScene();
+            transition = new FadeTransition();
+        };
+        let retryButton = createButton("Retry", -100, this.endPanel.h/2 - 75, 200, 50);
+        retryButton.onPress = () => {
+            nextScene = new LevelScene();
+            transition = new FadeTransition();
+        };
+        this.endPanel.addUI([homeButton,retryButton]);
+    }
 
-        let closePanelButton = createButton("Close Panel", -100, this.endPanel.h/2 - 75, 200, 50);
-        closePanelButton.onPress = () => {this.endPanel.close();};
-        this.endPanel.addUI([closePanelButton]);
+    start() {
+        player = new Player();
+        p5.tween.manager.addTween(this)
+            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
+            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
+            .startTween()
+
     }
 
     draw() {
@@ -123,5 +135,11 @@ class LevelScene extends Scene {
     
     keyReleased() {
         player.keyReleased();
+    }
+
+    close() {
+        attacks = [];
+        entities = [];
+        player = null;
     }
 }

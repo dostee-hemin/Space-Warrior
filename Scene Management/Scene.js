@@ -2,7 +2,6 @@
 class Scene {
     constructor() {
         this.preload();
-        gui.objects = [];
     }
 
     preload() {} // Called before start to load necessary files
