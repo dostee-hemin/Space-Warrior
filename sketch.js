@@ -1,10 +1,12 @@
 let currentScene;
 let nextScene;
 let transition;
+let gui;
 
 function setup() {
   windowResized();
 
+  gui = createGui();
   currentScene = new LevelScene();
 }
 
@@ -12,6 +14,8 @@ function draw() {
   background(200);
 
   currentScene.draw();
+
+  drawGui();
 
   handleSceneSwitching();
 }

@@ -7,8 +7,8 @@ class LevelScene extends Scene {
         super();
 
         player = new Player();
-        this.hasPlayerEnteredScene = false;
         this.shipEntranceAnimation = 0;
+        this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
         p5.tween.manager.addTween(this)
             .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
@@ -17,34 +17,41 @@ class LevelScene extends Scene {
 
         this.waves = [];
         this.waveStructures = [{
-            waitDuration: 4000,
+            waitDuration: 0,
             troops: [
-                {type: 'small', amount: 5, path: 'XP'},
-                {type: 'medium', amount: 3, path: 'HBP'},
-            ]
-        },
-        {
-            waitDuration: 2000,
-            troops: [
-                {type: 'small', amount: 10, path: 'RP'},
+                {type: 'small', amount: 1, path: 'XP'}
             ]
         }];
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
+
+        this.endPanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
+
+        let closePanelButton = createButton("Close Panel", -100, this.endPanel.h/2 - 75, 200, 50);
+        closePanelButton.onPress = () => {this.endPanel.close();};
+        this.endPanel.addUI([closePanelButton]);
     }
 
     draw() {
-        if(this.UIEntranceAnimation == 1) {
+        if(this.UIEntranceAnimation == 1 && this.shipExitAnimation == 0) {
             if (this.canAddTroops) {
-                if(this.currentWaveIndex >= this.waveStructures.length) {
-                    console.log('Level completed!');
-                } else this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
+                if(this.currentWaveIndex == this.waveStructures.length) {
+                    this.currentWaveIndex++;
+                    p5.tween.manager.addTween(this)
+                    .addMotion('shipExitAnimation', 0, 2000)
+                    .addMotion('shipExitAnimation', -0.2, 300)
+                    .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
+                    .onEnd(() => {
+                        this.endPanel.open();
+                    })
+                    .startTween()
+                } else if(this.currentWaveIndex < this.waveStructures.length) 
+                    this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
             }
             this.canAddTroops = entities.length == 1 && this.currentWave.hasReleasedTroops();
             this.currentWave.draw();
         }
-
 
 
         // Draw the title as "Level"
@@ -65,11 +72,11 @@ class LevelScene extends Scene {
             if (entity.isFinished()) entities.splice(i,1);
         }
         
-        if(!this.hasPlayerEnteredScene) {
+        if(!this.hasLevelStarted())
             player.position.y = height+600 - this.shipEntranceAnimation*800;
-            if(player.position.y < height-199) this.hasPlayerEnteredScene = true;
-        }
-        else player.update();
+        else if(this.shipExitAnimation == 0) player.update();
+        else player.position.y -= this.shipExitAnimation*(min(player.position.y+400,height*0.6)/20);
+
         player.display();
         
         for (let i=attacks.length-1; i>=0; i--) {
@@ -96,17 +103,25 @@ class LevelScene extends Scene {
          strokeWeight(this.UIEntranceAnimation*3);
          noFill();
          rect(20, height-35, this.UIEntranceAnimation * 200, 20);
+
+         if(this.endPanel) this.endPanel.display();
+    }
+
+    hasLevelStarted() {
+        return this.shipEntranceAnimation == 1;
+    }
+
+    hasLevelFinished() {
+        return this.shipExitAnimation != 0;
     }
 
     keyPressed() {
-        if(!this.hasPlayerEnteredScene) return;
+        if(!this.hasLevelStarted() || this.hasLevelFinished()) return;
         
         player.keyPressed();
     }
     
     keyReleased() {
-        if(!this.hasPlayerEnteredScene) return;
-
         player.keyReleased();
     }
 }
