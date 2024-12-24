@@ -1,6 +1,9 @@
 let currentScene;
 let nextScene;
 let transition;
+let selectedDifficulty = 0;
+let hasCompletedMap = false;
+let hasStartedGame = true;
 let gui;
 
 function setup() {
@@ -8,7 +11,7 @@ function setup() {
 
   gui = createGui();
 
-  currentScene = new LevelScene();
+  currentScene = new MainMenuScene();
   currentScene.start();
 }
 

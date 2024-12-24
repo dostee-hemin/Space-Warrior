@@ -2,6 +2,7 @@ class Transition {
     constructor() {
         // This boolean guarantees we switch scenes only once
         this.hasSwitchedScenes = false;
+        for (let object of gui.objects) object.enabled = false;
     }
 
     // Called to update and display the transition animation

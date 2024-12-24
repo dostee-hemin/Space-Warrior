@@ -39,9 +39,14 @@ class LevelScene extends Scene {
 
         this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
 
-        let homeButton = createButton("Home", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
-        homeButton.onPress = () => {
-            nextScene = new MainMenuScene();
+        let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
+        continueButton.onPress = () => {
+            nextScene = new LevelScene();
+            transition = new FadeTransition();
+        };
+        let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
+        mapButton.onPress = () => {
+            nextScene = new MapScene();
             transition = new FadeTransition();
         };
         let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
@@ -49,7 +54,7 @@ class LevelScene extends Scene {
             nextScene = new LevelScene();
             transition = new FadeTransition();
         };
-        this.levelCompletePanel.addUI([homeButton,retryButton]);
+        this.levelCompletePanel.addUI([continueButton, mapButton, retryButton]);
         
         this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
         let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
@@ -59,12 +64,12 @@ class LevelScene extends Scene {
             nextScene = new LevelScene();
             transition = new FadeTransition();
         };
-        let homeButton2 = createButton("Home", -100, -this.pausePanel.h/2 + 215, 200, 50);
-        homeButton2.onPress = () => {
-            nextScene = new MainMenuScene();
+        let mapButton2 = createButton("Map", -100, -this.pausePanel.h/2 + 215, 200, 50);
+        mapButton2.onPress = () => {
+            nextScene = new MapScene();
             transition = new FadeTransition();
         };
-        this.pausePanel.addUI([resumeButton,homeButton2,retryButton2]);
+        this.pausePanel.addUI([resumeButton,mapButton2,retryButton2]);
 
         this.pauseButton = createButton("", 10,10,50,50);
         this.pauseButton.onPress = () => {this.pauseGame();}
@@ -76,7 +81,7 @@ class LevelScene extends Scene {
         });
 
         this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
-        this.gameOverPanel.addUI([homeButton, retryButton]);
+        this.gameOverPanel.addUI([mapButton, retryButton]);
         this.gameOverAnimation = 0;
     }
 
