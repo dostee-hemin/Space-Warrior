@@ -12,9 +12,16 @@ class LevelScene extends Scene {
         
         this.waves = [];
         this.waveStructures = [{
-            waitDuration: 0,
+            waitDuration: 4000,
             troops: [
-                {type: 'small', amount: 1, path: 'XP'}
+                {type: 'small', amount: 5, path: 'XP'},
+                {type: 'medium', amount: 3, path: 'HBP'}
+            ]
+        },
+        {
+            waitDuration: 2000,
+            troops: [
+                {type: 'large', amount: 1, path: 'HLP'},
             ]
         }];
         this.currentWaveIndex = 0;
