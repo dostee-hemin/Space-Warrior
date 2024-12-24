@@ -30,19 +30,19 @@ class LevelScene extends Scene {
             .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
             .startTween()
 
-        this.endPanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
-        
-        let homeButton = createButton("Home", -100, this.endPanel.h/2 - 145, 200, 50);
+        this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
+
+        let homeButton = createButton("Home", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
         homeButton.onPress = () => {
             nextScene = new MainMenuScene();
             transition = new FadeTransition();
         };
-        let retryButton = createButton("Retry", -100, this.endPanel.h/2 - 75, 200, 50);
+        let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
         retryButton.onPress = () => {
             nextScene = new LevelScene();
             transition = new FadeTransition();
         };
-        this.endPanel.addUI([homeButton,retryButton]);
+        this.levelCompletePanel.addUI([homeButton,retryButton]);
         
         this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
         let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
@@ -67,6 +67,10 @@ class LevelScene extends Scene {
             fillBgActive: color(0,100),
             strokeWeight: 0
         });
+
+        this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
+        this.gameOverPanel.addUI([homeButton, retryButton]);
+        this.gameOverAnimation = 0;
     }
 
     draw() {
@@ -90,9 +94,7 @@ class LevelScene extends Scene {
                     .addMotion('shipExitAnimation', 0, 2000)
                     .addMotion('shipExitAnimation', -0.2, 300)
                     .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
-                    .onEnd(() => {
-                        this.endPanel.open();
-                    })
+                    .onEnd(() => {this.levelCompletePanel.open();})
                     .startTween()
                 } else if(this.currentWaveIndex < this.waveStructures.length) 
                     this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
@@ -113,8 +115,12 @@ class LevelScene extends Scene {
         // Player logic
         if(!this.hasPlayerEnteredScene())
             player.position.y = height+600 - this.shipEntranceAnimation*800;
-        else if(this.shipExitAnimation == 0) player.update();
-        else player.position.y -= this.shipExitAnimation*(min(player.position.y+400,height*0.6)/20);
+        else if(this.hasLevelFinished()) 
+            player.position.y -= this.shipExitAnimation*(min(player.position.y+400,height*0.6)/20);
+        else if(this.hasPlayerLost())
+            player.position.y += 1;
+        else
+            player.update();
 
         // Attack logic
         for (let i=attacks.length-1; i>=0; i--) {
@@ -122,7 +128,7 @@ class LevelScene extends Scene {
             
             attack.update();
             
-            for(let j=0; j<entities.length; j++) {
+            for(let j=0; j<entities.length && !this.hasPlayerLost(); j++) {
                 let entity = entities[j];
                 if(attack.hits(entity)) {
                     attack.interact(entity);
@@ -130,6 +136,13 @@ class LevelScene extends Scene {
             }
 
             if (attack.isFinished()) attacks.splice(i,1);
+        }
+
+        if(player.isFinished() && !this.hasPlayerLost()) {
+            p5.tween.manager.addTween(this)
+                .addMotion('gameOverAnimation', 1, 3000)
+                .onEnd(() => {this.gameOverPanel.open();})
+                .startTween();
         }
     }
     
@@ -171,12 +184,17 @@ class LevelScene extends Scene {
             rect(0,0,width,height);
         }
 
-        this.endPanel.display();
+        this.levelCompletePanel.display();
+        this.gameOverPanel.display();
         this.pausePanel.display();
     }
 
     hasPlayerEnteredScene() {
         return this.shipEntranceAnimation == 1;
+    }
+
+    hasPlayerLost() {
+        return this.gameOverAnimation != 0;
     }
 
     hasLevelStarted() {
@@ -198,7 +216,7 @@ class LevelScene extends Scene {
     }
 
     keyPressed() {
-        if(!this.hasPlayerEnteredScene() || this.hasLevelFinished()) return;
+        if(!this.hasPlayerEnteredScene() || this.hasLevelFinished() || this.hasPlayerLost()) return;
 
         player.keyPressed();
 
