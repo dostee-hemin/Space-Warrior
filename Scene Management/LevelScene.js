@@ -82,7 +82,7 @@ class LevelScene extends Scene {
     update() {
         // Pausing logic
         this.isPaused = this.pausePanel.isActive();
-        this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished();
+        this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished() && !this.hasPlayerLost();
         if(this.isPaused) return;
 
         // Wave logic
