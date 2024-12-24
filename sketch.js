@@ -1,42 +1,47 @@
 let currentScene;
 let nextScene;
 let transition;
+let gui;
 
 function setup() {
   windowResized();
 
+  gui = createGui();
+
   currentScene = new LevelScene();
+  currentScene.start();
 }
 
 function draw() {
   background(200);
 
   currentScene.draw();
-
+  
+  drawGui();
+  
   handleSceneSwitching();
 }
 
 function switchToNextScene() {
+  gui.objects = [];
   currentScene.close();
   currentScene = nextScene;
+  currentScene.start();
+  nextScene = null;
 }
 
 function handleSceneSwitching() {
   // If we don't want to change scenes, leave the function
-  if (!nextScene) return;
+  if (!nextScene && !transition) return;
   
   // If we haven't set a transition, simply switch the scenes directly
   if (!transition) {
     switchToNextScene();
-    currentScene.start();
-    nextScene = null;
     return;
   }
   
   // If the transition is complete, reset all values and begin the new scene
   if (transition.isDone()) {
-    currentScene.start();
-    nextScene = null;
     transition = null;
     return;
   }
