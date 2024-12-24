@@ -36,12 +36,20 @@ class Wave {
             maxTroopTime = Math.max(maxTroopTime, troopTime);
         }
 
-        p5.tween.manager.addTween(this)
+        this.tween = p5.tween.manager.addTween(this)
             .addMotion('battleshipPositionX', -width, waveStructure.waitDuration)
             .addMotion('battleshipPositionX', width/2, 2000, 'easeOutQuad')
             .addMotion('battleshipPositionX', width/2, maxTroopTime)
             .addMotion('battleshipPositionX', width*2, 2000, 'easeInQuad')
             .startTween()
+    }
+
+    pause() {
+        this.tween.pause();
+    }
+
+    resume() {
+        this.tween.resume();
     }
 
     hasReleasedTroops() {

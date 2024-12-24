@@ -23,11 +23,11 @@ function draw() {
 }
 
 function switchToNextScene() {
+  gui.objects = [];
   currentScene.close();
   currentScene = nextScene;
   currentScene.start();
   nextScene = null;
-  gui.objects = [];
 }
 
 function handleSceneSwitching() {

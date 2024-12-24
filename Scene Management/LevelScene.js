@@ -20,9 +20,18 @@ class LevelScene extends Scene {
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
-    
+        this.isPaused = false;
+    }
+
+    start() {
+        player = new Player();
+        p5.tween.manager.addTween(this)
+            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
+            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
+            .startTween()
+
         this.endPanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
-    
+        
         let homeButton = createButton("Home", -100, this.endPanel.h/2 - 145, 200, 50);
         homeButton.onPress = () => {
             nextScene = new MainMenuScene();
@@ -34,18 +43,45 @@ class LevelScene extends Scene {
             transition = new FadeTransition();
         };
         this.endPanel.addUI([homeButton,retryButton]);
-    }
+        
+        this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
+        let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
+        resumeButton.onPress = () => {this.resumeGame();}
+        let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
+        retryButton2.onPress = () => {
+            nextScene = new LevelScene();
+            transition = new FadeTransition();
+        };
+        let homeButton2 = createButton("Home", -100, -this.pausePanel.h/2 + 215, 200, 50);
+        homeButton2.onPress = () => {
+            nextScene = new MainMenuScene();
+            transition = new FadeTransition();
+        };
+        this.pausePanel.addUI([resumeButton,homeButton2,retryButton2]);
 
-    start() {
-        player = new Player();
-        p5.tween.manager.addTween(this)
-            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
-            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
-            .startTween()
-
+        this.pauseButton = createButton("", 10,10,50,50);
+        this.pauseButton.onPress = () => {this.pauseGame();}
+        this.pauseButton.setStyle({
+            fillBg: color(0,0),
+            fillBgHover: color(0,50),
+            fillBgActive: color(0,100),
+            strokeWeight: 0
+        });
     }
 
     draw() {
+        // Split into update and display for pausing logic
+        this.update();
+        this.display();
+    }
+    
+    update() {
+        // Pausing logic
+        this.isPaused = this.pausePanel.isActive();
+        this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished();
+        if(this.isPaused) return;
+
+        // Wave logic
         if(this.UIEntranceAnimation == 1 && this.shipExitAnimation == 0) {
             if (this.canAddTroops) {
                 if(this.currentWaveIndex == this.waveStructures.length) {
@@ -62,40 +98,29 @@ class LevelScene extends Scene {
                     this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
             }
             this.canAddTroops = entities.length == 1 && this.currentWave.hasReleasedTroops();
-            this.currentWave.draw();
         }
 
-
-        // Draw the title as "Level"
-        fill(0);
-        noStroke();
-        textSize(30);
-        textAlign(CENTER, CENTER);
-        text('Level', width/2, height/6);
-
+        // Entity logic
         for (let i=entities.length-1; i>=0; i--) {
             let entity = entities[i];
             if(entity == player) continue;
             
             entity.update();
-            entity.display();
             
-            // Remove the entity once it's done
             if (entity.isFinished()) entities.splice(i,1);
         }
-        
-        if(!this.hasLevelStarted())
+
+        // Player logic
+        if(!this.hasPlayerEnteredScene())
             player.position.y = height+600 - this.shipEntranceAnimation*800;
         else if(this.shipExitAnimation == 0) player.update();
         else player.position.y -= this.shipExitAnimation*(min(player.position.y+400,height*0.6)/20);
 
-        player.display();
-        
+        // Attack logic
         for (let i=attacks.length-1; i>=0; i--) {
             let attack = attacks[i];
             
             attack.update();
-            attack.display();
             
             for(let j=0; j<entities.length; j++) {
                 let entity = entities[j];
@@ -104,33 +129,86 @@ class LevelScene extends Scene {
                 }
             }
 
-            // Remove the attack once it's done
             if (attack.isFinished()) attacks.splice(i,1);
         }
+    }
+    
+    display() {
+        // Draw the title as "Level"
+        fill(0);
+        noStroke();
+        textSize(30);
+        textAlign(CENTER, CENTER);
+        text('Level', width/2, height/6);
 
+        if(this.currentWave) this.currentWave.draw();
+        for (let entity of entities) entity.display();
+        player.display();
+        for (let attack of attacks) attack.display();
 
-         // Draw a health bar for the player in the bottom left corner
-         player.displayHealthBar(20+this.UIEntranceAnimation*100, height-25, this.UIEntranceAnimation * 200, 20, CORNER);
-         stroke(0);
-         strokeWeight(this.UIEntranceAnimation*3);
-         noFill();
-         rect(20, height-35, this.UIEntranceAnimation * 200, 20);
+        // Draw a health bar for the player in the bottom left corner
+        player.displayHealthBar(20+this.UIEntranceAnimation*100, height-25, this.UIEntranceAnimation * 200, 20, CORNER);
+        stroke(0);
+        strokeWeight(this.UIEntranceAnimation*3);
+        noFill();
+        rect(20, height-35, this.UIEntranceAnimation * 200, 20);
 
-         if(this.endPanel) this.endPanel.display();
+        // Draw the pause button UI
+        fill(255);
+        stroke(0);
+        strokeWeight(2);
+        rectMode(CORNER);
+        rect(10,10,50,50,8);
+        strokeWeight(5);
+        line(27,20,27,50);
+        line(43,20,43,50);
+        
+        // Black cover when paused
+        if(this.isPaused) {
+            fill(0, 100);
+            noStroke();
+            rectMode(CORNER);
+            rect(0,0,width,height);
+        }
+
+        this.endPanel.display();
+        this.pausePanel.display();
+    }
+
+    hasPlayerEnteredScene() {
+        return this.shipEntranceAnimation == 1;
     }
 
     hasLevelStarted() {
-        return this.shipEntranceAnimation == 1;
+        return this.UIEntranceAnimation == 1;
     }
 
     hasLevelFinished() {
         return this.shipExitAnimation != 0;
     }
 
+    pauseGame() {
+        this.pausePanel.open();
+        if(this.currentWave) this.currentWave.pause();
+    }
+    
+    resumeGame() {
+        this.pausePanel.close();
+        if(this.currentWave) this.currentWave.resume();
+    }
+
     keyPressed() {
-        if(!this.hasLevelStarted() || this.hasLevelFinished()) return;
-        
+        if(!this.hasPlayerEnteredScene() || this.hasLevelFinished()) return;
+
         player.keyPressed();
+
+        if(!this.hasLevelStarted()) return;
+
+        if(keyCode == ESCAPE && this.pausePanel.startAnimation == int(this.pausePanel.startAnimation)) {
+            if(this.isPaused) this.resumeGame();
+            else this.pauseGame();
+        }
+        
     }
     
     keyReleased() {

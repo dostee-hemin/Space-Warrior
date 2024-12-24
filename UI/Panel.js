@@ -38,6 +38,10 @@ class Panel extends UI {
         });
     }
 
+    isActive() {
+        return this.startAnimation != 0;
+    }
+
     open() {
         p5.tween.manager.addTween(this)
             .addMotion('startAnimation', 1, 200, 'easeOutQuad')
