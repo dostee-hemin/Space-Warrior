@@ -24,7 +24,7 @@ class SmallTroop extends Troop {
     update() {
         super.update();
 
-        if(random(1) < 1) {
+        if(random(1) < 0.01) {
             this.shoot();
         }
     }
