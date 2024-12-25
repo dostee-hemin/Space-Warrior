@@ -6,13 +6,13 @@ class MainMenuScene extends Scene {
     start() {
         let y = height/2-100;
 
-        if(hasStartedGame) {
+        if(hasCompletedFirstLevel()) {
             let continueButton = createButton("Continue Game", width/2-100, y, 200,70);
             continueButton.onPress = () => {nextScene = new MapScene();};
             y+=100;
         }
         let newGameButton = createButton("New Game", width/2-100, y,200,70);
-        newGameButton.onPress = () => {nextScene = new SelectDifficultyScene();};
+        newGameButton.onPress = () => {nextScene = new SelectDifficultyScene('newGame');};
         y+=100;
         let survivalButton = createButton("Survival", width/2-100, y,200,70);
         y+=100;
@@ -21,7 +21,7 @@ class MainMenuScene extends Scene {
         let achievementsButton = createButton("Achievements", width/2-100, y,200,70);
         achievementsButton.onPress = () => {nextScene = new AchievementScene();};
 
-        if(!hasCompletedMap) {
+        if(!hasCompletedAllLevels()) {
             survivalButton.enabled = false;
             enemyRushButton.enabled = false;
         }

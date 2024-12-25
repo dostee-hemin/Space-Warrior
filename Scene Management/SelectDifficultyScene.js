@@ -1,28 +1,65 @@
 class SelectDifficultyScene extends Scene {
-    constructor() {
+    constructor(mode) {
         super();
+
+        this.levelInfo = null;
+        this.mode = mode;
+    }
+
+    preload() {
+        if(isLevelInfoLoaded()) return Promise.resolve();
+
+        const promise1 = new Promise((resolve) => {
+            loadJSON("./Levels/levelStructures.json", (loadedData) => {
+                levelStructures = Object.values(loadedData);
+                for(let i=0; i<levelStructures.length; i++) {
+                    let x = Math.sin(2.36*i) * width*0.3 + width/2;
+                    let y = 200 + i*100;
+
+                    levelStructures[i].levelNumber = i;
+                    levelStructures[i].x = x;
+                    levelStructures[i].y = y;
+                    levelStructures[i].unlocked = i==0;
+                    levelStructures[i].completed = false;
+                }
+                resolve();
+            });
+        });
+
+        return Promise.all([promise1]);
     }
 
     start() {
         let backButton = createButton("Home", 20, height-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
 
+        switch(this.mode) {
+            case 'newGame':
+                this.levelInfo = levelStructures[0];
+                break;
+            case 'enemyRush':
+                this.levelInfo = levelStructures[0];
+                for(let i=1; i<levelStructures.length; i++) 
+                    this.levelInfo.waveStructure.concat(levelStructures[i].waveStructure);
+                break;
+        }
+
         let easyButton = createButton("Easy", width/2-75, height/2-200, 150, 70);
         easyButton.onPress = () => {
             selectedDifficulty = 0;
-            nextScene = new LevelScene();
+            nextScene = new LevelScene(this.levelInfo);
             transition = new FadeTransition();
         };
         let normalButton = createButton("Normal", width/2-75, height/2-100, 150, 70);
         normalButton.onPress = () => {
             selectedDifficulty = 0.5;
-            nextScene = new LevelScene();
+            nextScene = new LevelScene(this.levelInfo);
             transition = new FadeTransition();
         };
         let hardButton = createButton("Hard", width/2-75, height/2, 150, 70);
         hardButton.onPress = () => {
             selectedDifficulty = 1;
-            nextScene = new LevelScene();
+            nextScene = new LevelScene(this.levelInfo);
             transition = new FadeTransition();
         };
     }

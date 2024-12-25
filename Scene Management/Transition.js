@@ -8,7 +8,7 @@ class Transition {
     // Called to update and display the transition animation
     draw() {
         // All transitions must switch scenes when they reach the halfway point
-        if(this.isHalfwayDone() && !this.hasSwitchedScenes) {
+        if(this.isHalfwayDone() && !this.hasSwitchedScenes && nextScene.preloadComplete) {
             switchToNextScene();
             this.hasSwitchedScenes = true;
         }
