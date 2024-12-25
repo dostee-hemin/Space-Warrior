@@ -1,6 +1,6 @@
 class Troop extends Entity {
     constructor(x, y, baseHealth, pathToFollow, timeToWait) {
-        super(baseHealth, false);
+        super(baseHealth * (1+selectedDifficulty*2), false);
 
         this.startTime = millis();
         this.timeToWait = timeToWait;
@@ -30,8 +30,8 @@ class Troop extends Entity {
         if (this.hitbox.type == 'circle') offset = this.hitbox.r*2;
         else if (this.hitbox.type == 'rect') offset = this.hitbox.h;
         
-        if (this.health != this.startingHealth)
-            this.displayHealthBar(this.position.x, this.position.y-offset, this.startingHealth*5, 5, CENTER);
+        if (this.health != this.baseHealth)
+            this.displayHealthBar(this.position.x, this.position.y-offset, this.baseHealth*5, 5, CENTER);
     }
 
     applyEffect(effect) {

@@ -1,8 +1,7 @@
 class Entity {
     constructor(baseHealth, isFriendly) {
         this.baseHealth = baseHealth;
-        this.startingHealth = this.baseHealth;
-        this.health = this.startingHealth;
+        this.health = this.baseHealth;
         this.position;
         this.hitbox;
         this.isFriendly = isFriendly;
@@ -45,10 +44,10 @@ class Entity {
         rect(x, y, barWidth, barHeight);
         if(millis() - this.timeOfLastHit < this.timeToShowDamage) {
             fill(255,255,0);
-            rect(x, y, max(0, map(this.healthBeforeHit, 0, this.startingHealth, 0, barWidth)), barHeight);
+            rect(x, y, max(0, map(this.healthBeforeHit, 0, this.baseHealth, 0, barWidth)), barHeight);
         }
         fill(0,255,0);
-        rect(x, y, max(0, map(this.health, 0, this.startingHealth, 0, barWidth)), barHeight);
+        rect(x, y, max(0, map(this.health, 0, this.baseHealth, 0, barWidth)), barHeight);
     }
 
     

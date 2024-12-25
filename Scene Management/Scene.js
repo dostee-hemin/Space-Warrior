@@ -1,10 +1,18 @@
 // Defines structure of each scene implementation
 class Scene {
     constructor() {
-        this.preload();
+        this.preloadComplete = false;
+        this.waitForPreload();
     }
 
-    preload() {} // Called before start to load necessary files
+    waitForPreload() {
+        this.preload().then(() => {
+            this.preloadComplete = true;
+        });
+    }
+
+    // Called before start to load necessary files
+    preload() {return Promise.resolve();}
     start() {}   // Called to initialize values
     draw() {}    // Called once per frame to update and draw scene elements
     close() {}   // Called before switching scenes to reset values

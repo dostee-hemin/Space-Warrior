@@ -1,0 +1,50 @@
+[
+    {
+        "waveStructure": [
+            {
+                "waitDuration": 4000,
+                "troops": [
+                    {"type": "small", "amount": 5, "path": "XP"},
+                    {"type": "medium", "amount": 3, "path": "HBP"}
+                ]
+            }
+        ]
+    },
+    {
+        "waveStructure": [
+            {
+                "waitDuration": 4000,
+                "troops": [
+                    {"type": "small", "amount": 5, "path": "RP"},
+                    {"type": "medium", "amount": 3, "path": "VBP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "large", "amount": 1, "path": "HLP"}
+                ]
+            }
+        ]
+    },
+    {
+        "waveStructure": [
+            {
+                "waitDuration": 4000,
+                "troops": [
+                    {"type": "large", "amount": 4, "path": "HLP"}
+                ]
+            }
+        ]
+    },
+    {
+        "waveStructure": [
+            {
+                "waitDuration": 4000,
+                "troops": [
+                    {"type": "boss"}
+                ]
+            }
+        ]
+    }
+]

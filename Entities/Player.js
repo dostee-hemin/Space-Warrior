@@ -100,6 +100,10 @@ class Player extends Entity {
         }
     }
 
+    getDamaged(damageAmount) {
+        super.getDamaged(damageAmount * (1+selectedDifficulty*4));
+    }
+
     // Returns true if the player has activated a dash
     isDashing() {
         return this.dashDirection.x != 0 || this.dashDirection.y != 0;

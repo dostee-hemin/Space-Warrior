@@ -3,27 +3,15 @@ let entities = [];
 let player;
 
 class LevelScene extends Scene {
-    constructor() {
+    constructor(levelInfo) {
         super();
 
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
         
-        this.waves = [];
-        this.waveStructures = [{
-            waitDuration: 4000,
-            troops: [
-                {type: 'small', amount: 5, path: 'XP'},
-                {type: 'medium', amount: 3, path: 'HBP'}
-            ]
-        },
-        {
-            waitDuration: 2000,
-            troops: [
-                {type: 'large', amount: 1, path: 'HLP'},
-            ]
-        }];
+        this.levelNumber = levelInfo.levelNumber;
+        this.waves = levelInfo.waveStructure;
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
@@ -39,44 +27,45 @@ class LevelScene extends Scene {
 
         this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
 
-        let homeButton = createButton("Home", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
-        homeButton.onPress = () => {
-            nextScene = new MainMenuScene();
+        let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
+        continueButton.onPress = () => {
+            if(hasCompletedAllLevels()) nextScene = new MapScene();
+            else nextScene = new LevelScene(getLevelInfo(this.levelNumber+1));
+            transition = new FadeTransition();
+        };
+        let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
+        mapButton.onPress = () => {
+            nextScene = new MapScene();
             transition = new FadeTransition();
         };
         let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
         retryButton.onPress = () => {
-            nextScene = new LevelScene();
+            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
             transition = new FadeTransition();
         };
-        this.levelCompletePanel.addUI([homeButton,retryButton]);
+        this.levelCompletePanel.addUI([continueButton, mapButton, retryButton]);
         
         this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
         let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
         resumeButton.onPress = () => {this.resumeGame();}
         let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
         retryButton2.onPress = () => {
-            nextScene = new LevelScene();
+            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
             transition = new FadeTransition();
         };
-        let homeButton2 = createButton("Home", -100, -this.pausePanel.h/2 + 215, 200, 50);
-        homeButton2.onPress = () => {
-            nextScene = new MainMenuScene();
+        let mapButton2 = createButton("Map", -100, -this.pausePanel.h/2 + 215, 200, 50);
+        mapButton2.onPress = () => {
+            nextScene = new MapScene();
             transition = new FadeTransition();
         };
-        this.pausePanel.addUI([resumeButton,homeButton2,retryButton2]);
+        this.pausePanel.addUI([resumeButton,mapButton2,retryButton2]);
 
         this.pauseButton = createButton("", 10,10,50,50);
         this.pauseButton.onPress = () => {this.pauseGame();}
-        this.pauseButton.setStyle({
-            fillBg: color(0,0),
-            fillBgHover: color(0,50),
-            fillBgActive: color(0,100),
-            strokeWeight: 0
-        });
+        this.pauseButton.setStyle(emptyButtonStyle);
 
         this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
-        this.gameOverPanel.addUI([homeButton, retryButton]);
+        this.gameOverPanel.addUI([mapButton, retryButton]);
         this.gameOverAnimation = 0;
     }
 
@@ -95,16 +84,18 @@ class LevelScene extends Scene {
         // Wave logic
         if(this.UIEntranceAnimation == 1 && this.shipExitAnimation == 0) {
             if (this.canAddTroops) {
-                if(this.currentWaveIndex == this.waveStructures.length) {
-                    this.currentWaveIndex++;
+                if(this.currentWaveIndex == this.waves.length) {
+                    this.currentWaveIndex++;    // Increasing it one more time so we don't enter this block again
+                    unlockLevel(this.levelNumber + 1);
+                    completeLevel(this.levelNumber);
                     p5.tween.manager.addTween(this)
                     .addMotion('shipExitAnimation', 0, 2000)
                     .addMotion('shipExitAnimation', -0.2, 300)
                     .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
                     .onEnd(() => {this.levelCompletePanel.open();})
                     .startTween()
-                } else if(this.currentWaveIndex < this.waveStructures.length) 
-                    this.currentWave = new Wave(this.waveStructures[this.currentWaveIndex++]);
+                } else if(this.currentWaveIndex < this.waves.length) 
+                    this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
             this.canAddTroops = entities.length == 1 && this.currentWave.hasReleasedTroops();
         }
@@ -159,7 +150,7 @@ class LevelScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Level', width/2, height/6);
+        text('Level ' + (this.levelNumber+1), width/2, height/6);
 
         if(this.currentWave) this.currentWave.draw();
         for (let entity of entities) entity.display();

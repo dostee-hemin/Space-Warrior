@@ -1,14 +1,23 @@
 let currentScene;
 let nextScene;
 let transition;
+let selectedDifficulty = 0;
 let gui;
+let emptyButtonStyle;
 
 function setup() {
   windowResized();
 
   gui = createGui();
 
-  currentScene = new LevelScene();
+  emptyButtonStyle = {
+    fillBg: color(0,0),
+    fillBgHover: color(0,50),
+    fillBgActive: color(0,100),
+    strokeWeight: 0
+  };
+
+  currentScene = new MainMenuScene();
   currentScene.start();
 }
 
@@ -36,7 +45,7 @@ function handleSceneSwitching() {
   
   // If we haven't set a transition, simply switch the scenes directly
   if (!transition) {
-    switchToNextScene();
+    if(nextScene.preloadComplete) switchToNextScene();
     return;
   }
   

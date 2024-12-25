@@ -3,6 +3,11 @@ class AchievementScene extends Scene {
         super();
     }
 
+    start() {
+        let backButton = createButton("Home", 20, height-70, 100, 50);
+        backButton.onPress = () => {nextScene = new MainMenuScene();};
+    }
+
     draw() {
         // Simply draws the title as the "Achievements"
         fill(0);
