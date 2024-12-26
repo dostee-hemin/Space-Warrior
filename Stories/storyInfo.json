@@ -1,0 +1,34 @@
+[
+    {
+        "pages" : [
+            {
+                "text": "Long ago, the evil warlord Balsius sought control over the galatic council.",
+                "duration": 5,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            },
+            {
+                "text": "He was very evil",
+                "duration": 3,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png"
+                ]
+            },
+            {
+                "text": "You are the chosen one",
+                "duration": 1,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png"
+                ]
+            },
+            {
+                "text": "Go and stop him!",
+                "duration": 6,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            }
+        ]
+    }
+]

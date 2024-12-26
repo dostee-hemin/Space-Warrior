@@ -1,11 +1,9 @@
-let levelStructures;
-
 class MapScene extends Scene {
     constructor() {
         super();
     }
 
-    start() {
+    setup() {
         let backButton = createButton("Home", 20, height-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
 

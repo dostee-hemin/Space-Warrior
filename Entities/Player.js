@@ -85,7 +85,7 @@ class Player extends Entity {
         // Find out how long the player has been holding the space bar (if at all)
         let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar
         // If the player has held the space bar, set the charge strength of the next attack based on how long they've held it
-        if(spaceKeyHeldDuration) {
+        if(spaceKeyHeldDuration > keyHoldTime) {
             this.chargedStrength = min(int(spaceKeyHeldDuration / this.chargeTime), 4);
         } 
         // Once the player lets go of the space bar and a charge has been made, launch either a charged attack or laser based on the strength
