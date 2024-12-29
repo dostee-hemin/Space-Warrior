@@ -5,7 +5,7 @@ class StoryScene extends Scene {
         this.levelNumber = levelNumber;
         this.currentPageNumber = -1;
         this.currentPage;
-        this.pageAnimation = -1;
+        this.pageAnimation = 1;
         this.currentImages = [];
         this.nextImages = [];
 
@@ -42,7 +42,10 @@ class StoryScene extends Scene {
     }
 
     switchToNextPage() {
-        let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1 && !this.isSkipping;
+        if(this.isSkipping) return;
+        if(this.pageAnimation != 1) this.isSkipping = true;
+
+        let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
             nextScene = new LevelScene(levelStructures[this.levelNumber]);
             transition = new FadeTransition();
@@ -105,10 +108,8 @@ class StoryScene extends Scene {
         circle(width-50,height-50,80);
         let duration = getHeldDownDuration(83);
         if(!this.isSkipping) {
-            if(duration >= 2000) {
-                this.isSkipping = true;
-                this.switchToNextPage();
-            } else {
+            if(duration >= 2000) this.switchToNextPage();
+            else {
                 noFill();
                 stroke(255);
                 strokeWeight(4);
