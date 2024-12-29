@@ -30,5 +30,59 @@
                 ]
             }
         ]
+    },
+    {
+        "pages" : [
+            {
+                "text": "This is page 1.",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            },
+            {
+                "text": "This is page 2.",
+                "duration": 4,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            }
+        ]
+    },
+    {
+        "pages" : [
+            {
+                "text": "This is level 3.",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            },
+            {
+                "text": "This is level 3. (part 2)",
+                "duration": 4,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            }
+        ]
+    },
+    {
+        "pages" : [
+            {
+                "text": "Last level bro.",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            },
+            {
+                "text": "Good luck...",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            }
+        ]
     }
 ]

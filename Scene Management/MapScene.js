@@ -12,7 +12,7 @@ class MapScene extends Scene {
 
             let button = createButton("", currentLevel.x-25, currentLevel.y-25, 50, 50);
             button.onPress = ()=>{
-                nextScene = new LevelScene(currentLevel); 
+                nextScene = new StoryScene(i); 
                 transition = new FadeTransition();};
             button.visible = currentLevel.unlocked;
             button.setStyle(emptyButtonStyle);
