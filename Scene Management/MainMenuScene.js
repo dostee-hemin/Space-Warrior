@@ -3,7 +3,7 @@ class MainMenuScene extends Scene {
         super();
     }
 
-    start() {
+    setup() {
         let y = height/2-100;
 
         if(hasCompletedFirstLevel()) {

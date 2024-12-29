@@ -2,6 +2,8 @@ let currentScene;
 let nextScene;
 let transition;
 let selectedDifficulty = 0;
+let levelStructures;
+let storyInfo;
 let gui;
 let emptyButtonStyle;
 
@@ -17,8 +19,8 @@ function setup() {
     strokeWeight: 0
   };
 
-  currentScene = new MainMenuScene();
-  currentScene.start();
+  nextScene = new MainMenuScene();
+  currentScene = new Scene();
 }
 
 function draw() {
@@ -35,7 +37,7 @@ function switchToNextScene() {
   gui.objects = [];
   currentScene.close();
   currentScene = nextScene;
-  currentScene.start();
+  currentScene.setup();
   nextScene = null;
 }
 
@@ -45,12 +47,16 @@ function handleSceneSwitching() {
   
   // If we haven't set a transition, simply switch the scenes directly
   if (!transition) {
-    if(nextScene.preloadComplete) switchToNextScene();
+    if(nextScene.preloadComplete) {
+      switchToNextScene();
+      currentScene.start()
+    }
     return;
   }
   
   // If the transition is complete, reset all values and begin the new scene
   if (transition.isDone()) {
+    currentScene.start();
     transition = null;
     return;
   }

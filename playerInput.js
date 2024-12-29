@@ -33,13 +33,13 @@ function isDoubleClick() {
 }
 
 // Returns the duration the given key has been held down for in milliseconds
-// (Returns null if the key isn't being held down)
+// (Returns 0 if the key isn't being held down)
 function getHeldDownDuration(heldKeyCode) {
     for (let i=0; i<keyPressTimes.length; i++) {
         let duration = millis() - keyPressTimes[i][1];
-        if (keyPressTimes[i][0] == heldKeyCode && duration > keyHoldTime) {
+        if (keyPressTimes[i][0] == heldKeyCode) {
             return duration;
         }
     }
-    return null;
+    return 0;
 }

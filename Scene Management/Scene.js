@@ -13,7 +13,8 @@ class Scene {
 
     // Called before start to load necessary files
     preload() {return Promise.resolve();}
-    start() {}   // Called to initialize values
+    setup() {}   // Called to initialize values
+    start() {}   // Called when transition is complete
     draw() {}    // Called once per frame to update and draw scene elements
     close() {}   // Called before switching scenes to reset values
     keyPressed() {}     // Called to handle player inputs when a key is pressed

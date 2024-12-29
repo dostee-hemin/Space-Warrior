@@ -18,19 +18,15 @@ class LevelScene extends Scene {
         this.isPaused = false;
     }
 
-    start() {
+    setup() {
         player = new Player();
-        p5.tween.manager.addTween(this)
-            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
-            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
-            .startTween()
 
         this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
             if(hasCompletedAllLevels()) nextScene = new MapScene();
-            else nextScene = new LevelScene(getLevelInfo(this.levelNumber+1));
+            else nextScene = new StoryScene(this.levelNumber+1);
             transition = new FadeTransition();
         };
         let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
@@ -67,6 +63,13 @@ class LevelScene extends Scene {
         this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
         this.gameOverPanel.addUI([mapButton, retryButton]);
         this.gameOverAnimation = 0;
+    }
+
+    start() {
+        p5.tween.manager.addTween(this)
+            .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
+            .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
+            .startTween()
     }
 
     draw() {

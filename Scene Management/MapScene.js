@@ -1,11 +1,9 @@
-let levelStructures;
-
 class MapScene extends Scene {
     constructor() {
         super();
     }
 
-    start() {
+    setup() {
         let backButton = createButton("Home", 20, height-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
 
@@ -14,7 +12,7 @@ class MapScene extends Scene {
 
             let button = createButton("", currentLevel.x-25, currentLevel.y-25, 50, 50);
             button.onPress = ()=>{
-                nextScene = new LevelScene(currentLevel); 
+                nextScene = new StoryScene(i); 
                 transition = new FadeTransition();};
             button.visible = currentLevel.unlocked;
             button.setStyle(emptyButtonStyle);
