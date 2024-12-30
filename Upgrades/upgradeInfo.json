@@ -4,7 +4,7 @@
         "iconPath": "test_icon.png",
         "unlocked": true,
         "equipped": true,
-        "isEquippable": true,
+        "type": "weapon",
         "prices": {
             "toUnlock": 0,
             "toImprove": [20,20,20,30,30,30,40,40]
@@ -15,7 +15,7 @@
         "iconPath": "test_icon.png",
         "unlocked": true,
         "equipped": true,
-        "isEquippable": true,
+        "type": "weapon",
         "prices": {
             "toUnlock": 0,
             "toImprove": [50,50,50,100]
@@ -26,7 +26,7 @@
         "iconPath": "test_icon.png",
         "unlocked": false,
         "equipped": false,
-        "isEquippable": true,
+        "type": "weapon",
         "prices": {
             "toUnlock": 200,
             "toImprove": [20,40,60,80]
@@ -37,17 +37,50 @@
         "iconPath": "test_icon.png",
         "unlocked": false,
         "equipped": false,
-        "isEquippable": true,
+        "type": "weapon",
         "prices": {
             "toUnlock": 300,
             "toImprove": [100,200]
         }
     },
     {
+        "name": "Freeze Wave",
+        "iconPath": "test_icon.png",
+        "unlocked": true,
+        "equipped": true,
+        "type": "ability",
+        "prices": {
+            "toUnlock": 200,
+            "toImprove": []
+        }
+    },
+    {
+        "name": "Damage Wave",
+        "iconPath": "test_icon.png",
+        "unlocked": false,
+        "equipped": false,
+        "type": "ability",
+        "prices": {
+            "toUnlock": 300,
+            "toImprove": []
+        }
+    },
+    {
+        "name": "Regain Health",
+        "iconPath": "test_icon.png",
+        "unlocked": false,
+        "equipped": false,
+        "type": "ability",
+        "prices": {
+            "toUnlock": 300,
+            "toImprove": []
+        }
+    },
+    {
         "name": "Health",
         "iconPath": "test_icon.png",
         "unlocked": true,
-        "isEquippable": false,
+        "type": "stat",
         "prices": {
             "toUnlock": 0,
             "toImprove": [20,20,20,20,20]
@@ -57,7 +90,7 @@
         "name": "Speed",
         "iconPath": "test_icon.png",
         "unlocked": true,
-        "isEquippable": false,
+        "type": "stat",
         "prices": {
             "toUnlock": 0,
             "toImprove": [10,10,10,10,10]

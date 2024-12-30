@@ -31,6 +31,7 @@ function loadUpgradeInfo() {
                 upgradeInfo[i].currentLevel = 0;
                 upgradeInfo[i].maxLevel = upgradeInfo[i].prices.toImprove.length;
                 upgradeInfo[i].icon = loadImage("./Assets/Images/"+upgradeInfo[i].iconPath);
+                upgradeInfo[i].isEquipable = upgradeInfo[i].type != "stat";
             }
             resolve();
         });
