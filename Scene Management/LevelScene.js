@@ -92,12 +92,13 @@ class LevelScene extends Scene {
                     this.currentWaveIndex++;    // Increasing it one more time so we don't enter this block again
                     unlockLevel(this.levelNumber + 1);
                     completeLevel(this.levelNumber);
+                    currency += this.levelCurrency;
                     p5.tween.manager.addTween(this)
-                    .addMotion('shipExitAnimation', 0, 2000)
-                    .addMotion('shipExitAnimation', -0.2, 300)
-                    .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
-                    .onEnd(() => {this.levelCompletePanel.open();})
-                    .startTween()
+                        .addMotion('shipExitAnimation', 0, 2000)
+                        .addMotion('shipExitAnimation', -0.2, 300)
+                        .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
+                        .onEnd(() => {this.levelCompletePanel.open();})
+                        .startTween()
                 } else if(this.currentWaveIndex < this.waves.length) 
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
@@ -187,8 +188,6 @@ class LevelScene extends Scene {
         textSize(40);
         textAlign(CENTER,CENTER);
         text("$"+ this.levelCurrency, width/2,30);
-
-        if(this.levelCompletePanel.open)
         
         // Black cover when paused
         if(this.isPaused) {

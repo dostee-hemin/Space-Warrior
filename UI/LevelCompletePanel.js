@@ -4,6 +4,7 @@ class LevelCompletePanel extends Panel {
 
         this.baseScore = currency;
         this.newScoreAmount = 0;
+        this.startTime = millis();
     }
 
     display(targetScore) {
@@ -11,7 +12,8 @@ class LevelCompletePanel extends Panel {
 
         if(!super.isOpen()) return;
 
-        this.newScoreAmount = min(this.newScoreAmount+2, targetScore);
+        if(millis() - this.startTime >= 1500)
+            this.newScoreAmount = min(this.newScoreAmount+2, targetScore);
 
         fill(0);
         noStroke();

@@ -2,7 +2,7 @@ let currentScene;
 let nextScene;
 let transition;
 let selectedDifficulty = 0;
-let currency = 0;
+let currency = 120;
 let levelStructures;
 let storyInfo;
 let gui;

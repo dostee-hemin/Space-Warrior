@@ -6,6 +6,9 @@ class MapScene extends Scene {
     setup() {
         let backButton = createButton("Home", 20, height-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
+        
+        let upgradeButton = createButton("Upgrades", 30,10,100,40);
+        upgradeButton.onPress = () => {nextScene = new UpgradeScene();};
 
         for(let i=0; i<levelStructures.length; i++) {
             let currentLevel = levelStructures[i];
@@ -20,12 +23,14 @@ class MapScene extends Scene {
     }
 
     draw() {
+        // Scene Title
         fill(0);
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
         text('Map', width/2, height/6);
 
+        // Level Paths
         for(let i=1; i<levelStructures.length; i++) {
             let currentLevel = getLevelInfo(i);
             let previousLevel = getLevelInfo(i-1);
@@ -34,6 +39,7 @@ class MapScene extends Scene {
             line(previousLevel.x, previousLevel.y, currentLevel.x, currentLevel.y);
         }
 
+        // Level Buttons
         for(let i=0; i<levelStructures.length; i++) {
             let currentLevel = getLevelInfo(i);
             if(currentLevel.completed) fill(0,200,50);
@@ -48,5 +54,14 @@ class MapScene extends Scene {
             textAlign(CENTER,CENTER);
             text(i+1, currentLevel.x, currentLevel.y);
         }
+
+        // Currency
+        fill(0);
+        noStroke();
+        textSize(24);
+        textAlign(CENTER,CENTER);
+        text("Total $", width/2, 20);
+        textSize(50);
+        text(currency, width/2, 55);
     }
 }
