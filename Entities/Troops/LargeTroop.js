@@ -46,6 +46,6 @@ class LargeTroop extends Troop {
     }
 
     shoot() {
-        new SmartBullet(this.position.x, this.position.y, player);
+        new SmartBullet(this.position.x, this.position.y, player, false);
     }
 }

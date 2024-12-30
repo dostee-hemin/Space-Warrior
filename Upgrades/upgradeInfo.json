@@ -29,7 +29,7 @@
         "type": "weaponHold",
         "prices": {
             "toUnlock": 0,
-            "toImprove": [50,50,50,100]
+            "toImprove": [50,50,100]
         }
     },
     {

@@ -1,11 +1,11 @@
 class Player extends Entity {
     constructor() {
-        super(20, true, 0);
+        super(20 + upgradeInfo[upgradeInfo.length-2].currentLevel*5, true, 0);
 
         this.position = createVector(width/2, height+1000);
         this.velocity = createVector();
         this.targetVelocity = createVector();
-        this.maxSpeed = 4;  // In pixels per frame
+        this.maxSpeed = 2+upgradeInfo[upgradeInfo.length-1].currentLevel;  // In pixels per frame
         
         this.hitbox  = {'type': 'rect', 'w': 10, 'h': 20};
 
@@ -25,8 +25,8 @@ class Player extends Entity {
         ]
         this.rotation = 0;
 
-        this.hasUsedSpecialAbility = false;
-        this.specialAbilityClass = FreezeWave;
+        this.specialAbilityCooldown = 0;
+        this.cooldownTime = 20000;
     }
 
     display() {
@@ -84,10 +84,10 @@ class Player extends Entity {
 
         // Find out how long the player has been holding the space bar (if at all)
         let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar
-        // If the player has held the space bar, set the charge strength of the next attack based on how long they've held it
-        if(spaceKeyHeldDuration > keyHoldTime) {
-            this.chargedStrength = min(int(spaceKeyHeldDuration / this.chargeTime), 4);
-        } 
+
+        // If the player has held the space bar, fire the continuous shots
+        if(spaceKeyHeldDuration > keyHoldTime) this.continuousShoot();
+
         // Once the player lets go of the space bar and a charge has been made, launch either a charged attack or laser based on the strength
         else if (this.chargedStrength != 0) {
             let x = this.position.x;
@@ -120,7 +120,7 @@ class Player extends Entity {
             // Set the x or y direction of the dash
             if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
-            this.dashDirection.mult(this.maxSpeed*2);
+            this.dashDirection.mult(8);
 
             this.dashStartTime = millis();
             return;
@@ -160,18 +160,16 @@ class Player extends Entity {
             case ' ':
                 // If the space bar is double clicked, perform the special ability
                 if (isDoubleClick()) {
-                    if(!this.hasUsedSpecialAbility) {
-                        new this.specialAbilityClass(this.position.x, this.position.y);
-                        this.hasUsedSpecialAbility = true;
+                    if(this.specialAbilityCooldown == 0) {
+                        this.specialAbility();
+                        this.specialAbilityCooldown = 1;
+                        p5.tween.manager.addTween(this)
+                            .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
+                            .startTween();
                     }
                 }
                 // If the space bar is simply clicked once, shoot a bullet
-                else {
-                    let x = this.position.x;
-                    let y = this.position.y;
-                    let angle = -HALF_PI;
-                    new Bullet(x, y, angle, 8, true);
-                }
+                else this.singleShoot();
                 break;
         }
     }
@@ -195,5 +193,131 @@ class Player extends Entity {
         }
         // Make sure to scale the velocity to match the max speed
         this.targetVelocity.setMag(this.maxSpeed);
+    }
+
+    specialAbility() {
+        let x = this.position.x;
+        let y = this.position.y;
+
+        for(let i=0; i<upgradeInfo.length; i++) {
+            let upgrade = upgradeInfo[i];
+
+            if(!upgrade.isEquipable) continue;
+            if(!upgrade.equipped || upgrade.type != "ability") continue;
+
+            switch(upgrade.name) {
+                case "Freeze Wave":
+                    new FreezeWave(x, y);
+                    break;
+                case "Damage Wave":
+                    new DamageWave(x, y);
+                    break;
+                case "Regain Health":
+                    this.health = min(this.health+10, this.baseHealth);
+                    break;
+            }
+        }
+    }
+
+    singleShoot() {
+        let x = this.position.x;
+        let y = this.position.y;
+
+        for(let i=0; i<upgradeInfo.length; i++) {
+            let upgrade = upgradeInfo[i];
+            
+            if(!upgrade.isEquipable) continue;
+            if(!upgrade.equipped || upgrade.type != "weaponSingle") continue;
+
+            switch(upgrade.name) {
+                case "Basic":
+                    switch(upgrade.currentLevel) {
+                        case 0:
+                            new Bullet(x, y, -HALF_PI, 8, true);
+                            break;
+                        case 1:
+                            new Bullet(x-4, y, -HALF_PI, 8, true);
+                            new Bullet(x+4, y, -HALF_PI, 8, true);
+                            break;
+                        case 2:
+                            new StrongBullet(x, y, -HALF_PI, 8, true);
+                            break;
+                        case 3:
+                            new Bullet(x-4,y, -HALF_PI-PI/9, 8, true);
+                            new Bullet(x-3, y, -HALF_PI, 8, true);
+                            new Bullet(x+3, y, -HALF_PI, 8, true);
+                            new Bullet(x+4,y, -HALF_PI+PI/9, 8, true);
+                            break;
+                        case 4:
+                            new Bullet(x-8,y, -HALF_PI-PI/9, 8, true);
+                            new StrongBullet(x, y-2, -HALF_PI, 8, true);
+                            new Bullet(x+8,y, -HALF_PI+PI/9, 8, true);
+                            break;
+                        case 5:
+                            new StrongBullet(x-8, y, -HALF_PI, 8, true);
+                            new StrongBullet(x+8, y, -HALF_PI, 8, true);
+                            break;
+                        case 6:
+                            new Bullet(x-16,y, -HALF_PI-PI/9, 8, true);
+                            new Bullet(x-16, y, -HALF_PI, 8, true);
+                            new StrongBullet(x, y-2, -HALF_PI, 8, true);
+                            new Bullet(x+16, y, -HALF_PI, 8, true);
+                            new Bullet(x+16,y, -HALF_PI+PI/9, 8, true);
+                            break;
+                        case 7:
+                            new Bullet(x-20, y, -HALF_PI, 8, true);
+                            new StrongBullet(x-8, y-2, -HALF_PI, 8, true);
+                            new StrongBullet(x+8, y-2, -HALF_PI, 8, true);
+                            new Bullet(x+20, y, -HALF_PI, 8, true);
+                            break;
+                        case 8:
+                            new StrongBullet(x-12,y, -HALF_PI-PI/9, 8, true);
+                            new StrongBullet(x-8, y, -HALF_PI, 8, true);
+                            new StrongBullet(x+8, y, -HALF_PI, 8, true);
+                            new StrongBullet(x+12,y, -HALF_PI+PI/9, 8, true);
+                            break;
+                    }
+                    break;
+                case "Missiles":
+                    let targetEntities = [];
+                    for(let j=0; j<entities.length; j++) {
+                        if(!entities[j].isFriendly) targetEntities.push(entities[j]);
+                    }
+                    
+                    for(let j=0; j<min(upgrade.currentLevel+1, targetEntities.length); j++) {
+                        new SmartBullet(x, y, this.popRandomElement(targetEntities), true);
+                    }
+                    break;
+            }
+        }
+    }
+
+    continuousShoot() {
+        let x = this.position.x;
+        let y = this.position.y;
+
+        for(let i=0; i<upgradeInfo.length; i++) {
+            let upgrade = upgradeInfo[i];
+            
+            if(!upgrade.isEquipable) continue;
+            if(!upgrade.equipped || upgrade.type != "weaponHold") continue;
+
+            switch(upgrade.name) {
+                case "Charged":
+                    this.chargedStrength = min(int(getHeldDownDuration(32) / this.chargeTime), upgrade.currentLevel+1);
+                    break;
+                case "Rapid Fire":
+                    let fireRate = 14 - upgrade.currentLevel * 3;
+                    if(frameCount % fireRate == 0) new WeakBullet(x,y,-HALF_PI,true);
+                    break;
+            }
+        }
+    }
+
+    popRandomElement(arr) {
+        let chosenIndex = Math.floor(Math.random() * arr.length);
+        let chosenElement = arr[chosenIndex];
+        arr.splice(chosenIndex,1);
+        return chosenElement;
     }
 }
