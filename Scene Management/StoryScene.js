@@ -14,16 +14,7 @@ class StoryScene extends Scene {
     }
 
     preload() {
-        if(storyInfo != null) return Promise.resolve();
-
-        const promise1 = new Promise((resolve) => {
-            loadJSON("./Stories/storyInfo.json", (loadedData) => {
-                storyInfo = Object.values(loadedData);
-                resolve();
-            });
-        });
-
-        return Promise.all([promise1]);
+        return Promise.all([loadStoryInfo()]);
     }
 
     start() {
@@ -47,7 +38,7 @@ class StoryScene extends Scene {
 
         let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
-            nextScene = new LevelScene(levelStructures[this.levelNumber]);
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
             return;
         }

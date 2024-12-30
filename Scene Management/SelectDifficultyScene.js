@@ -7,26 +7,7 @@ class SelectDifficultyScene extends Scene {
     }
 
     preload() {
-        if(isLevelInfoLoaded()) return Promise.resolve();
-
-        const promise1 = new Promise((resolve) => {
-            loadJSON("./Levels/levelStructures.json", (loadedData) => {
-                levelStructures = Object.values(loadedData);
-                for(let i=0; i<levelStructures.length; i++) {
-                    let x = Math.sin(2.36*i) * width*0.3 + width/2;
-                    let y = 200 + i*100;
-
-                    levelStructures[i].levelNumber = i;
-                    levelStructures[i].x = x;
-                    levelStructures[i].y = y;
-                    levelStructures[i].unlocked = i==0;
-                    levelStructures[i].completed = false;
-                }
-                resolve();
-            });
-        });
-
-        return Promise.all([promise1]);
+        return Promise.all([loadLevelStructure()]);
     }
 
     setup() {

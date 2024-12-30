@@ -3,15 +3,14 @@ let entities = [];
 let player;
 
 class LevelScene extends Scene {
-    constructor(levelInfo) {
+    constructor(levelNumber) {
         super();
 
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
         
-        this.levelNumber = levelInfo.levelNumber;
-        this.waves = levelInfo.waveStructure;
+        this.levelNumber = levelNumber;
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
@@ -19,10 +18,15 @@ class LevelScene extends Scene {
         this.levelCurrency = 0;
     }
 
+    preload() {
+        return Promise.all([loadLevelStructure(), loadUpgradeInfo()]);
+    }
+
     setup() {
         player = new Player();
 
         this.levelCompletePanel = new LevelCompletePanel();
+        this.waves = getLevelInfo(this.levelNumber).waveStructure;
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
@@ -37,7 +41,7 @@ class LevelScene extends Scene {
         };
         let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
         retryButton.onPress = () => {
-            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
         };
         this.levelCompletePanel.addUI([continueButton, mapButton, retryButton]);
@@ -47,7 +51,7 @@ class LevelScene extends Scene {
         resumeButton.onPress = () => {this.resumeGame();}
         let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
         retryButton2.onPress = () => {
-            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
         };
         let mapButton2 = createButton("Map", -100, -this.pausePanel.h/2 + 215, 200, 50);

@@ -3,6 +3,10 @@ class MapScene extends Scene {
         super();
     }
 
+    preload() {
+        return Promise.all([loadLevelStructure()]);
+    }
+
     setup() {
         let backButton = createButton("Home", 20, height-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
