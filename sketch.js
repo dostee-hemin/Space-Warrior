@@ -2,7 +2,7 @@ let currentScene;
 let nextScene;
 let transition;
 let selectedDifficulty = 0;
-let currency = 2000;
+let currency = 0;
 let levelStructures;
 let upgradeInfo;
 let storyInfo;
@@ -21,7 +21,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new UpgradeScene();
+  nextScene = new MainMenuScene();
   currentScene = new Scene();
 }
 

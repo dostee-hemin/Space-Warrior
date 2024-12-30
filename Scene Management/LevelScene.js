@@ -101,7 +101,7 @@ class LevelScene extends Scene {
                         .addMotion('shipExitAnimation', 0, 2000)
                         .addMotion('shipExitAnimation', -0.2, 300)
                         .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
-                        .onEnd(() => {this.levelCompletePanel.open();})
+                        .onEnd(() => {this.levelCompletePanel.open(this.levelCurrency);})
                         .startTween()
                 } else if(this.currentWaveIndex < this.waves.length) 
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
@@ -211,7 +211,7 @@ class LevelScene extends Scene {
             rect(0,0,width,height);
         }
 
-        this.levelCompletePanel.display(this.levelCurrency);
+        this.levelCompletePanel.display();
         this.gameOverPanel.display();
         this.pausePanel.display();
     }

@@ -7,13 +7,18 @@ class LevelCompletePanel extends Panel {
         this.startTime = millis();
     }
 
-    display(targetScore) {
+    open(targetScore) {
+        super.open();
+        p5.tween.manager.addTween(this)
+            .addMotion("newScoreAmount", 0, 1000)
+            .addMotion("newScoreAmount", targetScore, 3000, "easeOutQuad")
+            .startTween();
+    }
+
+    display() {
         super.display();
 
         if(!super.isOpen()) return;
-
-        if(millis() - this.startTime >= 1500)
-            this.newScoreAmount = min(this.newScoreAmount+2, targetScore);
 
         fill(0);
         noStroke();
@@ -21,6 +26,6 @@ class LevelCompletePanel extends Panel {
         textAlign(CENTER,CENTER);
         text("Total Currency", this.x, this.y-this.h*0.3);
         textSize(60);
-        text(this.baseScore + this.newScoreAmount, this.x, this.y-this.h*0.3+50);
+        text(int(this.baseScore + this.newScoreAmount), this.x, this.y-this.h*0.3+50);
     }
 }
