@@ -3,6 +3,8 @@
         "name": "Basic",
         "iconPath": "test_icon.png",
         "unlocked": true,
+        "equipped": true,
+        "isEquippable": true,
         "prices": {
             "toUnlock": 0,
             "toImprove": [20,20,20,30,30,30,40,40]
@@ -12,6 +14,8 @@
         "name": "Charged",
         "iconPath": "test_icon.png",
         "unlocked": true,
+        "equipped": true,
+        "isEquippable": true,
         "prices": {
             "toUnlock": 0,
             "toImprove": [50,50,50,100]
@@ -21,6 +25,8 @@
         "name": "Rapid Fire",
         "iconPath": "test_icon.png",
         "unlocked": false,
+        "equipped": false,
+        "isEquippable": true,
         "prices": {
             "toUnlock": 200,
             "toImprove": [20,40,60,80]
@@ -30,6 +36,8 @@
         "name": "Missiles",
         "iconPath": "test_icon.png",
         "unlocked": false,
+        "equipped": false,
+        "isEquippable": true,
         "prices": {
             "toUnlock": 300,
             "toImprove": [100,200]
@@ -39,6 +47,7 @@
         "name": "Health",
         "iconPath": "test_icon.png",
         "unlocked": true,
+        "isEquippable": false,
         "prices": {
             "toUnlock": 0,
             "toImprove": [20,20,20,20,20]
@@ -48,6 +57,7 @@
         "name": "Speed",
         "iconPath": "test_icon.png",
         "unlocked": true,
+        "isEquippable": false,
         "prices": {
             "toUnlock": 0,
             "toImprove": [10,10,10,10,10]

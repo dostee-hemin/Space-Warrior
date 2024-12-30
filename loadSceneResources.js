@@ -28,7 +28,7 @@ function loadUpgradeInfo() {
         loadJSON("./Upgrades/upgradeInfo.json", (loadedData) => {
             upgradeInfo = Object.values(loadedData);
             for(let i=0; i<upgradeInfo.length; i++) {
-                upgradeInfo[i].currentLevel = 1;
+                upgradeInfo[i].currentLevel = 0;
                 upgradeInfo[i].maxLevel = upgradeInfo[i].prices.toImprove.length;
                 upgradeInfo[i].icon = loadImage("./Assets/Images/"+upgradeInfo[i].iconPath);
             }

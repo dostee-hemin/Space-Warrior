@@ -2,7 +2,7 @@ let currentScene;
 let nextScene;
 let transition;
 let selectedDifficulty = 0;
-let currency = 120;
+let currency = 1000;
 let levelStructures;
 let upgradeInfo;
 let storyInfo;

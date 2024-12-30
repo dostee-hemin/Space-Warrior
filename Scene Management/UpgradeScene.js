@@ -32,7 +32,7 @@ class UpgradeScene extends Scene {
                 upgrade.unlocked = true
             };
             
-            let improveButton = createButton("",0,0, 100, 30);
+            let improveButton = createButton("",0,0, 80, 30);
             improveButton.onPress = ()=>{
                 let cost = upgrade.prices.toImprove[upgrade.currentLevel];
                 if(currency < cost) return;
@@ -41,9 +41,29 @@ class UpgradeScene extends Scene {
                 upgrade.currentLevel++;
             };
 
+            let equipButton = createButton("Equip",0,0,80,30);
+            equipButton.onPress = ()=>{
+                if(!upgrade.isEquippable) return;
+
+                if(upgrade.equipped) {
+                    upgrade.equipped = false;
+                    return;
+                }
+
+                let totalEquipped = 0;
+                for(let j=0; j<upgradeInfo.length; j++) {
+                    if(j == i) continue;
+                    totalEquipped += upgradeInfo[j].equipped ? 1 : 0;
+                }
+                if(totalEquipped == 2) return;
+
+                upgrade.equipped = true;
+            };
+
             this.upgradeButtons.push({
                 "unlock": unlockButton,
-                "improve": improveButton
+                "improve": improveButton,
+                "equip": equipButton
             });
         }
     }
@@ -68,21 +88,35 @@ class UpgradeScene extends Scene {
             // Set the positions of the upgrade buttons accordingly
             let unlockButton = this.upgradeButtons[i].unlock;
             let improveButton = this.upgradeButtons[i].improve;
+            let equipButton = this.upgradeButtons[i].equip;
             unlockButton.x = x-50;
             unlockButton.y = y-50;
-            improveButton.x = x-50;
+            improveButton.x = x+5 - (upgrade.isEquippable?0:45);
             improveButton.y = y-90;
+            equipButton.x = x-85 + (upgrade.currentLevel == upgrade.maxLevel?45:0);
+            equipButton.y = y-90;
+            equipButton.label = upgrade.equipped ? "Unequip" : "Equip"
 
             // Only show the improveButton if the upgrade is unlocked and not maxed out
             if(upgrade.unlocked) {
                 unlockButton.visible = false;
                 improveButton.visible = upgrade.currentLevel != upgrade.maxLevel;
+                equipButton.visible = upgrade.isEquippable;
                 improveButton.label = "$"+upgrade.prices.toImprove[upgrade.currentLevel];
             } 
             // Only show the unlockButton if the upgrade has not been unlocked yet
             else {
                 unlockButton.visible = true;
                 improveButton.visible = false;
+                equipButton.visible = false;
+            }
+
+            // Yellow highlight when equipped
+            if(upgrade.equipped) {
+                fill(200,200,0,150);
+                noStroke();
+                rectMode(CENTER);
+                rect(x,y+20,120,160);
             }
             
             // Icon
