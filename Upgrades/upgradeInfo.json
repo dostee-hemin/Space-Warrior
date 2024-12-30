@@ -4,10 +4,21 @@
         "iconPath": "test_icon.png",
         "unlocked": true,
         "equipped": true,
-        "type": "weapon",
+        "type": "weaponSingle",
         "prices": {
             "toUnlock": 0,
             "toImprove": [20,20,20,30,30,30,40,40]
+        }
+    },
+    {
+        "name": "Missiles",
+        "iconPath": "test_icon.png",
+        "unlocked": false,
+        "equipped": false,
+        "type": "weaponSingle",
+        "prices": {
+            "toUnlock": 300,
+            "toImprove": [100,200]
         }
     },
     {
@@ -15,7 +26,7 @@
         "iconPath": "test_icon.png",
         "unlocked": true,
         "equipped": true,
-        "type": "weapon",
+        "type": "weaponHold",
         "prices": {
             "toUnlock": 0,
             "toImprove": [50,50,50,100]
@@ -26,21 +37,10 @@
         "iconPath": "test_icon.png",
         "unlocked": false,
         "equipped": false,
-        "type": "weapon",
+        "type": "weaponHold",
         "prices": {
             "toUnlock": 200,
             "toImprove": [20,40,60,80]
-        }
-    },
-    {
-        "name": "Missiles",
-        "iconPath": "test_icon.png",
-        "unlocked": false,
-        "equipped": false,
-        "type": "weapon",
-        "prices": {
-            "toUnlock": 300,
-            "toImprove": [100,200]
         }
     },
     {

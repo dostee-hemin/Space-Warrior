@@ -70,6 +70,7 @@ class StoryScene extends Scene {
         rotate(0.06*this.pageAnimation*(this.currentPageNumber%2==0?1:-1));
         scale(1.3+0.05*this.pageAnimation);
         translate(-width/2,-height/2);
+        imageMode(CORNER);
         let offset = p5.Vector.fromAngle(2.36*this.currentPageNumber).mult(this.currentPage.duration);
         for(let i=0; i<this.currentImages.length; i++) {
             let y = i*min(this.currentPage.duration*5,20)*this.pageAnimation;
