@@ -14,16 +14,7 @@ class StoryScene extends Scene {
     }
 
     preload() {
-        if(storyInfo != null) return Promise.resolve();
-
-        const promise1 = new Promise((resolve) => {
-            loadJSON("./Stories/storyInfo.json", (loadedData) => {
-                storyInfo = Object.values(loadedData);
-                resolve();
-            });
-        });
-
-        return Promise.all([promise1]);
+        return Promise.all([loadStoryInfo()]);
     }
 
     start() {
@@ -47,7 +38,7 @@ class StoryScene extends Scene {
 
         let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
-            nextScene = new LevelScene(levelStructures[this.levelNumber]);
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
             return;
         }
@@ -79,6 +70,7 @@ class StoryScene extends Scene {
         rotate(0.06*this.pageAnimation*(this.currentPageNumber%2==0?1:-1));
         scale(1.3+0.05*this.pageAnimation);
         translate(-width/2,-height/2);
+        imageMode(CORNER);
         let offset = p5.Vector.fromAngle(2.36*this.currentPageNumber).mult(this.currentPage.duration);
         for(let i=0; i<this.currentImages.length; i++) {
             let y = i*min(this.currentPage.duration*5,20)*this.pageAnimation;

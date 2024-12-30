@@ -42,6 +42,10 @@ class Panel extends UI {
         return this.startAnimation != 0;
     }
 
+    isOpen() {
+        return this.startAnimation == 1;
+    }
+
     open() {
         p5.tween.manager.addTween(this)
             .addMotion('startAnimation', 1, 200, 'easeOutQuad')

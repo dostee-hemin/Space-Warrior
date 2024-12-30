@@ -3,25 +3,30 @@ let entities = [];
 let player;
 
 class LevelScene extends Scene {
-    constructor(levelInfo) {
+    constructor(levelNumber) {
         super();
 
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
         
-        this.levelNumber = levelInfo.levelNumber;
-        this.waves = levelInfo.waveStructure;
+        this.levelNumber = levelNumber;
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
         this.isPaused = false;
+        this.levelCurrency = 0;
+    }
+
+    preload() {
+        return Promise.all([loadLevelStructure(), loadUpgradeInfo()]);
     }
 
     setup() {
         player = new Player();
 
-        this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
+        this.levelCompletePanel = new LevelCompletePanel();
+        this.waves = getLevelInfo(this.levelNumber).waveStructure;
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
@@ -36,7 +41,7 @@ class LevelScene extends Scene {
         };
         let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
         retryButton.onPress = () => {
-            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
         };
         this.levelCompletePanel.addUI([continueButton, mapButton, retryButton]);
@@ -46,7 +51,7 @@ class LevelScene extends Scene {
         resumeButton.onPress = () => {this.resumeGame();}
         let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
         retryButton2.onPress = () => {
-            nextScene = new LevelScene(getLevelInfo(this.levelNumber));
+            nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
         };
         let mapButton2 = createButton("Map", -100, -this.pausePanel.h/2 + 215, 200, 50);
@@ -91,12 +96,13 @@ class LevelScene extends Scene {
                     this.currentWaveIndex++;    // Increasing it one more time so we don't enter this block again
                     unlockLevel(this.levelNumber + 1);
                     completeLevel(this.levelNumber);
+                    currency += this.levelCurrency;
                     p5.tween.manager.addTween(this)
-                    .addMotion('shipExitAnimation', 0, 2000)
-                    .addMotion('shipExitAnimation', -0.2, 300)
-                    .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
-                    .onEnd(() => {this.levelCompletePanel.open();})
-                    .startTween()
+                        .addMotion('shipExitAnimation', 0, 2000)
+                        .addMotion('shipExitAnimation', -0.2, 300)
+                        .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
+                        .onEnd(() => {this.levelCompletePanel.open(this.levelCurrency);})
+                        .startTween()
                 } else if(this.currentWaveIndex < this.waves.length) 
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
@@ -110,7 +116,10 @@ class LevelScene extends Scene {
             
             entity.update();
             
-            if (entity.isFinished()) entities.splice(i,1);
+            if (entity.isFinished()) {
+                entities.splice(i,1);
+                this.levelCurrency += entity.currencyPoints;
+            }
         }
 
         // Player logic
@@ -160,12 +169,22 @@ class LevelScene extends Scene {
         player.display();
         for (let attack of attacks) attack.display();
 
+        // Draw the ability cooldown
+        fill(100, this.UIEntranceAnimation*255);
+        stroke(0, this.UIEntranceAnimation*255);
+        strokeWeight(3);
+        rectMode(CORNER);
+        rect(20,height-35-this.UIEntranceAnimation*60,60,this.UIEntranceAnimation *60);
+        noStroke();
+        fill(0,100);
+        rect(20,height-35-player.specialAbilityCooldown*60,60,player.specialAbilityCooldown*60);
+
         // Draw a health bar for the player in the bottom left corner
-        player.displayHealthBar(20+this.UIEntranceAnimation*100, height-25, this.UIEntranceAnimation * 200, 20, CORNER);
+        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20, CORNER);
         stroke(0);
         strokeWeight(this.UIEntranceAnimation*3);
         noFill();
-        rect(20, height-35, this.UIEntranceAnimation * 200, 20);
+        rect(20, height-35, this.UIEntranceAnimation * player.baseHealth*6, 20);
 
         // Draw the pause button UI
         fill(255);
@@ -176,6 +195,13 @@ class LevelScene extends Scene {
         strokeWeight(5);
         line(27,20,27,50);
         line(43,20,43,50);
+
+        // Currency counter
+        fill(0);
+        noStroke();
+        textSize(40);
+        textAlign(CENTER,CENTER);
+        text("$"+ this.levelCurrency, width/2,30);
         
         // Black cover when paused
         if(this.isPaused) {
