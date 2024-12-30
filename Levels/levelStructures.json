@@ -4,8 +4,7 @@
             {
                 "waitDuration": 4000,
                 "troops": [
-                    {"type": "small", "amount": 5, "path": "XP"},
-                    {"type": "medium", "amount": 3, "path": "HBP"}
+                    {"type": "small", "amount": 1, "path": "XP"}
                 ]
             }
         ]

@@ -16,12 +16,13 @@ class LevelScene extends Scene {
         this.currentWave = null;
         this.canAddTroops = true;
         this.isPaused = false;
+        this.levelCurrency = 0;
     }
 
     setup() {
         player = new Player();
 
-        this.levelCompletePanel = new Panel('Level Complete', width/2, height/2, width*0.8, height*0.6);
+        this.levelCompletePanel = new LevelCompletePanel();
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
@@ -110,7 +111,10 @@ class LevelScene extends Scene {
             
             entity.update();
             
-            if (entity.isFinished()) entities.splice(i,1);
+            if (entity.isFinished()) {
+                entities.splice(i,1);
+                this.levelCurrency += entity.currencyPoints;
+            }
         }
 
         // Player logic
@@ -176,6 +180,15 @@ class LevelScene extends Scene {
         strokeWeight(5);
         line(27,20,27,50);
         line(43,20,43,50);
+
+        // Currency counter
+        fill(0);
+        noStroke();
+        textSize(40);
+        textAlign(CENTER,CENTER);
+        text("$"+ this.levelCurrency, width/2,30);
+
+        if(this.levelCompletePanel.open)
         
         // Black cover when paused
         if(this.isPaused) {
@@ -185,7 +198,7 @@ class LevelScene extends Scene {
             rect(0,0,width,height);
         }
 
-        this.levelCompletePanel.display();
+        this.levelCompletePanel.display(this.levelCurrency);
         this.gameOverPanel.display();
         this.pausePanel.display();
     }

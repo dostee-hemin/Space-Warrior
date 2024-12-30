@@ -1,6 +1,6 @@
 class MediumTroop extends Troop {
     constructor(x, y, pathToFollow, orderInGroup) {
-        super(x, y, 5, pathToFollow, orderInGroup*typeToTime['medium']);
+        super(x, y, 5, pathToFollow, orderInGroup*typeToTime['medium'], 25);
 
         this.speed = 2;
         this.hitbox = {'type': 'rect', 'w': 25, 'h': 25};

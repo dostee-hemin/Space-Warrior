@@ -1,6 +1,6 @@
 class Troop extends Entity {
-    constructor(x, y, baseHealth, pathToFollow, timeToWait) {
-        super(baseHealth * (1+selectedDifficulty*2), false);
+    constructor(x, y, baseHealth, pathToFollow, timeToWait, currencyPoints) {
+        super(baseHealth * (1+selectedDifficulty*2), false, currencyPoints);
 
         this.startTime = millis();
         this.timeToWait = timeToWait;

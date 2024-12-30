@@ -1,6 +1,6 @@
 class Player extends Entity {
     constructor() {
-        super(20, true);
+        super(20, true, 0);
 
         this.position = createVector(width/2, height+1000);
         this.velocity = createVector();

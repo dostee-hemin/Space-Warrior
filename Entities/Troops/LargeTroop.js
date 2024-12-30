@@ -1,6 +1,6 @@
 class LargeTroop extends Troop {
     constructor(x, y, pathToFollow, orderInGroup) {
-        super(x, y, 20, pathToFollow, orderInGroup*typeToTime['large']);
+        super(x, y, 20, pathToFollow, orderInGroup*typeToTime['large'], 60);
 
         this.speed = 1;
         this.hitbox = {'type': 'rect', 'w': 25, 'h': 25};

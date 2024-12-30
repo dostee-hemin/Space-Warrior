@@ -1,5 +1,5 @@
 class Entity {
-    constructor(baseHealth, isFriendly) {
+    constructor(baseHealth, isFriendly, currencyPoints) {
         this.baseHealth = baseHealth;
         this.health = this.baseHealth;
         this.position;
@@ -11,6 +11,7 @@ class Entity {
         this.timeOfLastHit = 0;
         this.timeToShowDamage = 500;    // In milliseconds
         this.healthBeforeHit = 0;
+        this.currencyPoints = currencyPoints;
     }
 
     display() {}                // Called to draw the entity on the canvas
