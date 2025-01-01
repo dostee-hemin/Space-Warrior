@@ -143,7 +143,7 @@ class LevelScene extends Scene {
                 if(entity instanceof Troop) {
                     this.totalEnemies--;
                     if(Math.random(1) <= this.numArmorPiecesLeft/this.totalEnemies) {
-                        let armorPiece = this.lockedArmorPieces.splice(Math.floor(Math.random(this.lockedArmorPieces.length)),1)[0];
+                        let armorPiece = this.lockedArmorPieces.splice(Math.floor(Math.random()*this.lockedArmorPieces.length),1)[0];
                         this.numArmorPiecesLeft--;
                         new ArmorPickupItem(entity.position.x, entity.position.y, armorPiece);
                     }

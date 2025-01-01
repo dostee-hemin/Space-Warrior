@@ -14,6 +14,9 @@ class MapScene extends Scene {
         let upgradeButton = createButton("Upgrades", 30,10,100,40);
         upgradeButton.onPress = () => {nextScene = new UpgradeScene();};
 
+        let armorButton = createButton("Armor Station", width-180,10,150,40);
+        armorButton.onPress = () => {nextScene = new ArmorStationScene();};
+
         for(let i=0; i<levelStructures.length; i++) {
             let currentLevel = levelStructures[i];
 

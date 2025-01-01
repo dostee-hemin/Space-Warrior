@@ -1,6 +1,7 @@
 [
     {
         "setName": "Organic Hull",
+        "description": "Grants constant health regeneration during battle",
         "pieces": [
             {
                 "shieldAmount": 5,
@@ -18,6 +19,7 @@
     },
     {
         "setName": "Miracle Shield",
+        "description": "Has a small chance to completely ignore an incoming attack",
         "pieces": [
             {
                 "shieldAmount": 3,

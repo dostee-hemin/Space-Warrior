@@ -18,7 +18,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new LevelScene(0);
+  nextScene = new ArmorStationScene();
   currentScene = new Scene();
 }
 
