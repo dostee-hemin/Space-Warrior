@@ -1,0 +1,38 @@
+[
+    {
+        "setName": "Organic Hull",
+        "description": "Grants constant health regeneration during battle",
+        "pieces": [
+            {
+                "shieldAmount": 5,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 10,
+                "iconPath": "test_icon.png"
+            }
+        ]
+    },
+    {
+        "setName": "Miracle Shield",
+        "description": "Has a small chance to completely ignore an incoming attack",
+        "pieces": [
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 6,
+                "iconPath": "test_icon.png"
+            }
+        ]
+    }
+]

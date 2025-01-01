@@ -1,5 +1,6 @@
 [
     {
+        "numArmorCollectables": 2,
         "waveStructure": [
             {
                 "waitDuration": 4000,
@@ -11,6 +12,7 @@
         ]
     },
     {
+        "numArmorCollectables": 3,
         "waveStructure": [
             {
                 "waitDuration": 4000,
@@ -28,6 +30,7 @@
         ]
     },
     {
+        "numArmorCollectables": 1,
         "waveStructure": [
             {
                 "waitDuration": 4000,

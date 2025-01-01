@@ -11,22 +11,34 @@ class LevelScene extends Scene {
         this.UIEntranceAnimation = 0;
         
         this.levelNumber = levelNumber;
+        this.levelInfo = null;
         this.currentWaveIndex = 0;
         this.currentWave = null;
         this.canAddTroops = true;
         this.isPaused = false;
         this.levelCurrency = 0;
+
+        // Get all pieces of armor that haven't been unlocked yet
+        this.lockedArmorPieces = [];
+        this.totalEnemies = 0;
+        this.numArmorPiecesLeft = 0;
     }
 
     preload() {
-        return Promise.all([loadLevelStructure(), loadUpgradeInfo()]);
+        return Promise.all([loadLevelStructure(), loadUpgradeInfo(), loadArmorInfo()]);
     }
 
     setup() {
         player = new Player();
 
         this.levelCompletePanel = new LevelCompletePanel();
-        this.waves = getLevelInfo(this.levelNumber).waveStructure;
+        this.levelInfo = getLevelInfo(this.levelNumber);
+        this.waves = this.levelInfo.waveStructure;
+        for(let i=0; i<this.waves.length; i++) {
+            for(let j=0; j<this.waves[i].troops.length; j++) {
+                this.totalEnemies += this.waves[i].troops[j].amount;
+            }
+        }
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
@@ -68,6 +80,16 @@ class LevelScene extends Scene {
         this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
         this.gameOverPanel.addUI([mapButton, retryButton]);
         this.gameOverAnimation = 0;
+
+        
+        for(let i=0; i<armorInfo.length; i++) {
+            for(let j=0; j<armorInfo[i].pieces.length; j++) {
+                if(armorInfo[i].pieces[j].unlocked) continue;
+
+                this.lockedArmorPieces.push(armorInfo[i].pieces[j]);
+            }
+        }
+        this.numArmorPiecesLeft = this.levelInfo.numArmorCollectables - this.levelInfo.numArmorCollected; 
     }
 
     start() {
@@ -117,6 +139,19 @@ class LevelScene extends Scene {
             entity.update();
             
             if (entity.isFinished()) {
+                // If a troop is defeated, there's a slight chance it will drop a random armor piece
+                if(entity instanceof Troop) {
+                    this.totalEnemies--;
+                    if(Math.random(1) <= this.numArmorPiecesLeft/this.totalEnemies) {
+                        let armorPiece = this.lockedArmorPieces.splice(Math.floor(Math.random()*this.lockedArmorPieces.length),1)[0];
+                        this.numArmorPiecesLeft--;
+                        new ArmorPickupItem(entity.position.x, entity.position.y, armorPiece);
+                    }
+                } 
+                // If an armor piece is collected, update how many have been collected in the level so far
+                else if(entity instanceof ArmorPickupItem) {
+                    if(entity.isPickedUp()) this.levelInfo.numArmorCollected++;
+                }
                 entities.splice(i,1);
                 this.levelCurrency += entity.currencyPoints;
             }
@@ -180,11 +215,11 @@ class LevelScene extends Scene {
         rect(20,height-35-player.specialAbilityCooldown*60,60,player.specialAbilityCooldown*60);
 
         // Draw a health bar for the player in the bottom left corner
-        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20, CORNER);
+        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20);
         stroke(0);
         strokeWeight(this.UIEntranceAnimation*3);
         noFill();
-        rect(20, height-35, this.UIEntranceAnimation * player.baseHealth*6, 20);
+        rect(20, height-35, this.UIEntranceAnimation * (player.baseHealth+player.baseSheildHealth)*6, 20);
 
         // Draw the pause button UI
         fill(255);
@@ -211,7 +246,7 @@ class LevelScene extends Scene {
             rect(0,0,width,height);
         }
 
-        this.levelCompletePanel.display();
+        this.levelCompletePanel.display(this.levelInfo.numArmorCollected, this.levelInfo.numArmorCollectables);
         this.gameOverPanel.display();
         this.pausePanel.display();
     }

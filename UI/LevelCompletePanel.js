@@ -15,7 +15,7 @@ class LevelCompletePanel extends Panel {
             .startTween();
     }
 
-    display() {
+    display(numArmorCollected, numArmorCollectables) {
         super.display();
 
         if(!super.isOpen()) return;
@@ -27,5 +27,14 @@ class LevelCompletePanel extends Panel {
         text("Total Currency", this.x, this.y-this.h*0.3);
         textSize(60);
         text(int(this.baseScore + this.newScoreAmount), this.x, this.y-this.h*0.3+50);
+
+        for(let i=0; i<numArmorCollectables; i++) {
+            let x = this.x - (numArmorCollectables-1)*30 + i*60;
+            let y = this.y - this.h*0.1;
+            fill(i < numArmorCollected ? 255 : 100, 0, 0);
+            stroke(30,0,0);
+            strokeWeight(4);
+            circle(x, y, 40);
+        }
     }
 }
