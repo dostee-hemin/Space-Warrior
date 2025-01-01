@@ -1,8 +1,10 @@
+const DATA_FOLDER_PATH = "./Data/"
+
 function loadLevelStructure() {
     if(isLevelInfoLoaded()) return Promise.resolve();
 
     const promise = new Promise((resolve) => {
-        loadJSON("./Levels/levelStructures.json", (loadedData) => {
+        loadJSON(DATA_FOLDER_PATH+"levelStructures.json", (loadedData) => {
             levelStructures = Object.values(loadedData);
             for(let i=0; i<levelStructures.length; i++) {
                 let x = Math.sin(2.36*i) * width*0.3 + width/2;
@@ -25,7 +27,7 @@ function loadUpgradeInfo() {
     if(upgradeInfo != null) return Promise.resolve();
 
     const promise = new Promise((resolve) => {
-        loadJSON("./Upgrades/upgradeInfo.json", (loadedData) => {
+        loadJSON(DATA_FOLDER_PATH+"upgradeInfo.json", (loadedData) => {
             upgradeInfo = Object.values(loadedData);
             for(let i=0; i<upgradeInfo.length; i++) {
                 upgradeInfo[i].currentLevel = 0;
@@ -44,7 +46,7 @@ function loadStoryInfo() {
     if(storyInfo != null) return Promise.resolve();
 
     const promise = new Promise((resolve) => {
-        loadJSON("./Stories/storyInfo.json", (loadedData) => {
+        loadJSON(DATA_FOLDER_PATH+"storyInfo.json", (loadedData) => {
             storyInfo = Object.values(loadedData);
             resolve();
         });
