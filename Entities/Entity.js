@@ -12,10 +12,35 @@ class Entity {
         this.timeToShowDamage = 500;    // In milliseconds
         this.healthBeforeHit = 0;
         this.currencyPoints = currencyPoints;
+        this.hasBeenBumped = false;
     }
 
     display() {}                // Called to draw the entity on the canvas
-    update() {}                 // Called to move and change the values of the entity
+
+    // Called to move and change the values of the entity
+    update() {
+        if(!this.hasBeenBumped) {
+            for(let i=0; i<entities.length; i++) {
+                let entity = entities[i];
+
+                if(entity == this) continue;
+                if(this.overlapsWith(entity)) {
+                    this.bump(entity);
+                    entity.bump(this);
+                    this.hasBeenBumped = true;
+                    entity.hasBeenBumped = true;
+                }
+            }
+        } else {
+            this.hasBeenBumped = false;
+            for(let i=0; i<entities.length; i++) {
+                if(entities[i] == this) continue;
+                if(this.overlapsWith(entities[i])) {
+                    this.hasBeenBumped = true;
+                }
+            }
+        }
+    }                 
 
     // Called when an attack has hit the entity
     getDamaged(damageAmount) {
@@ -32,6 +57,14 @@ class Entity {
     canCollideWithAttacks() {
         return true;
     }
+
+    overlapsWith(otherEntity) {
+        let thisRadius = (this.hitbox.type == 'circle') ? this.hitbox.r : Math.max(this.hitbox.w, this.hitbox.h);
+        let otherRadius = (otherEntity.hitbox.type == 'circle') ? otherEntity.hitbox.r : Math.max(otherEntity.hitbox.w, otherEntity.hitbox.h);
+        return distSq(this.position.x, this.position.y, otherEntity.position.x, otherEntity.position.y) < (thisRadius + otherRadius)**2;   
+    }
+
+    bump(otherEntity) {}
 
     // Called to draw the health bar of the entity
     displayHealthBar(x, y, barWidth, barHeight, barAlignment) {

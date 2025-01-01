@@ -1,4 +1,8 @@
 const DATA_FOLDER_PATH = "./Data/"
+let levelStructures;
+let upgradeInfo;
+let storyInfo;
+let armorInfo;
 
 function loadLevelStructure() {
     if(isLevelInfoLoaded()) return Promise.resolve();
@@ -15,6 +19,7 @@ function loadLevelStructure() {
                 levelStructures[i].y = y;
                 levelStructures[i].unlocked = i==0;
                 levelStructures[i].completed = false;
+                levelStructures[i].numArmorCollected = 0;
             }
             resolve();
         });
@@ -48,6 +53,27 @@ function loadStoryInfo() {
     const promise = new Promise((resolve) => {
         loadJSON(DATA_FOLDER_PATH+"storyInfo.json", (loadedData) => {
             storyInfo = Object.values(loadedData);
+            resolve();
+        });
+    });
+
+    return promise;
+}
+
+function loadArmorInfo() {
+    if(armorInfo != null) return Promise.resolve();
+
+    const promise = new Promise((resolve) => {
+        loadJSON(DATA_FOLDER_PATH+"armorInfo.json", (loadedData) => {
+            armorInfo = Object.values(loadedData);
+            for(let i=0; i<armorInfo.length; i++) {
+                armorInfo[i].equipped = false;
+                armorInfo[i].numPieces = 0;
+                for (let j = 0; j < armorInfo[i].pieces.length; j++) {
+                    armorInfo[i].pieces[j].icon = loadImage("./Assets/Images/"+armorInfo[i].pieces[j].iconPath);
+                    armorInfo[i].pieces[j].unlocked = false;
+                }
+            }
             resolve();
         });
     });

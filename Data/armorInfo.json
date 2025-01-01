@@ -1,0 +1,36 @@
+[
+    {
+        "setName": "Organic Hull",
+        "pieces": [
+            {
+                "shieldAmount": 5,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 10,
+                "iconPath": "test_icon.png"
+            }
+        ]
+    },
+    {
+        "setName": "Miracle Shield",
+        "pieces": [
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 3,
+                "iconPath": "test_icon.png"
+            },
+            {
+                "shieldAmount": 6,
+                "iconPath": "test_icon.png"
+            }
+        ]
+    }
+]

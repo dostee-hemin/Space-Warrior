@@ -7,7 +7,7 @@ class Player extends Entity {
         this.targetVelocity = createVector();
         this.maxSpeed = 2+upgradeInfo[upgradeInfo.length-1].currentLevel;  // In pixels per frame
         
-        this.hitbox  = {'type': 'rect', 'w': 10, 'h': 20};
+        this.hitbox  = {'type': 'rect', 'w': 10, 'h': 10};
 
         this.dashDirection = createVector();
         this.dashDuration = 150;        // In milliseconds
@@ -67,6 +67,8 @@ class Player extends Entity {
     }
 
     update() {
+        super.update();
+
         // If the player has activated a dash move, set the velocity to the dash direction
         if (this.isDashing() && millis() - this.dashStartTime < this.dashDuration) {
             this.velocity.set(this.dashDirection.x, this.dashDirection.y);
@@ -111,6 +113,12 @@ class Player extends Entity {
 
     canCollideWithAttacks() {
         return !this.isDashing();
+    }
+
+    bump(otherEntity) {
+        if(otherEntity instanceof PickupItem) return;
+
+        this.getDamaged(2);
     }
 
     // Function to utilize the arrow keys to activate dashes and set the target velocity

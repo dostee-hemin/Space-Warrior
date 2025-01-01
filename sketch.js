@@ -3,9 +3,6 @@ let nextScene;
 let transition;
 let selectedDifficulty = 0;
 let currency = 0;
-let levelStructures;
-let upgradeInfo;
-let storyInfo;
 let gui;
 let emptyButtonStyle;
 
@@ -21,7 +18,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new MainMenuScene();
+  nextScene = new LevelScene(0);
   currentScene = new Scene();
 }
 
