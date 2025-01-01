@@ -8,6 +8,20 @@ class Player extends Entity {
         this.maxSpeed = 2+upgradeInfo[upgradeInfo.length-1].currentLevel;  // In pixels per frame
         
         this.hitbox  = {'type': 'rect', 'w': 10, 'h': 10};
+        this.baseSheildHealth = 0;
+        for(let i=0; i<armorInfo.length; i++) {
+            let armor = armorInfo[i];
+            if(!armor.equipped) continue;
+            
+            for(let j=0; j<armor.pieces.length; j++) {
+                let piece = armor.pieces[j];
+                if(!piece.unlocked) continue;
+                
+                this.baseSheildHealth += piece.shieldAmount;
+            }
+        }
+        this.sheildHealth = this.baseSheildHealth;
+        this.shieldHealthBeforeHit = 0;
 
         this.dashDirection = createVector();
         this.dashDuration = 150;        // In milliseconds
@@ -100,10 +114,44 @@ class Player extends Entity {
             // Reset the charged strength for the next attack
             this.chargedStrength = 0;
         }
+
+        // Health regen buff with armor set
+        if(armorInfo[0].equipped && isArmorMaxedOut(0)) 
+            this.health = min(this.health+0.008, this.baseHealth);
+    }
+
+    saveHealthBeforeHit() {
+        super.saveHealthBeforeHit();
+        this.shieldHealthBeforeHit = this.sheildHealth;
     }
 
     getDamaged(damageAmount) {
-        super.getDamaged(damageAmount * (1+selectedDifficulty*4));
+        // Damage mitigation with armor set
+        if(armorInfo[1].equipped && isArmorMaxedOut(1)) {
+            if(Math.random() < 0.05) return;
+        }
+            
+        let scaledDamage = damageAmount * (1+selectedDifficulty*4);
+        let newShieldHealth = this.sheildHealth - scaledDamage;
+        
+        super.getDamaged(max(0, -newShieldHealth));
+        this.sheildHealth = max(0,newShieldHealth);
+    }
+
+    displayHealthBar(x, y, barWidth, barHeight) {
+        super.displayHealthBar(x, y, barWidth, barHeight, CORNER);
+
+        let barWidth2 = barWidth/this.baseHealth * this.baseSheildHealth;
+        fill(0,10,100); 
+        noStroke();
+        rectMode(CORNER);
+        rect(x+barWidth/2, y-barHeight/2, barWidth2, barHeight);
+        if(this.isHitInSuccession()) {
+            fill(255,255,0);
+            rect(x+barWidth/2, y-barHeight/2, this.shieldHealthBeforeHit/this.baseSheildHealth*barWidth2, barHeight);
+        }
+        fill(0,100,200);
+        rect(x+barWidth/2, y-barHeight/2, this.sheildHealth/this.baseSheildHealth * barWidth2, barHeight);
     }
 
     // Returns true if the player has activated a dash

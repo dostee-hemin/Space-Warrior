@@ -215,11 +215,11 @@ class LevelScene extends Scene {
         rect(20,height-35-player.specialAbilityCooldown*60,60,player.specialAbilityCooldown*60);
 
         // Draw a health bar for the player in the bottom left corner
-        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20, CORNER);
+        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20);
         stroke(0);
         strokeWeight(this.UIEntranceAnimation*3);
         noFill();
-        rect(20, height-35, this.UIEntranceAnimation * player.baseHealth*6, 20);
+        rect(20, height-35, this.UIEntranceAnimation * (player.baseHealth+player.baseSheildHealth)*6, 20);
 
         // Draw the pause button UI
         fill(255);

@@ -40,12 +40,20 @@ class Entity {
                 }
             }
         }
-    }                 
+    }         
+    
+    isHitInSuccession() {
+        return millis() - this.timeOfLastHit < this.timeToShowDamage;
+    }
+
+    saveHealthBeforeHit() {
+        this.healthBeforeHit = this.health;
+    }
 
     // Called when an attack has hit the entity
     getDamaged(damageAmount) {
-        if(millis() - this.timeOfLastHit > this.timeToShowDamage) {
-            this.healthBeforeHit = this.health;
+        if(!this.isHitInSuccession()) {
+            this.saveHealthBeforeHit();
         }
         this.timeOfLastHit = millis();
         this.health -= damageAmount;
@@ -76,7 +84,7 @@ class Entity {
             y -= barHeight/2;
         }
         rect(x, y, barWidth, barHeight);
-        if(millis() - this.timeOfLastHit < this.timeToShowDamage) {
+        if(this.isHitInSuccession()) {
             fill(255,255,0);
             rect(x, y, max(0, map(this.healthBeforeHit, 0, this.baseHealth, 0, barWidth)), barHeight);
         }
