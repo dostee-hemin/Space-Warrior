@@ -90,6 +90,7 @@ function loadAchievementInfo() {
             achievementInfo = Object.values(loadedData);
             for(let i=0; i<achievementInfo.length; i++) {
                 achievementInfo[i].unlocked = false;
+                achievementInfo[i].icon = loadImage("./Assets/Images/test_icon.png");
             }
             resolve();
         });
