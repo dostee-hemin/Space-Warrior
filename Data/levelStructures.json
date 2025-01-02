@@ -14,7 +14,7 @@
     },
     {
         "numArmorCollectables": 3,
-        "obstacles": ["asteroid", "asteroidWall", "debris"],
+        "obstacles": ["asteroid", "asteroidWall"],
         "waveStructure": [
             {
                 "waitDuration": 4000,
