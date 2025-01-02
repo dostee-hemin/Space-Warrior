@@ -4,8 +4,6 @@ class AchievementManager {
     static DODGED = 2;
 
     constructor() {
-        this.unlockedIDs = [];
-
         this.notificationsToDisplay = [];
         this.notificationAnimation = 0;
     }
@@ -13,12 +11,12 @@ class AchievementManager {
     unlock(id) {
         if(this.isUnlocked(id)) return;
 
-        this.unlockedIDs.push(id);
+        achievementInfo[id].unlocked = true;
         this.notificationsToDisplay.push(id);
     }
 
     isUnlocked(id) {
-        return this.unlockedIDs.includes(id);
+        return achievementInfo[id].unlocked;
     }
 
     displayNotification() {
@@ -40,8 +38,12 @@ class AchievementManager {
         rect(width-100, height-50 * this.notificationAnimation, 180, 80, 10);
         fill(0, 255 * this.notificationAnimation);
         noStroke();
-        textSize(30);
+        textSize(16);
+        textAlign(CENTER, TOP);
+        text("Achievement Unlocked", width-100, height-50 * this.notificationAnimation - 30);
+        rectMode(CENTER);
         textAlign(CENTER, CENTER);
-        text("Achievement\n" + this.notificationsToDisplay[0], width-100, height-50 * this.notificationAnimation);
+        textSize(20);
+        text(achievementInfo[this.notificationsToDisplay[0]].name, width-100, height-50 * this.notificationAnimation+10, 180);
     }
 }

@@ -3,6 +3,7 @@ let levelStructures;
 let upgradeInfo;
 let storyInfo;
 let armorInfo;
+let achievementInfo;
 
 function loadLevelStructure() {
     if(isLevelInfoLoaded()) return Promise.resolve();
@@ -73,6 +74,22 @@ function loadArmorInfo() {
                     armorInfo[i].pieces[j].icon = loadImage("./Assets/Images/"+armorInfo[i].pieces[j].iconPath);
                     armorInfo[i].pieces[j].unlocked = false;
                 }
+            }
+            resolve();
+        });
+    });
+
+    return promise;
+}
+
+function loadAchievementInfo() {
+    if(achievementInfo != null) return Promise.resolve();
+
+    const promise = new Promise((resolve) => {
+        loadJSON(DATA_FOLDER_PATH+"achievementInfo.json", (loadedData) => {
+            achievementInfo = Object.values(loadedData);
+            for(let i=0; i<achievementInfo.length; i++) {
+                achievementInfo[i].unlocked = false;
             }
             resolve();
         });

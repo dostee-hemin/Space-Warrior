@@ -26,7 +26,7 @@ class LevelScene extends Scene {
     }
 
     preload() {
-        return Promise.all([loadLevelStructure(), loadUpgradeInfo(), loadArmorInfo()]);
+        return Promise.all([loadLevelStructure(), loadUpgradeInfo(), loadArmorInfo(), loadAchievementInfo()]);
     }
 
     setup() {
