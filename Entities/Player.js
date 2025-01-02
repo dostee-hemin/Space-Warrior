@@ -83,6 +83,28 @@ class Player extends Entity {
     update() {
         super.update();
 
+        if(!this.hasBeenBumped) {
+            for(let i=0; i<entities.length; i++) {
+                let entity = entities[i];
+
+                if(entity == this) continue;
+                if(this.overlapsWith(entity)) {
+                    this.bump(entity);
+                    entity.bump(this);
+                    this.hasBeenBumped = true;
+                    entity.hasBeenBumped = true;
+                }
+            }
+        } else {
+            this.hasBeenBumped = false;
+            for(let i=0; i<entities.length; i++) {
+                if(entities[i] == this) continue;
+                if(this.overlapsWith(entities[i])) {
+                    this.hasBeenBumped = true;
+                }
+            }
+        }
+
         // If the player has activated a dash move, set the velocity to the dash direction
         if (this.isDashing() && millis() - this.dashStartTime < this.dashDuration) {
             this.velocity.set(this.dashDirection.x, this.dashDirection.y);
@@ -161,6 +183,11 @@ class Player extends Entity {
 
     canCollideWithAttacks() {
         return !this.isDashing();
+    }
+
+    overlapsWith(otherEntity) {
+        if(!this.canCollideWithAttacks()) return false;
+        return super.overlapsWith(otherEntity);
     }
 
     bump(otherEntity) {

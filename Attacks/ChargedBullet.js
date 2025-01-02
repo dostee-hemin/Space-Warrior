@@ -4,6 +4,7 @@ class ChargedBullet extends Bullet {
 
         this.damage = 5;
         this.hitsLeft = strength;
+        this.hitbox = {"type": "circle", "r": 10};
     }
 
     display() {

@@ -22,6 +22,7 @@ class LevelScene extends Scene {
         this.lockedArmorPieces = [];
         this.totalEnemies = 0;
         this.numArmorPiecesLeft = 0;
+        this.obstacleSpawners = [];
     }
 
     preload() {
@@ -37,6 +38,20 @@ class LevelScene extends Scene {
         for(let i=0; i<this.waves.length; i++) {
             for(let j=0; j<this.waves[i].troops.length; j++) {
                 this.totalEnemies += this.waves[i].troops[j].amount;
+            }
+        }
+
+        for(let spawnerType of this.levelInfo.obstacles) {
+            switch(spawnerType) {
+                case "asteroid":
+                    this.obstacleSpawners.push(new AsteroidSpawner());
+                    break;
+                case "asteroidWall":
+                    this.obstacleSpawners.push(new AsteroidWallSpawner());
+                    break;
+                case "debris":
+                    this.obstacleSpawners.push(new DebrisSpawner());
+                    break;
             }
         }
 
@@ -111,6 +126,8 @@ class LevelScene extends Scene {
         this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished() && !this.hasPlayerLost();
         if(this.isPaused) return;
 
+        for(let spawner of this.obstacleSpawners) spawner.update();
+
         // Wave logic
         if(this.UIEntranceAnimation == 1 && this.shipExitAnimation == 0) {
             if (this.canAddTroops) {
@@ -128,7 +145,13 @@ class LevelScene extends Scene {
                 } else if(this.currentWaveIndex < this.waves.length) 
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
-            this.canAddTroops = entities.length == 1 && this.currentWave.hasReleasedTroops();
+            this.canAddTroops = this.currentWave.hasReleasedTroops();
+            for(let entity of entities) {
+                if(entity instanceof Troop) {
+                    this.canAddTroops = false;
+                    break;
+                }
+            }
         }
 
         // Entity logic
