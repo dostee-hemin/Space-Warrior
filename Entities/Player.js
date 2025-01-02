@@ -204,6 +204,7 @@ class Player extends Entity {
             if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
             this.dashDirection.mult(8);
+            achievementManager.unlock(AchievementManager.DODGED);
 
             this.dashStartTime = millis();
             return;
