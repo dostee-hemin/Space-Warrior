@@ -18,29 +18,7 @@ class Entity {
     display() {}                // Called to draw the entity on the canvas
 
     // Called to move and change the values of the entity
-    update() {
-        if(!this.hasBeenBumped) {
-            for(let i=0; i<entities.length; i++) {
-                let entity = entities[i];
-
-                if(entity == this) continue;
-                if(this.overlapsWith(entity)) {
-                    this.bump(entity);
-                    entity.bump(this);
-                    this.hasBeenBumped = true;
-                    entity.hasBeenBumped = true;
-                }
-            }
-        } else {
-            this.hasBeenBumped = false;
-            for(let i=0; i<entities.length; i++) {
-                if(entities[i] == this) continue;
-                if(this.overlapsWith(entities[i])) {
-                    this.hasBeenBumped = true;
-                }
-            }
-        }
-    }         
+    update() {}         
     
     isHitInSuccession() {
         return millis() - this.timeOfLastHit < this.timeToShowDamage;
