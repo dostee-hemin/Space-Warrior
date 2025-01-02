@@ -15,3 +15,42 @@ function pointInRect(pointX, pointY, rectX, rectY, rectWidth, rectHeight) {
             pointY > rectY - rectHeight / 2 &&
             pointY < rectY + rectHeight / 2;
 }
+
+function hitboxesCollide(x1, y1, hitbox1, x2, y2, hitbox2) {
+    switch(hitbox1.type) {
+        // For circles
+        case 'circle':
+            switch(hitbox2.type) {
+                case 'circle':
+                    return distSq(x1, y1, x2, y2) < (hitbox1.r + hitbox2.r) ** 2;
+                case 'rect':
+                    let closestX = constrain(x1, x2 - hitbox2.w / 2, x2 + hitbox2.w / 2);
+                    let closestY = constrain(y1, y2 - hitbox2.h / 2, y2 + hitbox2.h / 2);
+                    return distSq(x1, y1, closestX, closestY) < hitbox1.r ** 2;
+                case 'point':
+                    return hitboxesCollide(x2, y2, hitbox2, x1, y1, hitbox1);
+            }
+            break;
+        // For rectangles
+        case 'rect':
+            switch(hitbox2.type) {
+                case 'circle':
+                    return hitboxesCollide(x2, y2, hitbox2, x1, y1, hitbox1);
+                case 'rect':
+                    return Math.abs(x1 - x2) < hitbox1.w/2 + hitbox2.w/2 && Math.abs(y1 - y2) < hitbox1.h/2 + hitbox2.h/2;
+                case 'point':
+                    return hitboxesCollide(x2, y2, hitbox2, x1, y1, hitbox1);
+            }
+            break;
+        
+        // For points that don't have a hitbox
+        case 'point':
+            switch(hitbox2.type) {
+                case 'circle':
+                    return distSq(x1, y1, x2, y2) < hitbox2.r ** 2;
+                case 'rect':
+                    return pointInRect(x1,y1,x2,y2,hitbox2.w,hitbox2.h);
+            }
+            break;
+    }
+}

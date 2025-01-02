@@ -45,9 +45,8 @@ class Entity {
     }
 
     overlapsWith(otherEntity) {
-        let thisRadius = (this.hitbox.type == 'circle') ? this.hitbox.r : Math.max(this.hitbox.w, this.hitbox.h);
-        let otherRadius = (otherEntity.hitbox.type == 'circle') ? otherEntity.hitbox.r : Math.max(otherEntity.hitbox.w, otherEntity.hitbox.h);
-        return distSq(this.position.x, this.position.y, otherEntity.position.x, otherEntity.position.y) < (thisRadius + otherRadius)**2;   
+        return hitboxesCollide(this.position.x, this.position.y, this.hitbox, 
+            otherEntity.position.x, otherEntity.position.y, otherEntity.hitbox);   
     }
 
     bump(otherEntity) {}

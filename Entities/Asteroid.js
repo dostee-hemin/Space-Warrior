@@ -1,6 +1,6 @@
 class Asteroid extends Obstacle {
     constructor(x, y, direction) {
-        super(x, y, direction);
+        super(x, y, direction, 1);
 
         this.hitbox = {"type": "circle", "r": random(12,18)};
     }

@@ -7,6 +7,7 @@ class Bullet extends Attack {
         this.velocity = p5.Vector.fromAngle(launchAngle).mult(this.speed);
         this.damage = 1;
         this.hitsLeft = 1;
+        this.hitbox = {"type": "point"};
     }
 
     update() {
@@ -30,12 +31,7 @@ class Bullet extends Attack {
     }
 
     collidesWith(entity) {
-        switch(entity.hitbox.type) {
-            case 'circle':
-                return distSq(this.position.x, this.position.y, entity.position.x, entity.position.y) < entity.hitbox.r**2;
-            case 'rect':
-                return pointInRect(this.position.x, this.position.y, entity.position.x, entity.position.y, entity.hitbox.w, entity.hitbox.h);
-        }
+        return hitboxesCollide(this.position.x, this.position.y, this.hitbox, entity.position.x, entity.position.y, entity.hitbox);
     }
 
     display() {

@@ -49,6 +49,9 @@ class LevelScene extends Scene {
                 case "asteroidWall":
                     this.obstacleSpawners.push(new AsteroidWallSpawner());
                     break;
+                case "debris":
+                    this.obstacleSpawners.push(new DebrisSpawner());
+                    break;
             }
         }
 
