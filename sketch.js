@@ -1,6 +1,7 @@
 let currentScene;
 let nextScene;
 let transition;
+let achievementManager;
 let selectedDifficulty = 0;
 let currency = 0;
 let gui;
@@ -10,6 +11,7 @@ function setup() {
   windowResized();
 
   gui = createGui();
+  achievementManager = new AchievementManager();
 
   emptyButtonStyle = {
     fillBg: color(0,0),
@@ -28,6 +30,7 @@ function draw() {
   currentScene.draw();
   
   drawGui();
+  achievementManager.displayNotification();
   
   handleSceneSwitching();
 }

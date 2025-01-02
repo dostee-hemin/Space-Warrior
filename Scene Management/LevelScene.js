@@ -133,6 +133,7 @@ class LevelScene extends Scene {
             if (this.canAddTroops) {
                 if(this.currentWaveIndex == this.waves.length) {
                     this.currentWaveIndex++;    // Increasing it one more time so we don't enter this block again
+                    if(this.levelNumber == 0) achievementManager.unlock(AchievementManager.COMPLETED_FIRST_LEVEL);
                     unlockLevel(this.levelNumber + 1);
                     completeLevel(this.levelNumber);
                     currency += this.levelCurrency;
@@ -165,6 +166,7 @@ class LevelScene extends Scene {
                 // If a troop is defeated, there's a slight chance it will drop a random armor piece
                 if(entity instanceof Troop) {
                     this.totalEnemies--;
+                    achievementManager.unlock(AchievementManager.KILLED_FIRST_ENEMY);
                     if(Math.random(1) <= this.numArmorPiecesLeft/this.totalEnemies) {
                         let armorPiece = this.lockedArmorPieces.splice(Math.floor(Math.random()*this.lockedArmorPieces.length),1)[0];
                         this.numArmorPiecesLeft--;
