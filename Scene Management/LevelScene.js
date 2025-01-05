@@ -37,6 +37,7 @@ class LevelScene extends Scene {
         this.waves = this.levelInfo.waveStructure;
         for(let i=0; i<this.waves.length; i++) {
             for(let j=0; j<this.waves[i].troops.length; j++) {
+                if(this.waves[i].troops[j].type == "boss") continue;
                 this.totalEnemies += this.waves[i].troops[j].amount;
             }
         }
@@ -143,12 +144,12 @@ class LevelScene extends Scene {
                         .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
                         .onEnd(() => {this.levelCompletePanel.open(this.levelCurrency);})
                         .startTween()
-                } else if(this.currentWaveIndex < this.waves.length) 
+                } else if(this.currentWaveIndex < this.waves.length)
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
             this.canAddTroops = this.currentWave.hasReleasedTroops();
             for(let entity of entities) {
-                if(entity instanceof Troop) {
+                if(entity instanceof Troop || entity instanceof Boss) {
                     this.canAddTroops = false;
                     break;
                 }
