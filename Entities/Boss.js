@@ -40,7 +40,7 @@ class Boss extends Entity {
             .addMotion('battleshipScale', 1, 30)
             .addMotion('healthBarAnimation', 1, 1000, 'easeInOutQuad')
             .addMotion('healthBarAnimation', 1, 1000)
-            .onEnd(()=>{this.stage = this.SHIELD_STAGE})
+            .onEnd(()=>{this.changeToNextStage();})
             .startTween()
             
 
@@ -54,6 +54,11 @@ class Boss extends Entity {
             case this.SHIELD_STAGE:
                 this.battleshipPositionX += this.velocity.x*0.3;
                 if(Math.abs(this.battleshipPositionX - width/2) > 20) this.velocity.x *= -1;
+
+                if(random(1) < 0.004) {
+                    let rocketSpawnPosition = random(1) < 0.5 ? 200 : width-200;
+                    new SmartBullet(rocketSpawnPosition,300,player,false);
+                }
                 break;
         }
     }
@@ -86,5 +91,15 @@ class Boss extends Entity {
         if(this.stage < this.NORMAL_ATTACK_STAGE) return;
         console.log(this.stage, this.NORMAL_ATTACK_STAGE)
         super.getDamaged(damageAmount);
+    }
+
+    changeToNextStage() {
+        switch(this.stage) {
+            case this.SHIELD_STAGE:
+                this.forceField.close();
+                break;
+        }
+
+        this.stage++;
     }
 }

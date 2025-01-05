@@ -204,6 +204,15 @@ class LevelScene extends Scene {
                 if(attack.hits(entity)) {
                     attack.interact(entity);
                 }
+
+                // This implements the logic where the warship's rockets damage its forcefield
+                if(!(entity instanceof Boss)) continue
+                if(entity.stage != entity.SHIELD_STAGE) continue
+                if(attack.isFriendly) continue
+                if(attack.position.y < entity.position.y+100) {
+                    attack.interact(entity);
+                    entity.changeToNextStage();
+                }
             }
 
             if (attack.isFinished()) attacks.splice(i,1);
