@@ -1,5 +1,5 @@
 class SpiralAttack extends Spawner {
-    constructor(attackType) {
+    constructor(patternType) {
         super(1, 10000);
 
         this.fireRate = 5;
@@ -8,8 +8,8 @@ class SpiralAttack extends Spawner {
         this.startingAngle = -this.angleDifference;
 
         p5.tween.manager.addTween(this)
-            .addMotion('startingAngle',this.angleDifference,attackType==0?1000:400, 'easeInOutSin')
-            .addMotion('startingAngle',-this.angleDifference,attackType==0?1000:400, 'easeInOutSin')
+            .addMotion('startingAngle',this.angleDifference,patternType==0?1000:400, 'easeInOutSin')
+            .addMotion('startingAngle',-this.angleDifference,patternType==0?1000:400, 'easeInOutSin')
             .startLoop();
     }
 

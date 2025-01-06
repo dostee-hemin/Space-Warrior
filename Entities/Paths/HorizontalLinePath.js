@@ -3,9 +3,16 @@ class HorizontalLinePath extends PathGenerator {
         super();
     }
 
-    generatePath() {
-        this.points.push(createVector(50,40));
-        this.points.push(createVector(width-50,40));
+    generatePath(startsAtLeft = true) {
+        let a = createVector(50,40);
+        let b = createVector(width-50,40);
+        if(startsAtLeft) {
+            this.points.push(a);
+            this.points.push(b);
+        } else {
+            this.points.push(b);
+            this.points.push(a);
+        }
         return this.points;
     }
 }

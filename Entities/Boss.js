@@ -1,6 +1,6 @@
 class Boss extends Entity {
     constructor() {
-        super(300, false, 2000);
+        super(10, false, 2000);
 
         this.FLY_IN_STAGE = 0;
         this.SHIELD_STAGE = 1;
@@ -129,6 +129,16 @@ class Boss extends Entity {
                 break;
             case this.HEAVY_ATTACK_STAGE:
                 this.attackSpawners.push(new SpiralAttack(1));
+
+                let sniperPathLeft = new HorizontalLinePath().generatePath(true);
+                new LargeTroop(this.position.x + width*random(-0.3,0.3), this.position.y-100,sniperPathLeft, 10)
+                let sniperPathRight = new HorizontalLinePath().generatePath(false);
+                new LargeTroop(this.position.x + width*random(-0.3,0.3), this.position.y-100,sniperPathRight, 11)
+
+                let barricadePath = new BarricadePath().generatePath();
+                for(let i=0; i<36; i++) {
+                    new SmallTroop(this.position.x + width*random(-0.3,0.3), this.position.y-100,barricadePath, 15+i)
+                }
                 break;
         }
     }

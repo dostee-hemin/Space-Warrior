@@ -6,7 +6,7 @@ class SmallTroop extends Troop {
         this.hitbox = {'type': 'circle', 'r': 10};
     }
 
-    display() {
+    drawTroop() {
         // Draw a small circle for the troop
         fill(255);
         stroke(0);
@@ -17,19 +17,11 @@ class SmallTroop extends Troop {
         strokeWeight(1);
         fill(255,0,0,50);
         circle(this.position.x, this.position.y, this.hitbox.r*2);
-
-        super.display();
     }
-
-    update() {
-        super.update();
-
-        if(random(1) < 0.01) {
-            this.shoot();
-        }
-    }
-
+    
     shoot() {
-        new Bullet(this.position.x, this.position.y, HALF_PI, 4, false);
+        if(random(1) < 0.01) {
+            new Bullet(this.position.x, this.position.y, HALF_PI, 4, false);
+        }
     }
 }
