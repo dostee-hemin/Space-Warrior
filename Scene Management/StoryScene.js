@@ -38,7 +38,8 @@ class StoryScene extends Scene {
 
         let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
-            nextScene = new LevelScene(this.levelNumber);
+            if(hasCompletedAllLevels()) nextScene = new MapScene();
+            else nextScene = new LevelScene(this.levelNumber);
             transition = new FadeTransition();
             return;
         }

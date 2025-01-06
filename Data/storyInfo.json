@@ -84,5 +84,23 @@
                 ]
             }
         ]
+    },
+    {
+        "pages" : [
+            {
+                "text": "You saved everybody",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            },
+            {
+                "text": "You win.",
+                "duration": 8,
+                "layers" : [
+                    "test_image_1.png", "test_image_2.png", "test_image_3.png", "test_image_4.png"
+                ]
+            }
+        ]
     }
 ]

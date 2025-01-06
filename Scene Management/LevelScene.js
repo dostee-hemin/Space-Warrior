@@ -58,8 +58,7 @@ class LevelScene extends Scene {
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
-            if(hasCompletedAllLevels()) nextScene = new MapScene();
-            else nextScene = new StoryScene(this.levelNumber+1);
+            nextScene = new StoryScene(this.levelNumber+1);
             transition = new FadeTransition();
         };
         let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);

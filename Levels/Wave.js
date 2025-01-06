@@ -58,7 +58,7 @@ class Wave {
     }
 
     hasReleasedTroops() {
-        return this.battleshipPositionX > width;
+        return this.battleshipPositionX > width || this.hasSpawnedTroops;
     }
 
     draw() {
@@ -78,6 +78,7 @@ class Wave {
 
         if(!this.hasSpawnedTroops && this.battleshipPositionX > width/2-10) {
             for(let troop of this.waveStructure.troops) {
+                if(troop.type == "boss") continue;
                 let number = troop.amount;
                 let type = typeToClass[troop.type];
                 let path = pathToClass[troop.path];
