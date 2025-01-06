@@ -37,6 +37,7 @@ class LevelScene extends Scene {
         this.waves = this.levelInfo.waveStructure;
         for(let i=0; i<this.waves.length; i++) {
             for(let j=0; j<this.waves[i].troops.length; j++) {
+                if(this.waves[i].troops[j].type == "boss") continue;
                 this.totalEnemies += this.waves[i].troops[j].amount;
             }
         }
@@ -57,8 +58,7 @@ class LevelScene extends Scene {
 
         let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
         continueButton.onPress = () => {
-            if(hasCompletedAllLevels()) nextScene = new MapScene();
-            else nextScene = new StoryScene(this.levelNumber+1);
+            nextScene = new StoryScene(this.levelNumber+1);
             transition = new FadeTransition();
         };
         let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
@@ -143,12 +143,12 @@ class LevelScene extends Scene {
                         .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
                         .onEnd(() => {this.levelCompletePanel.open(this.levelCurrency);})
                         .startTween()
-                } else if(this.currentWaveIndex < this.waves.length) 
+                } else if(this.currentWaveIndex < this.waves.length)
                     this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
             }
             this.canAddTroops = this.currentWave.hasReleasedTroops();
             for(let entity of entities) {
-                if(entity instanceof Troop) {
+                if(entity instanceof Troop || entity instanceof Boss) {
                     this.canAddTroops = false;
                     break;
                 }
@@ -202,6 +202,15 @@ class LevelScene extends Scene {
                 let entity = entities[j];
                 if(attack.hits(entity)) {
                     attack.interact(entity);
+                }
+
+                // This implements the logic where the warship's rockets damage its forcefield
+                if(!(entity instanceof Boss)) continue
+                if(entity.stage != entity.SHIELD_STAGE) continue
+                if(attack.isFriendly) continue
+                if(attack.position.y < entity.position.y+100) {
+                    attack.interact(entity);
+                    entity.changeToNextStage();
                 }
             }
 

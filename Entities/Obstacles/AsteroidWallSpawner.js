@@ -1,9 +1,9 @@
-class AsteroidWallSpawner extends ObstacleSpawner {
+class AsteroidWallSpawner extends Spawner {
     constructor() {
         super(0.001, 2000);
     }
 
-    spawnObstacles() {
+    spawn() {
         let randomDirection = random(PI/3, 2*PI/3);
         let verticaIncrement = random(1)-0.5;
         for(let i=0; i<30; i++) {

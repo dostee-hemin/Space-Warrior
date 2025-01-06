@@ -32,6 +32,11 @@ class Wave {
         // Used to calculate how long it takes to release all troops
         let maxTroopTime = 0;
         for(let troop of waveStructure.troops) {
+            if(troop.type == "boss") {
+                new Boss();
+                this.hasSpawnedTroops = true;
+                return;
+            }
             let troopTime = troop.amount * typeToTime[troop.type] + 300;
             maxTroopTime = Math.max(maxTroopTime, troopTime);
         }
@@ -53,7 +58,7 @@ class Wave {
     }
 
     hasReleasedTroops() {
-        return this.battleshipPositionX > width;
+        return this.battleshipPositionX > width || this.hasSpawnedTroops;
     }
 
     draw() {
@@ -73,6 +78,7 @@ class Wave {
 
         if(!this.hasSpawnedTroops && this.battleshipPositionX > width/2-10) {
             for(let troop of this.waveStructure.troops) {
+                if(troop.type == "boss") continue;
                 let number = troop.amount;
                 let type = typeToClass[troop.type];
                 let path = pathToClass[troop.path];

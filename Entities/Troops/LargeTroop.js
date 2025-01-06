@@ -5,11 +5,11 @@ class LargeTroop extends Troop {
         this.speed = 1;
         this.hitbox = {'type': 'rect', 'w': 25, 'h': 25};
 
-        this.laserSpawnTime = millis();
+        this.laserSpawnTime = 0;
         this.timeBetweenLasers = 3000;
     }
 
-    display() {
+    drawTroop() {
         fill(255);
         stroke(0);
         strokeWeight(2);
@@ -28,24 +28,22 @@ class LargeTroop extends Troop {
         fill(150,0,0,100);
         noStroke();
         circle(this.position.x, this.position.y + this.hitbox.h, map(millis()-this.laserSpawnTime, 0, this.timeBetweenLasers, 0, 20));
-
-        super.display();
     }
 
     update() {
         super.update();
 
+        if(!this.hasEnteredPath) this.laserSpawnTime = millis();
+    }
+
+    shoot() {
         if(random(1) < 0.01) {
-            this.shoot();
+            new SmartBullet(this.position.x, this.position.y, player, false);
         }
 
         if(millis() - this.laserSpawnTime > this.timeBetweenLasers) {
             this.laserSpawnTime = millis();
             new Laser(this, 1, 1000);
         }
-    }
-
-    shoot() {
-        new SmartBullet(this.position.x, this.position.y, player, false);
     }
 }

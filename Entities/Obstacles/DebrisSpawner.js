@@ -1,9 +1,9 @@
-class DebrisSpawner extends ObstacleSpawner {
+class DebrisSpawner extends Spawner {
     constructor() {
         super(0.003, 2000);
     }
 
-    spawnObstacles() {
+    spawn() {
         new Debris();
     }
 }
