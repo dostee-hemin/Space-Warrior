@@ -1,4 +1,4 @@
-class ObstacleSpawner {
+class Spawner {
     constructor(spawnChance, timeBetweenSpawns) {
         this.spawnChance = spawnChance;
         this.timeBetweenSpawns = timeBetweenSpawns; // In milliseconds
@@ -9,10 +9,10 @@ class ObstacleSpawner {
         if(millis() - this.lastSpawnTime < this.timeBetweenSpawns) return;
 
         if(random(1) < this.spawnChance) {
-            this.spawnObstacles();
+            this.spawn();
             this.lastSpawnTime = millis();
         }
     }
 
-    spawnObstacles() {}
+    spawn() {}
 }

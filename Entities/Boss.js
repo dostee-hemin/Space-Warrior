@@ -9,16 +9,20 @@ class Boss extends Entity {
         this.END_STAGE = 4;
 
         this.stage = this.FLY_IN_STAGE;
+        this.stageTransitionTime = 0;
+        this.stageTransitionDuration = 2000;
+
         this.battleshipPositionX = -width;
         this.battleshipPositionY = -100;
         this.battleshipRotation = -HALF_PI;
         this.battleshipScale = 1;
-        this.healthBarAnimation = 0;
-        this.velocity = createVector(1,0);
         this.position = createVector(this.battleshipPositionX, this.battleshipPositionY);
+        this.velocity = createVector(1,0);
         this.hitbox = {'type': 'rect', 'w':width, 'h':300};
 
+        this.healthBarAnimation = 0;
         this.forceField = new ForceField();
+        this.attackSpawners = [];
 
         p5.tween.manager.addTween(this)
             .addMotion('battleshipPositionX', -width, 3000)
@@ -32,12 +36,6 @@ class Boss extends Entity {
                 {key:'battleshipPositionY', target: 175}
             ], 3000, 'easeInOutSin')
             .addMotion('battleshipPositionX', width/2, 400)
-            .addMotion('battleshipScale', 1.04, 30)
-            .addMotion('battleshipScale', 1, 30)
-            .addMotion('battleshipScale', 1.04, 30)
-            .addMotion('battleshipScale', 1, 30)
-            .addMotion('battleshipScale', 1.04, 30)
-            .addMotion('battleshipScale', 1, 30)
             .addMotion('healthBarAnimation', 1, 1000, 'easeInOutQuad')
             .addMotion('healthBarAnimation', 1, 1000)
             .onEnd(()=>{this.changeToNextStage();})
@@ -50,17 +48,16 @@ class Boss extends Entity {
         this.position.set(this.battleshipPositionX, this.battleshipPositionY);
         this.forceField.position.set(this.battleshipPositionX, this.battleshipPositionY-200);
 
-        switch(this.stage) {
-            case this.SHIELD_STAGE:
-                this.battleshipPositionX += this.velocity.x*0.3;
-                if(Math.abs(this.battleshipPositionX - width/2) > 20) this.velocity.x *= -1;
+        if(millis() - this.stageTransitionTime < this.stageTransitionDuration) return;
 
-                if(random(1) < 0.004) {
-                    let rocketSpawnPosition = random(1) < 0.5 ? 200 : width-200;
-                    new SmartBullet(rocketSpawnPosition,300,player,false);
-                }
-                break;
+        if(this.stage >= this.SHIELD_STAGE) {
+            this.battleshipPositionX += this.velocity.x*0.3;
+            if(Math.abs(this.battleshipPositionX - width/2) > 20) this.velocity.x *= -1;
         }
+
+        if(this.stage == this.NORMAL_ATTACK_STAGE && this.health < this.baseHealth*0.5) this.changeToNextStage();
+
+        for(let attack of this.attackSpawners) attack.update();
     }
 
     display() { 
@@ -84,22 +81,55 @@ class Boss extends Entity {
         strokeWeight(this.healthBarAnimation*3);
         noFill();
         rect(width/2-(width*0.45)*this.healthBarAnimation, 70, width*0.9*this.healthBarAnimation, 20);
-
     }
 
     getDamaged(damageAmount) {
         if(this.stage < this.NORMAL_ATTACK_STAGE) return;
-        console.log(this.stage, this.NORMAL_ATTACK_STAGE)
         super.getDamaged(damageAmount);
     }
 
     changeToNextStage() {
+        this.attackSpawners = [];
+
+        // End of current stage
         switch(this.stage) {
             case this.SHIELD_STAGE:
                 this.forceField.close();
                 break;
+            case this.NORMAL_ATTACK_STAGE:
+                p5.tween.manager.addTween(this)
+                .addMotion('battleshipPositionX', width/2, 500, 'easeInOutQuad')
+                .addMotion('battleshipPositionX', width/2, 500)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2+5, 20)
+                .addMotion('battleshipPositionX', width/2-5, 20)
+                .addMotion('battleshipPositionX', width/2, 20)
+                .startTween()
+                break;
         }
 
+        this.stageTransitionTime = millis();
         this.stage++;
+        // Start of next stage
+        switch(this.stage) {
+            case this.SHIELD_STAGE:
+                this.attackSpawners.push(new RocketLauncher());
+                break;
+            case this.NORMAL_ATTACK_STAGE:
+                this.attackSpawners.push(new SpiralAttack(0));
+                break;
+            case this.HEAVY_ATTACK_STAGE:
+                this.attackSpawners.push(new SpiralAttack(1));
+                break;
+        }
     }
 }
