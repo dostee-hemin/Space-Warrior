@@ -55,7 +55,14 @@ class Boss extends Entity {
             if(Math.abs(this.battleshipPositionX - width/2) > 20) this.velocity.x *= -1;
         }
 
-        if(this.stage == this.NORMAL_ATTACK_STAGE && this.health < this.baseHealth*0.5) this.changeToNextStage();
+        switch(this.stage) {
+            case this.NORMAL_ATTACK_STAGE:
+               if(this.health <= this.baseHealth/2) this.changeToNextStage(); 
+               break;
+            case this.HEAVY_ATTACK_STAGE:
+                if(this.health <= 0) this.changeToNextStage();
+                break;
+        }
 
         for(let attack of this.attackSpawners) attack.update();
     }
@@ -88,6 +95,10 @@ class Boss extends Entity {
         super.getDamaged(damageAmount);
     }
 
+    isFinished() {
+        return this.stage > this.END_STAGE;
+    }
+
     changeToNextStage() {
         this.attackSpawners = [];
 
@@ -98,22 +109,22 @@ class Boss extends Entity {
                 break;
             case this.NORMAL_ATTACK_STAGE:
                 p5.tween.manager.addTween(this)
-                .addMotion('battleshipPositionX', width/2, 500, 'easeInOutQuad')
-                .addMotion('battleshipPositionX', width/2, 500)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2+5, 20)
-                .addMotion('battleshipPositionX', width/2-5, 20)
-                .addMotion('battleshipPositionX', width/2, 20)
-                .startTween()
+                    .addMotion('battleshipPositionX', width/2, 500, 'easeInOutQuad')
+                    .addMotion('battleshipPositionX', width/2, 500)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2+5, 20)
+                    .addMotion('battleshipPositionX', width/2-5, 20)
+                    .addMotion('battleshipPositionX', width/2, 20)
+                    .startTween()
                 break;
         }
 
@@ -139,6 +150,16 @@ class Boss extends Entity {
                 for(let i=0; i<36; i++) {
                     new SmallTroop(this.position.x + width*random(-0.3,0.3), this.position.y-100,barricadePath, 15+i)
                 }
+                break;
+            case this.END_STAGE:
+                p5.tween.manager.addTween(this)
+                    .addMotions([
+                        {key:'battleshipPositionX', target: width*1.8},
+                        {key:'battleshipPositionY', target: height/2},
+                        {key:'battleshipRotation', target: -PI/3}
+                    ], 10000, 'easeInOutSin')
+                    .onEnd(()=>{this.changeToNextStage()})
+                    .startTween();
                 break;
         }
     }
