@@ -20,7 +20,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new EnemeyRushMode();
+  nextScene = new SurvivalMode();
   // nextScene = new LevelMode(0);
   currentScene = new Scene();
 }

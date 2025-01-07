@@ -92,8 +92,13 @@ class LevelMode extends GameScene {
     display() {
         super.display();
 
-        this.levelCompletePanel.display(this.levelInfo.numArmorCollected, this.levelInfo.numArmorCollectables);
-
+        // Currency counter
+        fill(0);
+        noStroke();
+        textSize(40);
+        textAlign(CENTER,CENTER);
+        text("$"+ this.currencyGained, width/2,30);
+        
         if(this.currentWaveIndex > 0 && this.currentWaveIndex < this.waves.length+1) {
             fill(0);
             noStroke();
@@ -101,5 +106,7 @@ class LevelMode extends GameScene {
             textAlign(RIGHT,CENTER);
             text("Wave "+this.currentWaveIndex+"/"+this.waves.length,width-10,30);
         }
+
+        this.levelCompletePanel.display(this.levelInfo.numArmorCollected, this.levelInfo.numArmorCollectables);
     }
 }

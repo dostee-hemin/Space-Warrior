@@ -199,13 +199,6 @@ class GameScene extends Scene {
         strokeWeight(5);
         line(27,20,27,50);
         line(43,20,43,50);
-
-        // Currency counter
-        fill(0);
-        noStroke();
-        textSize(40);
-        textAlign(CENTER,CENTER);
-        text("$"+ this.currencyGained, width/2,30);
         
         // Black cover when paused
         if(this.isPaused) {
