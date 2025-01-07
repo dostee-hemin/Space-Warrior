@@ -9,7 +9,8 @@ class Panel extends UI {
     }
 
     addUI(children) {
-        this.UIChildren = children;
+        for (let child of children) this.UIChildren.push(child);
+        this.childrenOriginalPositions = [];
         this.UIChildren.forEach(child => {
             this.childrenOriginalPositions.push({x: child.x, y: child.y});
             child.visible = false

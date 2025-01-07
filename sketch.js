@@ -20,7 +20,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new LevelScene(3);
+  nextScene = new MainMenuScene();
   currentScene = new Scene();
 }
 

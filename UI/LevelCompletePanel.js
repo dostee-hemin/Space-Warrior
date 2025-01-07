@@ -15,7 +15,7 @@ class LevelCompletePanel extends Panel {
             .startTween();
     }
 
-    display(numArmorCollected, numArmorCollectables) {
+    display(numArmorCollected=0, numArmorCollectables=0) {
         super.display();
 
         if(!super.isOpen()) return;
