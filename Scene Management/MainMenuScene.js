@@ -15,8 +15,10 @@ class MainMenuScene extends Scene {
         newGameButton.onPress = () => {nextScene = new SelectDifficultyScene('newGame');};
         y+=100;
         let survivalButton = createButton("Survival", width/2-100, y,200,70);
+        survivalButton.onPress = () => {nextScene = new SelectDifficultyScene('survival');};
         y+=100;
         let enemyRushButton = createButton("Enemy Rush", width/2-100, y,200,70);
+        enemyRushButton.onPress = () => {nextScene = new SelectDifficultyScene('enemyRush');};
         y+=100;
         let achievementsButton = createButton("Achievements", width/2-100, y,200,70);
         achievementsButton.onPress = () => {nextScene = new AchievementScene();};

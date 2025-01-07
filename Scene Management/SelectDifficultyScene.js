@@ -40,10 +40,11 @@ class SelectDifficultyScene extends Scene {
                 transition = new FadeTransition();
                 break;
             case 'enemyRush':
-                this.levelInfo = levelStructures[0];
-                for(let i=1; i<levelStructures.length; i++) 
-                    this.levelInfo.waveStructure.concat(levelStructures[i].waveStructure);
-                nextScene = new GameScene(this.levelInfo);
+                nextScene = new EnemeyRushMode();
+                transition = new FadeTransition();
+                break;
+            case 'survival':
+                nextScene = new SurvivalMode();
                 transition = new FadeTransition();
                 break;
         }
