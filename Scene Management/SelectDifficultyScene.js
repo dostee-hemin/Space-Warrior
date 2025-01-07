@@ -43,7 +43,7 @@ class SelectDifficultyScene extends Scene {
                 this.levelInfo = levelStructures[0];
                 for(let i=1; i<levelStructures.length; i++) 
                     this.levelInfo.waveStructure.concat(levelStructures[i].waveStructure);
-                nextScene = new LevelScene(this.levelInfo);
+                nextScene = new GameScene(this.levelInfo);
                 transition = new FadeTransition();
                 break;
         }
