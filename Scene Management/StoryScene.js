@@ -1,8 +1,8 @@
 class StoryScene extends Scene {
-    constructor(levelNumber) {
+    constructor(storyNumber) {
         super();
 
-        this.levelNumber = levelNumber;
+        this.storyNumber = storyNumber;
         this.currentPageNumber = -1;
         this.currentPage;
         this.pageAnimation = 1;
@@ -26,7 +26,7 @@ class StoryScene extends Scene {
 
     loadNextImages() {
         this.nextImages = [];
-        let nextPage = storyInfo[this.levelNumber].pages[this.currentPageNumber+1];
+        let nextPage = storyInfo[this.storyNumber].pages[this.currentPageNumber+1];
         for(let i=0; i<nextPage.layers.length; i++) {
             this.nextImages.push(loadImage("./Assets/Images/"+nextPage.layers[i]));
         }
@@ -36,16 +36,16 @@ class StoryScene extends Scene {
         if(this.isSkipping) return;
         if(this.pageAnimation != 1) this.isSkipping = true;
 
-        let isLastPage = this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1;
+        let isLastPage = this.currentPageNumber == storyInfo[this.storyNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
-            if(hasCompletedAllLevels()) nextScene = new MapScene();
-            else nextScene = new LevelScene(this.levelNumber);
+            if(this.storyNumber == storyInfo.length-1) nextScene = new MapScene();
+            else nextScene = new LevelScene(this.storyNumber);
             transition = new FadeTransition();
             return;
         }
         
         this.currentPageNumber++;
-        this.currentPage = storyInfo[this.levelNumber].pages[this.currentPageNumber];
+        this.currentPage = storyInfo[this.storyNumber].pages[this.currentPageNumber];
         this.pageAnimation = -1;
 
         p5.tween.manager.addTween(this)
@@ -56,7 +56,7 @@ class StoryScene extends Scene {
 
         this.currentImages = this.nextImages;
 
-        if(this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1) return;
+        if(this.currentPageNumber == storyInfo[this.storyNumber].pages.length-1) return;
 
         new Promise(() => {this.loadNextImages();});
     }
@@ -111,7 +111,7 @@ class StoryScene extends Scene {
         }
 
         // Fade in and out
-        if(this.currentPageNumber == storyInfo[this.levelNumber].pages.length-1) fill(0,map(this.pageAnimation,0.5,1,0,255));
+        if(this.currentPageNumber == storyInfo[this.storyNumber].pages.length-1) fill(0,map(this.pageAnimation,0.5,1,0,255));
         else if(this.currentPageNumber == 0) fill(0,-this.pageAnimation*255);
         else noFill();
         noStroke();
