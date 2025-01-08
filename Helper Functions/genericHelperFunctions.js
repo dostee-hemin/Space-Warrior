@@ -54,3 +54,15 @@ function hitboxesCollide(x1, y1, hitbox1, x2, y2, hitbox2) {
             break;
     }
 }
+
+function getRandomElement(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Get a random element from a list and remove it from the list
+function popRandomElement(arr) {
+    let chosenIndex = Math.floor(Math.random() * arr.length);
+    let chosenElement = arr[chosenIndex];
+    arr.splice(chosenIndex,1);
+    return chosenElement;
+}

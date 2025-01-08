@@ -369,7 +369,7 @@ class Player extends Entity {
                     }
                     
                     for(let j=0; j<min(upgrade.currentLevel+1, targetEntities.length); j++) {
-                        new SmartBullet(x, y, this.popRandomElement(targetEntities), true);
+                        new SmartBullet(x, y, popRandomElement(targetEntities), true);
                     }
                     break;
             }
@@ -396,12 +396,5 @@ class Player extends Entity {
                     break;
             }
         }
-    }
-
-    popRandomElement(arr) {
-        let chosenIndex = Math.floor(Math.random() * arr.length);
-        let chosenElement = arr[chosenIndex];
-        arr.splice(chosenIndex,1);
-        return chosenElement;
     }
 }

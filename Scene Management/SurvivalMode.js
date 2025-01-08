@@ -30,17 +30,17 @@ class SurvivalMode extends GameScene {
         let minTroops = Math.ceil(this.currentWaveNumber/3); // Every 3 levels, add one more minimum troop
         do {
             if(Math.random() < 0.8) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*10)+minTroops
                 this.waves[0].troops.push({"type": "small", "amount": numTroops, "path": chosenPath});
             }
             if(Math.random() < 0.5) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*5)+minTroops
                 this.waves[0].troops.push({"type": "medium", "amount": numTroops, "path": chosenPath});
             }
             if(Math.random() < 0.3) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*3)+minTroops
                 this.waves[0].troops.push({"type": "large", "amount": numTroops, "path": chosenPath});
             }
