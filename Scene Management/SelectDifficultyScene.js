@@ -11,21 +11,21 @@ class SelectDifficultyScene extends Scene {
     }
 
     setup() {
-        let backButton = createButton("Home", 20, height-70, 100, 50);
+        let backButton = createButton("Home", 20, H-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
 
-        let easyButton = createButton("Easy", width/2-75, height/2-200, 150, 70);
+        let easyButton = createButton("Easy", W/2-75, H/2-200, 150, 70);
         easyButton.onPress = () => {
             selectedDifficulty = 0;
             this.switchSceneBasedOnMode();
             
         };
-        let normalButton = createButton("Normal", width/2-75, height/2-100, 150, 70);
+        let normalButton = createButton("Normal", W/2-75, H/2-100, 150, 70);
         normalButton.onPress = () => {
             selectedDifficulty = 0.5;
             this.switchSceneBasedOnMode();
         };
-        let hardButton = createButton("Hard", width/2-75, height/2, 150, 70);
+        let hardButton = createButton("Hard", W/2-75, H/2, 150, 70);
         hardButton.onPress = () => {
             selectedDifficulty = 1;
             this.switchSceneBasedOnMode();
@@ -55,6 +55,6 @@ class SelectDifficultyScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Select Difficulty', width/2, height/6);
+        text('Select Difficulty', W/2, H/6);
     }
 }

@@ -68,15 +68,15 @@ class SurvivalMode extends GameScene {
             noStroke();
             textSize(30);
             textAlign(CENTER,CENTER);
-            text("You reached", width/2, height/2-100);
+            text("You reached", W/2, H/2-100);
             textSize(60);
-            text("Wave "+this.currentWaveNumber, width/2, height/2-40);
+            text("Wave "+this.currentWaveNumber, W/2, H/2-40);
         }
 
         fill(0);
         noStroke();
         textSize(30);
         textAlign(RIGHT,CENTER);
-        text("Wave "+this.currentWaveNumber,width-10,-70+100*this.UIEntranceAnimation);
+        text("Wave "+this.currentWaveNumber,W-10,-70+100*this.UIEntranceAnimation);
     }
 }

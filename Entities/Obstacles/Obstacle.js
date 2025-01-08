@@ -13,6 +13,6 @@ class Obstacle extends Entity {
     }
 
     isFinished() {
-        return super.isFinished() || this.position.y > height+200;
+        return super.isFinished() || this.position.y > H+200;
     }
 }

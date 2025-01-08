@@ -1,6 +1,6 @@
 class LevelCompletePanel extends Panel {
     constructor() {
-        super('Level Complete', width/2, height/2, width*0.8, height*0.6);
+        super('Level Complete', W/2, H/2, W*0.8, H*0.6);
 
         this.baseScore = currency;
         this.newScoreAmount = 0;

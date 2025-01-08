@@ -10,7 +10,7 @@ class ArmorStationScene extends Scene {
     }
 
     setup() {
-        let backButton = createButton("Back", 20, height-70, 100, 50);
+        let backButton = createButton("Back", 20, H-70, 100, 50);
         backButton.onPress = () => {nextScene = new MapScene();};
 
         for(let i=0; i<armorInfo.length; i++) {
@@ -40,17 +40,17 @@ class ArmorStationScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Armor Station', width/2, height/6);
+        text('Armor Station', W/2, H/6);
 
         for(let i=0; i<armorInfo.length; i++) {
             let armor = armorInfo[i];
             let equipButton = this.equipButtons[i];
 
             let x = 20;
-            let y = height/6 + 100 + i*230;
+            let y = H/6 + 100 + i*230;
 
-            equipButton.x = x;
-            equipButton.y = y+20;
+            equipButton.x = x * res;
+            equipButton.y = (y+20) * res;
             equipButton.label = armor.equipped ? "Unequip" : "Equip";
 
             // Armor set panel
@@ -63,7 +63,7 @@ class ArmorStationScene extends Scene {
             }
             strokeWeight(3);
             rectMode(CENTER);
-            rect(width/2, y+40, width-20, 200, 8);
+            rect(W/2, y+40, W-20, 200, 8);
 
             
             // Title and description
@@ -73,7 +73,7 @@ class ArmorStationScene extends Scene {
             textAlign(LEFT, CENTER);
             text(armor.setName, x, y - 40);
             rectMode(CORNER);
-            text("Full Set Buff: "+armor.description, x, y+100, width-20);
+            text("Full Set Buff: "+armor.description, x, y+100, W-20);
 
             
 

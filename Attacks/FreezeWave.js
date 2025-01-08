@@ -26,6 +26,6 @@ class FreezeWave extends Attack {
     }
 
     isFinished() {
-        return this.radius > height;
+        return this.radius > H;
     }
 }

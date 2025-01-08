@@ -2,7 +2,7 @@ class Player extends Entity {
     constructor() {
         super(20 + upgradeInfo[upgradeInfo.length-2].currentLevel*5, true, 0);
 
-        this.position = createVector(width/2, height+1000);
+        this.position = createVector(W/2, H+1000);
         this.velocity = createVector();
         this.targetVelocity = createVector();
         this.maxSpeed = 2+upgradeInfo[upgradeInfo.length-1].currentLevel;  // In pixels per frame
@@ -123,8 +123,8 @@ class Player extends Entity {
         this.position.add(this.velocity);
 
         // Remain within canvas borders
-        this.position.x = constrain(this.position.x, this.hitbox.w/2, width-this.hitbox.w/2);
-        this.position.y = constrain(this.position.y, this.hitbox.h/2, height-this.hitbox.h/2);
+        this.position.x = constrain(this.position.x, this.hitbox.w/2, W-this.hitbox.w/2);
+        this.position.y = constrain(this.position.y, this.hitbox.h/2, H-this.hitbox.h/2);
 
         // Find out how long the player has been holding the space bar (if at all)
         let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar

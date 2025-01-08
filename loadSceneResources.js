@@ -12,7 +12,7 @@ function loadLevelStructure() {
         loadJSON(DATA_FOLDER_PATH+"levelStructures.json", (loadedData) => {
             levelStructures = Object.values(loadedData);
             for(let i=0; i<levelStructures.length; i++) {
-                let x = Math.sin(2.36*i) * width*0.3 + width/2;
+                let x = Math.sin(2.36*i) * W*0.3 + W/2;
                 let y = 200 + i*100;
 
                 levelStructures[i].levelNumber = i;

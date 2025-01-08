@@ -1,6 +1,6 @@
 class Debris extends Obstacle {
     constructor() {
-        super(random(width), -100, random(PI/3, 2*PI/3), 1);
+        super(random(W), -100, random(PI/3, 2*PI/3), 1);
 
         let size = random(1) < 0.8 ? 1 : 3;
         this.hitbox = {"type": "rect", "w": size*100, "h": size*20};

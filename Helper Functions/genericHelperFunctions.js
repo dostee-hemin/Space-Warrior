@@ -8,7 +8,7 @@ function distSqVector(v1, v2) {
     return distSq(v1.x, v1.y, v2.x, v2.y);
 }
 
-// Function to return true if a point is in a rectangle (the rectangle has a center x y and a width and height)
+// Function to return true if a point is in a rectangle (the rectangle has a center x y and a W and H)
 function pointInRect(pointX, pointY, rectX, rectY, rectWidth, rectHeight) {
     return pointX > rectX - rectWidth / 2 &&
             pointX < rectX + rectWidth / 2 &&
@@ -65,4 +65,14 @@ function popRandomElement(arr) {
     let chosenElement = arr[chosenIndex];
     arr.splice(chosenIndex,1);
     return chosenElement;
+}
+
+function arraysAreEqual(arr1, arr2) {
+    if(arr1.length != arr2.length) return false;
+
+    let result = true;
+    for(let i=0; i<arr1.length; i++) {
+        if(arr1[i] != arr2[i]) result = false;
+    }
+    return result;
 }

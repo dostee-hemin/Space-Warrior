@@ -5,12 +5,18 @@ let achievementManager;
 let selectedDifficulty = 0;
 let currency = 0;
 let gui;
+let prevGUIObjects = [];
 let emptyButtonStyle;
+let prevRes = 1;
+let res = 1;
+let W = 518.625;
+let H = 914;
+
 
 function setup() {
+  gui = createGui();
   windowResized();
 
-  gui = createGui();
   achievementManager = new AchievementManager();
 
   emptyButtonStyle = {
@@ -25,13 +31,18 @@ function setup() {
 }
 
 function draw() {
+  scale(res);
   background(200);
-
+  
   currentScene.draw();
   
+  // GUI needs to be drawn with no transformations
+  push();
+  scale(1/res);
   drawGui();
-  achievementManager.displayNotification();
+  pop();
   
+  achievementManager.displayNotification();
   handleSceneSwitching();
 }
 
@@ -41,6 +52,13 @@ function switchToNextScene() {
   currentScene = nextScene;
   currentScene.setup();
   nextScene = null;
+
+  // Adjust newly created GUI objects
+  prevRes = 1;
+  if(!arraysAreEqual(gui.objects, prevGUIObjects)) {
+    scaleUI();
+    prevGUIObjects = gui.objects;
+  }
 }
 
 function handleSceneSwitching() {
@@ -68,19 +86,21 @@ function handleSceneSwitching() {
 }
 
 function windowResized() {
-  // Standard dimensions used for pixel art games on various display sizes
-  let originalSize = {"w": 360, "h": 640};
-
   // Calculate the amount to scale each dimension to fill the window
-  let heightRatio = windowHeight / originalSize.h;
-  let widthRatio = windowWidth / originalSize.w;
+  let heightRatio = windowHeight / H;
+  let widthRatio = windowWidth / W;
   let ratio = Math.min(heightRatio, widthRatio);
 
   // Scaled dimensions for window
-  let newSize = {"w": originalSize.w * ratio, "h": originalSize.h * ratio};
+  let newSize = {"w": W * ratio, "h": H * ratio};
 
   // If it's the first time running this function, create a new canvas. Otherwise, resize the existing canvas
   frameCount == 0 ? createCanvas(newSize.w, newSize.h) : resizeCanvas(newSize.w, newSize.h);
+
+  // Update the resolution values and scale the GUI objects accordingly
+  prevRes = res;
+  res = heightRatio;
+  scaleUI();
 }
 
 function resetGameData() {
@@ -88,4 +108,16 @@ function resetGameData() {
   levelStructures = null;
   upgradeInfo = null;
   armorInfo = null;
+}
+
+function scaleUI() {
+  for(let object of gui.objects) {
+    object.x *= res/prevRes;
+    object.y *= res/prevRes;
+    object.w *= res/prevRes;
+    object.h *= res/prevRes;
+    object._style.textSize *= res/prevRes;
+    object._style.strokeWeight *= res/prevRes;
+    object._style.rounding *= res/prevRes;
+  }
 }

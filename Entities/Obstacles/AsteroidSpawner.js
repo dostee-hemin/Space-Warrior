@@ -4,6 +4,6 @@ class AsteroidSpawner extends Spawner {
     }
 
     spawn() {
-        new Asteroid(random(width), -100, random(PI/3, 2*PI/3));
+        new Asteroid(random(W), -100, random(PI/3, 2*PI/3));
     }
 }

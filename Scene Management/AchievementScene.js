@@ -4,7 +4,7 @@ class AchievementScene extends Scene {
     }
 
     setup() {
-        let backButton = createButton("Home", 20, height-70, 100, 50);
+        let backButton = createButton("Home", 20, H-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
     }
 
@@ -18,12 +18,12 @@ class AchievementScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Achievements', width/2, height/6);
+        text('Achievements', W/2, H/6);
 
         // Loop through all the achievements and display them vertically on the left, with their name and description shown on the right of the achievement icon, and the icon is either locked or unlocked
         for(let i=0; i<achievementInfo.length; i++) {
-            let x = width/4;
-            let y = height/4 + i*100;
+            let x = W/4;
+            let y = H/4 + i*100;
             let achievement = achievementInfo[i];
 
             // Draw the achievement icon
@@ -50,7 +50,7 @@ class AchievementScene extends Scene {
             textSize(16);
             textAlign(LEFT, TOP);
             rectMode(CORNER);
-            text(achievement.description, x+50, y-15, width-x-50);
+            text(achievement.description, x+50, y-15, W-x-50);
         }
     }
 }

@@ -2,8 +2,8 @@ class ForceField extends Entity {
     constructor() {
         super(10000, false, 0);
 
-        this.position = createVector(width/2,0);
-        this.hitbox = {'type': 'circle', 'r':width};
+        this.position = createVector(W/2,0);
+        this.hitbox = {'type': 'circle', 'r':W};
         
         this.barrierAnimation = 0;
         this.closeAnimation = -1;

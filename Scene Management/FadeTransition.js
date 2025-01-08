@@ -13,7 +13,7 @@ class FadeTransition extends Transition {
         fill(0, this.alpha);
         noStroke();
         rectMode(CORNER);
-        rect(0,0,width,height);
+        rect(0,0,W,H);
 
         // Increase or decrease the alpha based on whether we're fading in or out
         let direction = this.hasSwitchedScenes ? -1 : 1;
