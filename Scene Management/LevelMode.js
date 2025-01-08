@@ -50,28 +50,14 @@ class LevelMode extends GameScene {
         }
         this.numArmorPiecesLeft = this.levelInfo.numArmorCollectables - this.levelInfo.numArmorCollected; 
     
-
-        let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
-        continueButton.onPress = () => {
-            nextScene = new StoryScene(this.levelNumber+1);
-            transition = new FadeTransition();
-        };
-        let mapButton = createButton("Map", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
-        mapButton.onPress = () => {
-            nextScene = new MapScene();
-            transition = new FadeTransition();
-        };
-        this.levelCompletePanel.addUI([continueButton, mapButton]);
-        this.gameOverPanel.addUI([mapButton])
-
-        let mapButton2 = createButton("Map", -100, -this.pausePanel.h/2 + 215, 200, 50);
-        mapButton2.onPress = () => {
-            nextScene = new MapScene();
-            transition = new FadeTransition();
-        };
-        this.pausePanel.addUI([mapButton2]);
-
+        super.implementPanelButtonLogic({
+            "Continue": ()=>{nextScene = new StoryScene(this.levelNumber+1); transition = new FadeTransition();},
+            "Leave": ()=>{nextScene = new MapScene(); transition = new FadeTransition();},
+            "Retry": ()=>{nextScene = new LevelMode(this.levelNumber); transition = new FadeTransition();}
+        })
     }
+
+    
 
     createNextWave() {
         if(this.currentWaveIndex == this.waves.length) {

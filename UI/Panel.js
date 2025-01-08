@@ -17,6 +17,10 @@ class Panel extends UI {
         });
     }
 
+    getUI() {
+        return this.UIChildren;
+    }
+
     display() {
         if(this.startAnimation == 0) return;
 

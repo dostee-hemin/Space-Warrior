@@ -9,6 +9,7 @@ class GameScene extends Scene {
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
+        this.gameOverAnimation = 0;    
         
         this.currentWave = null;
         this.canAddTroops = true;
@@ -26,30 +27,25 @@ class GameScene extends Scene {
         player = new Player();
 
         this.levelCompletePanel = new LevelCompletePanel();
+        let continueButton = createButton("Continue", -100, this.levelCompletePanel.h/2 - 215, 200, 50);
+        let leaveButton = createButton("Leave", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
         let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
-        retryButton.onPress = () => {
-            nextScene = new GameScene(this.levelNumber);
-            transition = new FadeTransition();
-        };
-        this.levelCompletePanel.addUI([retryButton]);
+        this.levelCompletePanel.addUI([continueButton, leaveButton, retryButton]);
+
         
         this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
         let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
-        resumeButton.onPress = () => {this.resumeGame();}
+        let leaveButton2 = createButton("Leave", -100, -this.pausePanel.h/2 + 215, 200, 50);
         let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
-        retryButton2.onPress = () => {
-            nextScene = new GameScene(this.levelNumber);
-            transition = new FadeTransition();
-        };
-        this.pausePanel.addUI([resumeButton,retryButton2]);
+        resumeButton.onPress = () => {this.resumeGame();}
+        this.pausePanel.addUI([resumeButton, leaveButton2, retryButton2]);
+        
+        this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
+        this.gameOverPanel.addUI([leaveButton, retryButton]);
 
         this.pauseButton = createButton("", 10,10,50,50);
         this.pauseButton.onPress = () => {this.pauseGame();}
         this.pauseButton.setStyle(emptyButtonStyle);
-
-        this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
-        this.gameOverPanel.addUI([retryButton]);
-        this.gameOverAnimation = 0;    
     }
 
     start() {
@@ -57,6 +53,25 @@ class GameScene extends Scene {
             .addMotion('shipEntranceAnimation', 1, 1500, 'easeOutQuad')
             .addMotion('UIEntranceAnimation', 1, 1000, 'easeInOutQuad')
             .startTween()
+    }
+
+    implementPanelButtonLogic(logicInfo) {
+        let setButtonLogic = (buttons) => {
+            for(let button of buttons) {
+                // If the button isn't mentioned in the logicInfo dictionary, remove it from the panel
+                if(!(button.label in logicInfo)) {
+                    // Only the "Resume" button is safe from this
+                    if (button.label != "Resume") buttons.splice(buttons.indexOf(button),1);
+                    continue;
+                }
+    
+                // Implement the appropriate logic for the current button
+                button.onPress = logicInfo[button.label];
+            }
+        };
+        setButtonLogic(this.levelCompletePanel.getUI());
+        setButtonLogic(this.pausePanel.getUI());
+        setButtonLogic(this.gameOverPanel.getUI());       
     }
 
     draw() {

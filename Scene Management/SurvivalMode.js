@@ -8,20 +8,10 @@ class SurvivalMode extends GameScene {
     setup() {
         super.setup();
         
-        let homeButton = createButton("Home", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
-        homeButton.onPress = () => {
-            nextScene = new MainMenuScene();
-            transition = new FadeTransition();
-        };
-        this.gameOverPanel.addUI([homeButton])
-
-        let homeButton2 = createButton("Home", -100, -this.pausePanel.h/2 + 215, 200, 50);
-        homeButton2.onPress = () => {
-            nextScene = new MainMenuScene();
-            transition = new FadeTransition();
-        };
-        this.pausePanel.addUI([homeButton2]);
-
+        super.implementPanelButtonLogic({
+            "Leave": ()=>{nextScene = new MainMenuScene(); transition = new FadeTransition();},
+            "Retry": ()=>{nextScene = new SurvivalMode(); transition = new FadeTransition();}
+        })
     }
 
     createNextWave() {

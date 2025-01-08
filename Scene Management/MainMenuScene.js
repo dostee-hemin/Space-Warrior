@@ -3,6 +3,10 @@ class MainMenuScene extends Scene {
         super();
     }
 
+    preload() {
+        return Promise.all([loadLevelStructure()]);
+    }
+
     setup() {
         let y = height/2-100;
 
