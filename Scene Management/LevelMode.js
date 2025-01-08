@@ -97,14 +97,14 @@ class LevelMode extends GameScene {
         noStroke();
         textSize(40);
         textAlign(CENTER,CENTER);
-        text("$"+ this.currencyGained, width/2,30);
+        text("$"+ this.currencyGained, width/2,-70+100*this.UIEntranceAnimation);
         
-        if(this.currentWaveIndex > 0 && this.currentWaveIndex < this.waves.length+1) {
+        if(this.currentWaveIndex < this.waves.length+1) {
             fill(0);
             noStroke();
             textSize(30);
             textAlign(RIGHT,CENTER);
-            text("Wave "+this.currentWaveIndex+"/"+this.waves.length,width-10,30);
+            text("Wave "+this.currentWaveIndex+"/"+this.waves.length,width-10,-70+100*this.UIEntranceAnimation);
         }
 
         this.levelCompletePanel.display(this.levelInfo.numArmorCollected, this.levelInfo.numArmorCollectables);

@@ -197,10 +197,10 @@ class GameScene extends Scene {
         stroke(0);
         strokeWeight(2);
         rectMode(CORNER);
-        rect(10,10,50,50,8);
+        rect(10,-90+100*this.UIEntranceAnimation,50,50,8);
         strokeWeight(5);
-        line(27,20,27,50);
-        line(43,20,43,50);
+        line(27,-80+100*this.UIEntranceAnimation,27,-50+100*this.UIEntranceAnimation);
+        line(43,-80+100*this.UIEntranceAnimation,43,-50+100*this.UIEntranceAnimation);
         
         // Black cover when paused
         if(this.isPaused) {

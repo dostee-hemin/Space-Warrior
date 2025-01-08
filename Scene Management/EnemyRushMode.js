@@ -68,13 +68,13 @@ class EnemeyRushMode extends GameScene {
         
         this.levelCompletePanel.display();
 
-        if(this.currentWaveIndex > 0 && this.currentWaveIndex < this.waves.length+1) {
+        if(this.currentWaveIndex < this.waves.length+1) {
             fill(0);
             noStroke();
             textSize(30);
             textAlign(RIGHT,CENTER);
-            text("Level "+this.currentLevelIndex+"/"+levelStructures.length,width-10,30);
-            text("Wave "+this.currentWaveIndex+"/"+this.waves.length,width-10,60);
+            text("Level "+this.currentLevelIndex+"/"+levelStructures.length,width-10,-70+100*this.UIEntranceAnimation);
+            text("Wave "+this.currentWaveIndex+"/"+this.waves.length,width-10,-40+100*this.UIEntranceAnimation);
         }
     }
 }
