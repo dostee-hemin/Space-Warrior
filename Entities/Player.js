@@ -41,19 +41,25 @@ class Player extends Entity {
 
         this.specialAbilityCooldown = 0;
         this.cooldownTime = 20000;
+
+        this.isPlayable = false;
     }
 
     display() {
         // Move to the player's position
         push();
         translate(this.position.x, this.position.y);
-        scale(this.isDashing() ? 0.8 : 1);
-        let i=1, j=1;
-        if(this.targetVelocity.x < 0) i = 0;
-        else if (this.targetVelocity.x > 0) i = 2;
-        if(this.targetVelocity.y < 0) j = 0;
-        else if (this.targetVelocity.y > 0) j = 2;
-        this.rotation = lerp(this.rotation, radians(this.rotationMatrix[j][i]), 0.3);
+        let targetRotation = 0;
+        if(this.isPlayable) {
+            scale(this.isDashing() ? 0.8 : 1);
+            let i=1, j=1;
+            if(this.targetVelocity.x < 0) i = 0;
+            else if (this.targetVelocity.x > 0) i = 2;
+            if(this.targetVelocity.y < 0) j = 0;
+            else if (this.targetVelocity.y > 0) j = 2;
+            targetRotation = radians(this.rotationMatrix[j][i]);
+        }
+        this.rotation = lerp(this.rotation, targetRotation, 0.3);
         rotate(this.rotation);
 
         // Draw the ship as a triangle
@@ -62,7 +68,7 @@ class Player extends Entity {
         strokeWeight(2);
         triangle(-20,20,0,-20,20,20);
 
-        if(this.chargedStrength != 0) {
+        if(this.chargedStrength != 0 && this.isPlayable) {
             stroke(0,0,200);
             strokeWeight(10+this.chargedStrength*5);
             point(0,-this.hitbox.h);
@@ -240,7 +246,7 @@ class Player extends Entity {
         }
 
         switch(key) {
-            case 's':
+            case 's': case 'S':
                 if(this.specialAbilityCooldown == 0) {
                     this.specialAbility();
                     this.specialAbilityCooldown = 1;

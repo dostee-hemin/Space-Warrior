@@ -66,9 +66,11 @@ class GameScene extends Scene {
     }
     
     update() {
+        player.isPlayable = this.hasPlayerEnteredScene() && !this.hasLevelFinished() && !this.hasPlayerLost();
+
         // Pausing logic
         this.isPaused = this.pausePanel.isActive();
-        this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished() && !this.hasPlayerLost();
+        this.pauseButton.visible = !this.isPaused && player.isPlayable;
         if(this.isPaused) return;
 
         for(let spawner of this.obstacleSpawners) spawner.update();
@@ -239,7 +241,7 @@ class GameScene extends Scene {
     }
 
     keyPressed() {
-        if(!this.hasPlayerEnteredScene() || this.hasLevelFinished() || this.hasPlayerLost()) return;
+        if(!player.isPlayable) return;
 
         player.keyPressed();
 
