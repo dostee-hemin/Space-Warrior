@@ -35,7 +35,7 @@ class SelectDifficultyScene extends Scene {
     switchSceneBasedOnMode() {
         switch(this.mode) {
             case 'newGame':
-                this.levelInfo = levelStructures[0];
+                resetGameData();
                 nextScene = new StoryScene(0);
                 transition = new FadeTransition();
                 break;

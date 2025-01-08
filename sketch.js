@@ -20,7 +20,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new SurvivalMode();
+  nextScene = new MainMenuScene();
   currentScene = new Scene();
 }
 
@@ -81,4 +81,11 @@ function windowResized() {
 
   // If it's the first time running this function, create a new canvas. Otherwise, resize the existing canvas
   frameCount == 0 ? createCanvas(newSize.w, newSize.h) : resizeCanvas(newSize.w, newSize.h);
+}
+
+function resetGameData() {
+  currency = 0;
+  levelStructures = null;
+  upgradeInfo = null;
+  armorInfo = null;
 }
