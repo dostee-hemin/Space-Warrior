@@ -8,20 +8,10 @@ class SurvivalMode extends GameScene {
     setup() {
         super.setup();
         
-        let homeButton = createButton("Home", -100, this.levelCompletePanel.h/2 - 145, 200, 50);
-        homeButton.onPress = () => {
-            nextScene = new MainMenuScene();
-            transition = new FadeTransition();
-        };
-        this.gameOverPanel.addUI([homeButton])
-
-        let homeButton2 = createButton("Home", -100, -this.pausePanel.h/2 + 215, 200, 50);
-        homeButton2.onPress = () => {
-            nextScene = new MainMenuScene();
-            transition = new FadeTransition();
-        };
-        this.pausePanel.addUI([homeButton2]);
-
+        super.implementPanelButtonLogic({
+            "Leave": ()=>{nextScene = new MainMenuScene(); transition = new FadeTransition();},
+            "Retry": ()=>{nextScene = new SurvivalMode(); transition = new FadeTransition();}
+        })
     }
 
     createNextWave() {
@@ -30,17 +20,17 @@ class SurvivalMode extends GameScene {
         let minTroops = Math.ceil(this.currentWaveNumber/3); // Every 3 levels, add one more minimum troop
         do {
             if(Math.random() < 0.8) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*10)+minTroops
                 this.waves[0].troops.push({"type": "small", "amount": numTroops, "path": chosenPath});
             }
             if(Math.random() < 0.5) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*5)+minTroops
                 this.waves[0].troops.push({"type": "medium", "amount": numTroops, "path": chosenPath});
             }
             if(Math.random() < 0.3) {
-                let chosenPath = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+                let chosenPath = getRandomElement(possiblePaths);
                 let numTroops = Math.floor(Math.random()*3)+minTroops
                 this.waves[0].troops.push({"type": "large", "amount": numTroops, "path": chosenPath});
             }
@@ -78,17 +68,15 @@ class SurvivalMode extends GameScene {
             noStroke();
             textSize(30);
             textAlign(CENTER,CENTER);
-            text("You reached", width/2, height/2-100);
+            text("You reached", W/2, H/2-100);
             textSize(60);
-            text("Wave "+this.currentWaveNumber, width/2, height/2-40);
+            text("Wave "+this.currentWaveNumber, W/2, H/2-40);
         }
 
-        if(this.currentWaveNumber != 0) {
-            fill(0);
-            noStroke();
-            textSize(30);
-            textAlign(RIGHT,CENTER);
-            text("Wave "+this.currentWaveNumber,width-10,30);
-        }
+        fill(0);
+        noStroke();
+        textSize(30);
+        textAlign(RIGHT,CENTER);
+        text("Wave "+this.currentWaveNumber,W-10,-70+100*this.UIEntranceAnimation);
     }
 }

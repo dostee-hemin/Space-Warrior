@@ -20,7 +20,7 @@ class SpiralAttack extends Spawner {
         if(frameCount % this.fireRate == 0) {
             for(let i=0; i<16; i++) {
                 let angle = this.startingAngle + i*this.angleDifference;
-                let x = width/2;
+                let x = W/2;
                 let y = 150;
                 new Bullet(x,y,angle,4,false);
             }

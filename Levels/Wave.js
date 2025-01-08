@@ -25,7 +25,7 @@ class Wave {
         this.shipExitDuration = 2000;    // In milliseconds
         this.startTime = millis();
         
-        this.battleshipPositionX = -width;       
+        this.battleshipPositionX = -W;       
         this.waveStructure = waveStructure;
         this.hasSpawnedTroops = false;
 
@@ -42,10 +42,10 @@ class Wave {
         }
 
         this.tween = p5.tween.manager.addTween(this)
-            .addMotion('battleshipPositionX', -width, waveStructure.waitDuration)
-            .addMotion('battleshipPositionX', width/2, 2000, 'easeOutQuad')
-            .addMotion('battleshipPositionX', width/2, maxTroopTime)
-            .addMotion('battleshipPositionX', width*2, 2000, 'easeInQuad')
+            .addMotion('battleshipPositionX', -W, waveStructure.waitDuration)
+            .addMotion('battleshipPositionX', W/2, 2000, 'easeOutQuad')
+            .addMotion('battleshipPositionX', W/2, maxTroopTime)
+            .addMotion('battleshipPositionX', W*2, 2000, 'easeInQuad')
             .startTween()
     }
 
@@ -58,25 +58,25 @@ class Wave {
     }
 
     hasReleasedTroops() {
-        return this.battleshipPositionX > width || this.hasSpawnedTroops;
+        return this.battleshipPositionX > W || this.hasSpawnedTroops;
     }
 
     draw() {
         push();
         translate(this.battleshipPositionX, 0);
-        rotate(map(this.battleshipPositionX,-width,width*2,-HALF_PI,HALF_PI));
+        rotate(map(this.battleshipPositionX,-W,W*2,-HALF_PI,HALF_PI));
         fill(255);
         stroke(0);
         strokeWeight(5);
         rectMode(CENTER);
-        rect(0, 0, width*1.4, 100);
+        rect(0, 0, W*1.4, 100);
         fill(0);
         noStroke();
-        rect(0,0,width*0.8,100);
+        rect(0,0,W*0.8,100);
         pop();
 
 
-        if(!this.hasSpawnedTroops && this.battleshipPositionX > width/2-10) {
+        if(!this.hasSpawnedTroops && this.battleshipPositionX > W/2-10) {
             for(let troop of this.waveStructure.troops) {
                 if(troop.type == "boss") continue;
                 let number = troop.amount;

@@ -4,7 +4,7 @@ class RocketLauncher extends Spawner {
     }
 
     spawn() {
-        let rocketSpawnPosition = random(1) < 0.5 ? 200 : width-200;
+        let rocketSpawnPosition = random(1) < 0.5 ? 200 : W-200;
         new SmartBullet(rocketSpawnPosition,300,player,false);
     }
 }

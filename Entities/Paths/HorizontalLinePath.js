@@ -5,7 +5,7 @@ class HorizontalLinePath extends PathGenerator {
 
     generatePath(startsAtLeft = true) {
         let a = createVector(50,40);
-        let b = createVector(width-50,40);
+        let b = createVector(W-50,40);
         if(startsAtLeft) {
             this.points.push(a);
             this.points.push(b);

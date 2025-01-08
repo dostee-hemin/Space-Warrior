@@ -10,7 +10,7 @@ class UpgradeScene extends Scene {
     }
 
     setup() {
-        let backButton = createButton("Back", 20, height-70, 100, 50);
+        let backButton = createButton("Back", 20, H-70, 100, 50);
         backButton.onPress = () => {nextScene = new MapScene();};
 
         for(let i=0; i<upgradeInfo.length; i++) {
@@ -69,11 +69,11 @@ class UpgradeScene extends Scene {
         noStroke();
         textSize(24);
         textAlign(CENTER,CENTER);
-        text("Total $", width-100, 20);
+        text("Total $", W-100, 20);
         textSize(50);
-        text(currency, width-100, 55);
+        text(currency, W-100, 55);
 
-        let x = width*0.15;
+        let x = W*0.15;
         let y = 180;
         let prevType = upgradeInfo[0].type;
 
@@ -82,19 +82,19 @@ class UpgradeScene extends Scene {
 
             if(prevType != upgrade.type && !upgrade.type.includes("weapon")) {
                 y += 280;
-                x = width*0.15;
+                x = W*0.15;
             }
 
             // Set the positions of the upgrade buttons accordingly
             let unlockButton = this.upgradeButtons[i].unlock;
             let improveButton = this.upgradeButtons[i].improve;
             let equipButton = this.upgradeButtons[i].equip;
-            unlockButton.x = x-50;
-            unlockButton.y = y-50;
-            improveButton.x = x-40;
-            improveButton.y = y-90;
-            equipButton.x = x-40;
-            equipButton.y = y+90;
+            unlockButton.x = (x-50) * res;
+            unlockButton.y = (y-50) * res;
+            improveButton.x = (x-40) * res;
+            improveButton.y = (y-90) * res;
+            equipButton.x = (x-40) * res;
+            equipButton.y = (y+90) * res;
 
             // Only show the improveButton if the upgrade is unlocked and not maxed out
             if(upgrade.unlocked) {
@@ -155,7 +155,7 @@ class UpgradeScene extends Scene {
                 }
             }
 
-            x += width*0.233;
+            x += W*0.233;
             prevType = upgrade.type;
         }
 

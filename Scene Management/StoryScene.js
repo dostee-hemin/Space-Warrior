@@ -39,7 +39,7 @@ class StoryScene extends Scene {
         let isLastPage = this.currentPageNumber == storyInfo[this.storyNumber].pages.length-1;
         if(this.isSkipping || isLastPage) {
             if(this.storyNumber == storyInfo.length-1) nextScene = new MapScene();
-            else nextScene = new GameScene(this.storyNumber);
+            else nextScene = new LevelMode(this.storyNumber);
             transition = new FadeTransition();
             return;
         }
@@ -67,15 +67,15 @@ class StoryScene extends Scene {
 
         // Page images
         push();
-        translate(width/2,height/2);
+        translate(W/2,H/2);
         rotate(0.06*this.pageAnimation*(this.currentPageNumber%2==0?1:-1));
         scale(1.3+0.05*this.pageAnimation);
-        translate(-width/2,-height/2);
+        translate(-W/2,-H/2);
         imageMode(CORNER);
         let offset = p5.Vector.fromAngle(2.36*this.currentPageNumber).mult(this.currentPage.duration);
         for(let i=0; i<this.currentImages.length; i++) {
             let y = i*min(this.currentPage.duration*5,20)*this.pageAnimation;
-            image(this.currentImages[i],offset.x,offset.y-y, width, height);
+            image(this.currentImages[i],offset.x,offset.y-y, W, H);
         }
         pop();
         
@@ -86,7 +86,7 @@ class StoryScene extends Scene {
         textWrap(WORD);
         textAlign(CENTER,CENTER);
         textSize(30);
-        text(this.currentPage.text, width*0.1, height*0.7, width*0.8);
+        text(this.currentPage.text, W*0.1, H*0.7, W*0.8);
 
         // Skip text
         this.skipTextAlpha = max(this.skipTextAlpha-5, 0);
@@ -94,11 +94,11 @@ class StoryScene extends Scene {
         stroke(0, this.skipTextAlpha);
         strokeWeight(5);
         textSize(15);
-        text("Hold 's'\nto skip", width-50,height-50);
+        text("Hold 's'\nto skip", W-50,H-50);
         noFill();
         stroke(0,min(this.skipTextAlpha,100));
         strokeWeight(8);
-        circle(width-50,height-50,80);
+        circle(W-50,H-50,80);
         let duration = getHeldDownDuration(83);
         if(!this.isSkipping) {
             if(duration >= 2000) this.switchToNextPage();
@@ -106,7 +106,7 @@ class StoryScene extends Scene {
                 noFill();
                 stroke(255);
                 strokeWeight(4);
-                arc(width-50,height-50,80,80,0,duration/1000*PI);
+                arc(W-50,H-50,80,80,0,duration/1000*PI);
             }
         }
 
@@ -116,7 +116,7 @@ class StoryScene extends Scene {
         else noFill();
         noStroke();
         rectMode(CORNER);
-        rect(0,0,width,height);
+        rect(0,0,W,H);
     }
 
     keyPressed() {

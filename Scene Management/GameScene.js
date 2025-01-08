@@ -9,6 +9,7 @@ class GameScene extends Scene {
         this.shipEntranceAnimation = 0;
         this.shipExitAnimation = 0;
         this.UIEntranceAnimation = 0;
+        this.gameOverAnimation = 0;    
         
         this.currentWave = null;
         this.canAddTroops = true;
@@ -26,30 +27,24 @@ class GameScene extends Scene {
         player = new Player();
 
         this.levelCompletePanel = new LevelCompletePanel();
-        let retryButton = createButton("Retry", -100, this.levelCompletePanel.h/2 - 75, 200, 50);
-        retryButton.onPress = () => {
-            nextScene = new GameScene(this.levelNumber);
-            transition = new FadeTransition();
-        };
-        this.levelCompletePanel.addUI([retryButton]);
+        let continueButton = createButton("Continue", W/2-100, H/2+this.levelCompletePanel.h/2 - 215, 200, 50);
+        let leaveButton = createButton("Leave", W/2-100, H/2+this.levelCompletePanel.h/2 - 145, 200, 50);
+        let retryButton = createButton("Retry", W/2-100, H/2+this.levelCompletePanel.h/2 - 75, 200, 50);
+        this.levelCompletePanel.addUI([continueButton, leaveButton, retryButton]);
         
-        this.pausePanel = new Panel('Paused', width/2, height/2, width*0.8, height*0.6);
-        let resumeButton = createButton("Resume", -100, -this.pausePanel.h/2 + 75, 200, 50);
+        this.pausePanel = new Panel('Paused', W/2, H/2, W*0.8, H*0.6);
+        let resumeButton = createButton("Resume", W/2-100, H/2-this.pausePanel.h/2 + 75, 200, 50);
+        let leaveButton2 = createButton("Leave", W/2-100, H/2-this.pausePanel.h/2 + 215, 200, 50);
+        let retryButton2 = createButton("Retry", W/2-100, H/2-this.pausePanel.h/2 + 145, 200, 50);
         resumeButton.onPress = () => {this.resumeGame();}
-        let retryButton2 = createButton("Retry", -100, -this.pausePanel.h/2 + 145, 200, 50);
-        retryButton2.onPress = () => {
-            nextScene = new GameScene(this.levelNumber);
-            transition = new FadeTransition();
-        };
-        this.pausePanel.addUI([resumeButton,retryButton2]);
+        this.pausePanel.addUI([resumeButton, leaveButton2, retryButton2]);
+        
+        this.gameOverPanel = new Panel('Game Over', W/2, H/2, W*0.8, H*0.6);
+        this.gameOverPanel.addUI([leaveButton, retryButton]);
 
         this.pauseButton = createButton("", 10,10,50,50);
-        this.pauseButton.onPress = () => {this.pauseGame();}
         this.pauseButton.setStyle(emptyButtonStyle);
-
-        this.gameOverPanel = new Panel('Game Over', width/2, height/2, width*0.8, height*0.6);
-        this.gameOverPanel.addUI([retryButton]);
-        this.gameOverAnimation = 0;    
+        this.pauseButton.onPress = () => {this.pauseGame();}
     }
 
     start() {
@@ -59,6 +54,25 @@ class GameScene extends Scene {
             .startTween()
     }
 
+    implementPanelButtonLogic(logicInfo) {
+        let setButtonLogic = (buttons) => {
+            for(let button of buttons) {
+                // If the button isn't mentioned in the logicInfo dictionary, remove it from the panel
+                if(!(button.label in logicInfo)) {
+                    // Only the "Resume" button is safe from this
+                    if (button.label != "Resume") buttons.splice(buttons.indexOf(button),1);
+                    continue;
+                }
+    
+                // Implement the appropriate logic for the current button
+                button.onPress = logicInfo[button.label];
+            }
+        };
+        setButtonLogic(this.levelCompletePanel.getUI());
+        setButtonLogic(this.pausePanel.getUI());
+        setButtonLogic(this.gameOverPanel.getUI());       
+    }
+
     draw() {
         // Split into update and display for pausing logic
         this.update();
@@ -66,9 +80,11 @@ class GameScene extends Scene {
     }
     
     update() {
+        player.isPlayable = this.hasPlayerEnteredScene() && !this.hasLevelFinished() && !this.hasPlayerLost();
+
         // Pausing logic
         this.isPaused = this.pausePanel.isActive();
-        this.pauseButton.visible = !this.isPaused && this.hasLevelStarted() && !this.hasLevelFinished() && !this.hasPlayerLost();
+        this.pauseButton.visible = !this.isPaused && player.isPlayable;
         if(this.isPaused) return;
 
         for(let spawner of this.obstacleSpawners) spawner.update();
@@ -114,9 +130,9 @@ class GameScene extends Scene {
 
         // Player logic
         if(!this.hasPlayerEnteredScene())
-            player.position.y = height+600 - this.shipEntranceAnimation*800;
+            player.position.y = H+600 - this.shipEntranceAnimation*800;
         else if(this.hasLevelFinished()) 
-            player.position.y -= this.shipExitAnimation*(min(player.position.y+400,height*0.6)/20);
+            player.position.y -= this.shipExitAnimation*(min(player.position.y+400,H*0.6)/20);
         else if(this.hasPlayerLost())
             player.position.y += 1;
         else
@@ -178,34 +194,34 @@ class GameScene extends Scene {
         stroke(0, this.UIEntranceAnimation*255);
         strokeWeight(3);
         rectMode(CORNER);
-        rect(20,height-35-this.UIEntranceAnimation*60,60,this.UIEntranceAnimation *60);
+        rect(20,H-35-this.UIEntranceAnimation*60,60,this.UIEntranceAnimation *60);
         noStroke();
         fill(0,100);
-        rect(20,height-35-player.specialAbilityCooldown*60,60,player.specialAbilityCooldown*60);
+        rect(20,H-35-player.specialAbilityCooldown*60,60,player.specialAbilityCooldown*60);
 
         // Draw a health bar for the player in the bottom left corner
-        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, height-25, this.UIEntranceAnimation * player.baseHealth*6, 20);
+        player.displayHealthBar(20+this.UIEntranceAnimation*player.baseHealth*3, H-25, this.UIEntranceAnimation * player.baseHealth*6, 20);
         stroke(0);
         strokeWeight(this.UIEntranceAnimation*3);
         noFill();
-        rect(20, height-35, this.UIEntranceAnimation * (player.baseHealth+player.baseSheildHealth)*6, 20);
+        rect(20, H-35, this.UIEntranceAnimation * (player.baseHealth+player.baseSheildHealth)*6, 20);
 
         // Draw the pause button UI
         fill(255);
         stroke(0);
         strokeWeight(2);
         rectMode(CORNER);
-        rect(10,10,50,50,8);
+        rect(10,-90+100*this.UIEntranceAnimation,50,50,8);
         strokeWeight(5);
-        line(27,20,27,50);
-        line(43,20,43,50);
+        line(27,-80+100*this.UIEntranceAnimation,27,-50+100*this.UIEntranceAnimation);
+        line(43,-80+100*this.UIEntranceAnimation,43,-50+100*this.UIEntranceAnimation);
         
         // Black cover when paused
         if(this.isPaused) {
             fill(0, 100);
             noStroke();
             rectMode(CORNER);
-            rect(0,0,width,height);
+            rect(0,0,W,H);
         }
 
         this.gameOverPanel.display();
@@ -239,7 +255,7 @@ class GameScene extends Scene {
     }
 
     keyPressed() {
-        if(!this.hasPlayerEnteredScene() || this.hasLevelFinished() || this.hasPlayerLost()) return;
+        if(!player.isPlayable) return;
 
         player.keyPressed();
 

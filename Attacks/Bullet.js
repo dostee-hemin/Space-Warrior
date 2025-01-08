@@ -26,8 +26,8 @@ class Bullet extends Attack {
 
     isFinished() {
         // Once the bullet leaves the canvas bounds, it's ready to be removed
-        return super.isFinished() || this.position.x < 0 || this.position.x > width ||
-               this.position.y < 0 || this.position.y > height;
+        return super.isFinished() || this.position.x < 0 || this.position.x > W ||
+               this.position.y < 0 || this.position.y > H;
     }
 
     collidesWith(entity) {

@@ -8,13 +8,13 @@ class MapScene extends Scene {
     }
 
     setup() {
-        let backButton = createButton("Home", 20, height-70, 100, 50);
+        let backButton = createButton("Home", 20, H-70, 100, 50);
         backButton.onPress = () => {nextScene = new MainMenuScene();};
         
         let upgradeButton = createButton("Upgrades", 30,10,100,40);
         upgradeButton.onPress = () => {nextScene = new UpgradeScene();};
 
-        let armorButton = createButton("Armor Station", width-180,10,150,40);
+        let armorButton = createButton("Armor Station", W-180,10,150,40);
         armorButton.onPress = () => {nextScene = new ArmorStationScene();};
 
         for(let i=0; i<levelStructures.length; i++) {
@@ -35,7 +35,7 @@ class MapScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Map', width/2, height/6);
+        text('Map', W/2, H/6);
 
         // Level Paths
         for(let i=1; i<levelStructures.length; i++) {
@@ -67,8 +67,8 @@ class MapScene extends Scene {
         noStroke();
         textSize(24);
         textAlign(CENTER,CENTER);
-        text("Total $", width/2, 20);
+        text("Total $", W/2, 20);
         textSize(50);
-        text(currency, width/2, 55);
+        text(currency, W/2, 55);
     }
 }

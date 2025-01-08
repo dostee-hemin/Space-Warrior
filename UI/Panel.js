@@ -5,16 +5,15 @@ class Panel extends UI {
         this.title = title
         this.startAnimation = 0;
         this.UIChildren = [];
-        this.childrenOriginalPositions = [];
     }
 
     addUI(children) {
-        for (let child of children) this.UIChildren.push(child);
-        this.childrenOriginalPositions = [];
-        this.UIChildren.forEach(child => {
-            this.childrenOriginalPositions.push({x: child.x, y: child.y});
-            child.visible = false
-        });
+        this.UIChildren = this.UIChildren.concat(children);
+        for(let child of children) child.visible = false; 
+    }
+
+    getUI() {
+        return this.UIChildren;
     }
 
     display() {
@@ -31,12 +30,6 @@ class Panel extends UI {
         textSize(20*this.startAnimation);
         textAlign(CENTER, CENTER);
         text(this.title, this.x, this.y - this.h/2*this.startAnimation + 20);
-
-        // Update all the positions of the children based on the panel's position
-        this.UIChildren.forEach((child, i) => {
-            child.x = this.x + this.childrenOriginalPositions[i].x;
-            child.y = this.y + this.childrenOriginalPositions[i].y;
-        });
     }
 
     isActive() {

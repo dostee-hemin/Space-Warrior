@@ -4,16 +4,16 @@ class HorizontalBarsPath extends PathGenerator {
     }
 
     generatePath() {
-        let y = 20;
+        let y = 40;
         let barGap = 25;
         let right = true;
         let direction = 1;
         do{
             if(right) {
                 this.points.push(createVector(50,y));
-                this.points.push(createVector(width-50,y));
+                this.points.push(createVector(W-50,y));
             } else {
-                this.points.push(createVector(width-50,y));
+                this.points.push(createVector(W-50,y));
                 this.points.push(createVector(50,y));
             }
             right = !right;

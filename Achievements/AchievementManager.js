@@ -35,15 +35,15 @@ class AchievementManager {
         stroke(50, 255 * this.notificationAnimation);
         strokeWeight(4);
         rectMode(CENTER);
-        rect(width-100, height-50 * this.notificationAnimation, 180, 80, 10);
+        rect(W-100, H-50 * this.notificationAnimation, 180, 80, 10);
         fill(0, 255 * this.notificationAnimation);
         noStroke();
         textSize(16);
         textAlign(CENTER, TOP);
-        text("Achievement Unlocked", width-100, height-50 * this.notificationAnimation - 30);
+        text("Achievement Unlocked", W-100, H-50 * this.notificationAnimation - 30);
         rectMode(CENTER);
         textAlign(CENTER, CENTER);
         textSize(20);
-        text(achievementInfo[this.notificationsToDisplay[0]].name, width-100, height-50 * this.notificationAnimation+10, 180);
+        text(achievementInfo[this.notificationsToDisplay[0]].name, W-100, H-50 * this.notificationAnimation+10, 180);
     }
 }

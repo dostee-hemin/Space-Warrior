@@ -23,6 +23,6 @@ class PickupItem extends Entity {
     canCollideWithAttacks() {return false;}
 
     isFinished() {
-        return this.position.y > height + this.hitbox.r;
+        return this.position.y > H + this.hitbox.r;
     }
 }

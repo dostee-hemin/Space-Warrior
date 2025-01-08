@@ -2,7 +2,7 @@ class Player extends Entity {
     constructor() {
         super(20 + upgradeInfo[upgradeInfo.length-2].currentLevel*5, true, 0);
 
-        this.position = createVector(width/2, height+1000);
+        this.position = createVector(W/2, H+1000);
         this.velocity = createVector();
         this.targetVelocity = createVector();
         this.maxSpeed = 2+upgradeInfo[upgradeInfo.length-1].currentLevel;  // In pixels per frame
@@ -41,19 +41,25 @@ class Player extends Entity {
 
         this.specialAbilityCooldown = 0;
         this.cooldownTime = 20000;
+
+        this.isPlayable = false;
     }
 
     display() {
         // Move to the player's position
         push();
         translate(this.position.x, this.position.y);
-        scale(this.isDashing() ? 0.8 : 1);
-        let i=1, j=1;
-        if(this.targetVelocity.x < 0) i = 0;
-        else if (this.targetVelocity.x > 0) i = 2;
-        if(this.targetVelocity.y < 0) j = 0;
-        else if (this.targetVelocity.y > 0) j = 2;
-        this.rotation = lerp(this.rotation, radians(this.rotationMatrix[j][i]), 0.3);
+        let targetRotation = 0;
+        if(this.isPlayable) {
+            scale(this.isDashing() ? 0.8 : 1);
+            let i=1, j=1;
+            if(this.targetVelocity.x < 0) i = 0;
+            else if (this.targetVelocity.x > 0) i = 2;
+            if(this.targetVelocity.y < 0) j = 0;
+            else if (this.targetVelocity.y > 0) j = 2;
+            targetRotation = radians(this.rotationMatrix[j][i]);
+        }
+        this.rotation = lerp(this.rotation, targetRotation, 0.3);
         rotate(this.rotation);
 
         // Draw the ship as a triangle
@@ -62,7 +68,7 @@ class Player extends Entity {
         strokeWeight(2);
         triangle(-20,20,0,-20,20,20);
 
-        if(this.chargedStrength != 0) {
+        if(this.chargedStrength != 0 && this.isPlayable) {
             stroke(0,0,200);
             strokeWeight(10+this.chargedStrength*5);
             point(0,-this.hitbox.h);
@@ -117,8 +123,8 @@ class Player extends Entity {
         this.position.add(this.velocity);
 
         // Remain within canvas borders
-        this.position.x = constrain(this.position.x, this.hitbox.w/2, width-this.hitbox.w/2);
-        this.position.y = constrain(this.position.y, this.hitbox.h/2, height-this.hitbox.h/2);
+        this.position.x = constrain(this.position.x, this.hitbox.w/2, W-this.hitbox.w/2);
+        this.position.y = constrain(this.position.y, this.hitbox.h/2, H-this.hitbox.h/2);
 
         // Find out how long the player has been holding the space bar (if at all)
         let spaceKeyHeldDuration = getHeldDownDuration(32); // 32 is the keyCode for the space bar
@@ -207,7 +213,6 @@ class Player extends Entity {
             achievementManager.unlock(AchievementManager.DODGED);
 
             this.dashStartTime = millis();
-            return;
         }
 
         // If the player has not dashed, set the desired velocity to the right direction
@@ -241,19 +246,18 @@ class Player extends Entity {
         }
 
         switch(key) {
-            case ' ':
-                // If the space bar is double clicked, perform the special ability
-                if (isDoubleClick()) {
-                    if(this.specialAbilityCooldown == 0) {
-                        this.specialAbility();
-                        this.specialAbilityCooldown = 1;
-                        p5.tween.manager.addTween(this)
-                            .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
-                            .startTween();
-                    }
+            case 's': case 'S':
+                if(this.specialAbilityCooldown == 0) {
+                    this.specialAbility();
+                    this.specialAbilityCooldown = 1;
+                    p5.tween.manager.addTween(this)
+                        .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
+                        .startTween();
                 }
-                // If the space bar is simply clicked once, shoot a bullet
-                else this.singleShoot();
+                break;
+            case ' ':
+                // If the space bar is simply clicked once, shoot a single shot
+                this.singleShoot();
                 break;
         }
     }
@@ -262,17 +266,29 @@ class Player extends Entity {
         // Based on which arrow key was previously pressed, reset the x or y direction of the desired velocity
         switch (keyCode) {
             case UP_ARROW:
-                if (this.targetVelocity.y < 0) this.targetVelocity.y = 0
+                if (this.targetVelocity.y < 0) {
+                    if(getHeldDownDuration(DOWN_ARROW) == 0) this.targetVelocity.y = 0
+                    else this.targetVelocity.y = -this.targetVelocity.y;
+                }
                 break;
             case DOWN_ARROW:
-                if (this.targetVelocity.y > 0) this.targetVelocity.y = 0
+                if (this.targetVelocity.y > 0) {
+                    if(getHeldDownDuration(UP_ARROW) == 0) this.targetVelocity.y = 0
+                    else this.targetVelocity.y = -this.targetVelocity.y;
+                }
                 break;
 
             case LEFT_ARROW:
-                if (this.targetVelocity.x < 0) this.targetVelocity.x = 0
+                if (this.targetVelocity.x < 0) {
+                    if(getHeldDownDuration(RIGHT_ARROW) == 0) this.targetVelocity.x = 0
+                    else this.targetVelocity.x = -this.targetVelocity.x;
+                }
                 break;
             case RIGHT_ARROW:
-                if (this.targetVelocity.x > 0) this.targetVelocity.x = 0
+                if (this.targetVelocity.x > 0) {
+                    if(getHeldDownDuration(LEFT_ARROW) == 0) this.targetVelocity.x = 0
+                    else this.targetVelocity.x = -this.targetVelocity.x;
+                }
                 break;
         }
         // Make sure to scale the velocity to match the max speed
@@ -369,7 +385,7 @@ class Player extends Entity {
                     }
                     
                     for(let j=0; j<min(upgrade.currentLevel+1, targetEntities.length); j++) {
-                        new SmartBullet(x, y, this.popRandomElement(targetEntities), true);
+                        new SmartBullet(x, y, popRandomElement(targetEntities), true);
                     }
                     break;
             }
@@ -396,12 +412,5 @@ class Player extends Entity {
                     break;
             }
         }
-    }
-
-    popRandomElement(arr) {
-        let chosenIndex = Math.floor(Math.random() * arr.length);
-        let chosenElement = arr[chosenIndex];
-        arr.splice(chosenIndex,1);
-        return chosenElement;
     }
 }

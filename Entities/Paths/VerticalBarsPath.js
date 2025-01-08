@@ -18,7 +18,7 @@ class VerticalBarsPath extends PathGenerator {
             }
             downwards = !downwards;
     
-            if (x >= width-50-barGap) direction *= -1;
+            if (x >= W-50-barGap) direction *= -1;
 
             x += direction * barGap;
         } while (x >= 50+barGap);

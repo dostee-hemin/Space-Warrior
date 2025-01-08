@@ -8,7 +8,7 @@ function distSqVector(v1, v2) {
     return distSq(v1.x, v1.y, v2.x, v2.y);
 }
 
-// Function to return true if a point is in a rectangle (the rectangle has a center x y and a width and height)
+// Function to return true if a point is in a rectangle (the rectangle has a center x y and a W and H)
 function pointInRect(pointX, pointY, rectX, rectY, rectWidth, rectHeight) {
     return pointX > rectX - rectWidth / 2 &&
             pointX < rectX + rectWidth / 2 &&
@@ -53,4 +53,26 @@ function hitboxesCollide(x1, y1, hitbox1, x2, y2, hitbox2) {
             }
             break;
     }
+}
+
+function getRandomElement(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Get a random element from a list and remove it from the list
+function popRandomElement(arr) {
+    let chosenIndex = Math.floor(Math.random() * arr.length);
+    let chosenElement = arr[chosenIndex];
+    arr.splice(chosenIndex,1);
+    return chosenElement;
+}
+
+function arraysAreEqual(arr1, arr2) {
+    if(arr1.length != arr2.length) return false;
+
+    let result = true;
+    for(let i=0; i<arr1.length; i++) {
+        if(arr1[i] != arr2[i]) result = false;
+    }
+    return result;
 }
