@@ -16,8 +16,6 @@ function keyPressed() {
 }
 
 function keyReleased() {
-    currentScene.keyReleased();
-
     // Remove the key from the list of pressed keys
     for (let i=0; i<keyPressTimes.length; i++) {
         if (keyPressTimes[i][0] == keyCode) {
@@ -25,6 +23,8 @@ function keyReleased() {
             break;
         }
     }
+
+    currentScene.keyReleased();
 }
 
 // Returns true if the currently pressed key was also pressed very recently

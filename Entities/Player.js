@@ -207,7 +207,6 @@ class Player extends Entity {
             achievementManager.unlock(AchievementManager.DODGED);
 
             this.dashStartTime = millis();
-            return;
         }
 
         // If the player has not dashed, set the desired velocity to the right direction
@@ -241,19 +240,18 @@ class Player extends Entity {
         }
 
         switch(key) {
-            case ' ':
-                // If the space bar is double clicked, perform the special ability
-                if (isDoubleClick()) {
-                    if(this.specialAbilityCooldown == 0) {
-                        this.specialAbility();
-                        this.specialAbilityCooldown = 1;
-                        p5.tween.manager.addTween(this)
-                            .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
-                            .startTween();
-                    }
+            case 's':
+                if(this.specialAbilityCooldown == 0) {
+                    this.specialAbility();
+                    this.specialAbilityCooldown = 1;
+                    p5.tween.manager.addTween(this)
+                        .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
+                        .startTween();
                 }
-                // If the space bar is simply clicked once, shoot a bullet
-                else this.singleShoot();
+                break;
+            case ' ':
+                // If the space bar is simply clicked once, shoot a single shot
+                this.singleShoot();
                 break;
         }
     }
@@ -262,17 +260,29 @@ class Player extends Entity {
         // Based on which arrow key was previously pressed, reset the x or y direction of the desired velocity
         switch (keyCode) {
             case UP_ARROW:
-                if (this.targetVelocity.y < 0) this.targetVelocity.y = 0
+                if (this.targetVelocity.y < 0) {
+                    if(getHeldDownDuration(DOWN_ARROW) == 0) this.targetVelocity.y = 0
+                    else this.targetVelocity.y = -this.targetVelocity.y;
+                }
                 break;
             case DOWN_ARROW:
-                if (this.targetVelocity.y > 0) this.targetVelocity.y = 0
+                if (this.targetVelocity.y > 0) {
+                    if(getHeldDownDuration(UP_ARROW) == 0) this.targetVelocity.y = 0
+                    else this.targetVelocity.y = -this.targetVelocity.y;
+                }
                 break;
 
             case LEFT_ARROW:
-                if (this.targetVelocity.x < 0) this.targetVelocity.x = 0
+                if (this.targetVelocity.x < 0) {
+                    if(getHeldDownDuration(RIGHT_ARROW) == 0) this.targetVelocity.x = 0
+                    else this.targetVelocity.x = -this.targetVelocity.x;
+                }
                 break;
             case RIGHT_ARROW:
-                if (this.targetVelocity.x > 0) this.targetVelocity.x = 0
+                if (this.targetVelocity.x > 0) {
+                    if(getHeldDownDuration(LEFT_ARROW) == 0) this.targetVelocity.x = 0
+                    else this.targetVelocity.x = -this.targetVelocity.x;
+                }
                 break;
         }
         // Make sure to scale the velocity to match the max speed
