@@ -26,7 +26,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new MainMenuScene();
+  nextScene = new EnemyRushMode();
   currentScene = new Scene();
 }
 
@@ -99,7 +99,7 @@ function windowResized() {
 
   // Update the resolution values and scale the GUI objects accordingly
   prevRes = res;
-  res = heightRatio;
+  res = ratio;
   scaleUI();
 }
 

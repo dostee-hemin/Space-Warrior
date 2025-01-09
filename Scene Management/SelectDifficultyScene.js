@@ -40,7 +40,7 @@ class SelectDifficultyScene extends Scene {
                 transition = new FadeTransition();
                 break;
             case 'enemyRush':
-                nextScene = new EnemeyRushMode();
+                nextScene = new EnemyRushMode();
                 transition = new FadeTransition();
                 break;
             case 'survival':

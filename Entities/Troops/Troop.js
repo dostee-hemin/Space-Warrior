@@ -48,6 +48,10 @@ class Troop extends Entity {
     drawTroop() {}
     shoot() {}
 
+    canCollideWithAttacks() {
+        return !this.isStartingUp;
+    }
+
     applyEffect(effect) {
         if(effect.type == 'freeze') {
             this.startTime = millis();

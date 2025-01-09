@@ -1,6 +1,6 @@
 class Boss extends Entity {
     constructor() {
-        super(300, false, 2000);
+        super(2, false, 2000);
 
         this.FLY_IN_STAGE = 0;
         this.SHIELD_STAGE = 1;
@@ -48,7 +48,7 @@ class Boss extends Entity {
         this.position.set(this.battleshipPositionX, this.battleshipPositionY);
         this.forceField.position.set(this.battleshipPositionX, this.battleshipPositionY-200);
 
-        if(millis() - this.stageTransitionTime < this.stageTransitionDuration) return;
+        if(this.isTransitioning()) return;
 
         if(this.stage >= this.SHIELD_STAGE) {
             this.battleshipPositionX += this.velocity.x*0.3;
@@ -65,6 +65,10 @@ class Boss extends Entity {
         }
 
         for(let attack of this.attackSpawners) attack.update();
+    }
+
+    isTransitioning() {
+        return millis() - this.stageTransitionTime < this.stageTransitionDuration
     }
 
     display() { 
@@ -91,12 +95,16 @@ class Boss extends Entity {
     }
 
     getDamaged(damageAmount) {
-        if(this.stage < this.NORMAL_ATTACK_STAGE) return;
+        if(this.stage < this.NORMAL_ATTACK_STAGE || this.isTransitioning()) return;
         super.getDamaged(damageAmount);
     }
 
     isFinished() {
         return this.stage > this.END_STAGE;
+    }
+
+    canCollideWithAttacks() {
+        return this.stage < this.END_STAGE;
     }
 
     changeToNextStage() {
@@ -160,6 +168,15 @@ class Boss extends Entity {
                     ], 10000, 'easeInOutSin')
                     .onEnd(()=>{this.changeToNextStage()})
                     .startTween();
+                
+                // Remove all troops that haven't been released yet
+                for(let i=entities.length-1; i>=0; i--) {
+                    let entity = entities[i];
+
+                    if(!(entity instanceof Troop)) continue;
+
+                    if(entity.isStartingUp) entities.splice(i,1);
+                }
                 break;
         }
     }
