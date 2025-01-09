@@ -163,7 +163,7 @@ class GameScene extends Scene {
             if (attack.isFinished()) attacks.splice(i,1);
         }
 
-        if(player.isFinished() && !this.hasPlayerLost()) {
+        if(player.isFinished() && player.isPlayable) {
             p5.tween.manager.addTween(this)
                 .addMotion('gameOverAnimation', 1, 3000)
                 .onEnd(() => {this.gameOverPanel.open();})
@@ -173,13 +173,13 @@ class GameScene extends Scene {
 
     createNextWave() {}
 
-    playerWon() {
-        currency += this.currencyGained;
+    playerWon(changeInCurrency=this.currencyGained) {
+        currency += changeInCurrency;
         p5.tween.manager.addTween(this)
             .addMotion('shipExitAnimation', 0, 2000)
             .addMotion('shipExitAnimation', -0.2, 300)
             .addMotion('shipExitAnimation', 1, 1500, 'easeInQuad')
-            .onEnd(() => {this.levelCompletePanel.open(this.currencyGained);})
+            .onEnd(() => {this.levelCompletePanel.open(changeInCurrency);})
             .startTween()
     }
     

@@ -17,7 +17,7 @@ class SurvivalMode extends GameScene {
     createNextWave() {
         this.waves = [{"waitDuration": 1000, "troops":[]}];
         let possiblePaths = ["HBP","HLP","RP","XP","VBP"];
-        let minTroops = Math.ceil(this.currentWaveNumber/3); // Every 3 levels, add one more minimum troop
+        let minTroops = 1+Math.floor(this.currentWaveNumber/3); // Every 3 levels, add one more minimum troop
         do {
             if(Math.random() < 0.8) {
                 let chosenPath = getRandomElement(possiblePaths);

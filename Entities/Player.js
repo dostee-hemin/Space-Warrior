@@ -39,8 +39,12 @@ class Player extends Entity {
         ]
         this.rotation = 0;
 
+        this.singleShotCooldown = 0;
+        this.singleShotCooldownDuration = 100;
+        this.dashCooldown = 0;
+        this.dashCooldownDuration = 200;
         this.specialAbilityCooldown = 0;
-        this.cooldownTime = 20000;
+        this.specialAbilityCooldownDuration = 20000;
 
         this.isPlayable = false;
     }
@@ -205,7 +209,12 @@ class Player extends Entity {
     // Function to utilize the arrow keys to activate dashes and set the target velocity
     setTargetVelocity(direction, amount) {
         // If the player double clicked one of the arrow keys, they have activated a dash
-        if (isDoubleClick()) {
+        if (isDoubleClick() && this.dashCooldown == 0) {        
+            this.dashCooldown = 1;
+            p5.tween.manager.addTween(this)
+                .addMotion("dashCooldown", 0, this.dashCooldownDuration)
+                .startTween();
+
             // Set the x or y direction of the dash
             if (direction == 'x') this.dashDirection.x = amount;
             else this.dashDirection.y = amount;
@@ -251,7 +260,7 @@ class Player extends Entity {
                     this.specialAbility();
                     this.specialAbilityCooldown = 1;
                     p5.tween.manager.addTween(this)
-                        .addMotion("specialAbilityCooldown", 0, this.cooldownTime)
+                        .addMotion("specialAbilityCooldown", 0, this.specialAbilityCooldownDuration)
                         .startTween();
                 }
                 break;
@@ -320,6 +329,13 @@ class Player extends Entity {
     }
 
     singleShoot() {
+        if(this.singleShotCooldown != 0) return;
+
+        this.singleShotCooldown = 1;
+        p5.tween.manager.addTween(this)
+            .addMotion("singleShotCooldown", 0, this.singleShotCooldownDuration)
+            .startTween();
+            
         let x = this.position.x;
         let y = this.position.y;
 

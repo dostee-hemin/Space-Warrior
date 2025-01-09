@@ -1,4 +1,4 @@
-class EnemeyRushMode extends GameScene {
+class EnemyRushMode extends GameScene {
     constructor() {
         super();
         
@@ -13,14 +13,14 @@ class EnemeyRushMode extends GameScene {
         
         super.implementPanelButtonLogic({
             "Leave": ()=>{nextScene = new MainMenuScene(); transition = new FadeTransition();},
-            "Retry": ()=>{nextScene = new EnemeyRushMode(); transition = new FadeTransition();}
+            "Retry": ()=>{nextScene = new EnemyRushMode(); transition = new FadeTransition();}
         })
     }
 
     createNextLevel() {
         if(this.currentLevelIndex == levelStructures.length) {
             this.currentLevelIndex++;    // Increasing it one more time so we don't enter this block again
-            this.playerWon();            
+            super.playerWon(0);            
         } else if(this.currentLevelIndex < levelStructures.length) {
             this.currentWaveIndex = 0;
             this.levelInfo = getLevelInfo(this.currentLevelIndex++);
@@ -50,6 +50,10 @@ class EnemeyRushMode extends GameScene {
             this.createNextLevel();            
         } else if(this.currentWaveIndex < this.waves.length)
             this.currentWave = new Wave(this.waves[this.currentWaveIndex++]);
+    }
+
+    playerWon() {
+
     }
 
     display() {

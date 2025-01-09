@@ -25,7 +25,7 @@ class Wave {
         this.shipExitDuration = 2000;    // In milliseconds
         this.startTime = millis();
         
-        this.battleshipPositionX = -W;       
+        this.battleshipAnimation = 0;       
         this.waveStructure = waveStructure;
         this.hasSpawnedTroops = false;
 
@@ -34,7 +34,7 @@ class Wave {
         for(let troop of waveStructure.troops) {
             if(troop.type == "boss") {
                 new Boss();
-                this.hasSpawnedTroops = true;
+                this.battleshipAnimation = 1;
                 return;
             }
             let troopTime = troop.amount * typeToTime[troop.type] + 300;
@@ -42,10 +42,10 @@ class Wave {
         }
 
         this.tween = p5.tween.manager.addTween(this)
-            .addMotion('battleshipPositionX', -W, waveStructure.waitDuration)
-            .addMotion('battleshipPositionX', W/2, 2000, 'easeOutQuad')
-            .addMotion('battleshipPositionX', W/2, maxTroopTime)
-            .addMotion('battleshipPositionX', W*2, 2000, 'easeInQuad')
+            .addMotion('battleshipAnimation', 0, waveStructure.waitDuration)
+            .addMotion('battleshipAnimation', 0.5, 2000, 'easeOutQuad')
+            .addMotion('battleshipAnimation', 0.5, maxTroopTime)
+            .addMotion('battleshipAnimation', 1, 2000, 'easeInQuad')
             .startTween()
     }
 
@@ -58,13 +58,13 @@ class Wave {
     }
 
     hasReleasedTroops() {
-        return this.battleshipPositionX > W || this.hasSpawnedTroops;
+        return this.battleshipAnimation == 1;
     }
 
     draw() {
         push();
-        translate(this.battleshipPositionX, 0);
-        rotate(map(this.battleshipPositionX,-W,W*2,-HALF_PI,HALF_PI));
+        translate(W*(-1+3*this.battleshipAnimation), 0);
+        rotate(-HALF_PI+this.battleshipAnimation*PI);
         fill(255);
         stroke(0);
         strokeWeight(5);
@@ -76,7 +76,7 @@ class Wave {
         pop();
 
 
-        if(!this.hasSpawnedTroops && this.battleshipPositionX > W/2-10) {
+        if(!this.hasSpawnedTroops && this.battleshipAnimation == 0.5) {
             for(let troop of this.waveStructure.troops) {
                 if(troop.type == "boss") continue;
                 let number = troop.amount;
