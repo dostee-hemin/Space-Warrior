@@ -20,8 +20,9 @@ class DamageWave extends Attack {
     collidesWith(entity) {
         let direction = p5.Vector.sub(entity.position, this.originPoint);
         let up = createVector(0,-1);
-        let angle = direction.angleBetween(up);
-        return angle < PI/2 && distSq(this.originPoint.x, this.originPoint.y, entity.position.x, entity.position.y) < this.radius**2;
+        let angle = Math.abs(direction.angleBetween(up));
+        let distanceSquared = distSq(this.originPoint.x, this.originPoint.y, entity.position.x, entity.position.y)
+        return angle < HALF_PI && distanceSquared <= (this.radius)**2 && distanceSquared >= (this.radius-this.growSpeed*2)**2;
     }   
 
     update() {

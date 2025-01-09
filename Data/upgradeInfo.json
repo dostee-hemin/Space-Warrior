@@ -47,7 +47,7 @@
         "name": "Freeze Wave",
         "iconPath": "test_icon.png",
         "unlocked": true,
-        "equipped": true,
+        "equipped": false,
         "type": "ability",
         "prices": {
             "toUnlock": 200,
@@ -58,7 +58,7 @@
         "name": "Damage Wave",
         "iconPath": "test_icon.png",
         "unlocked": false,
-        "equipped": false,
+        "equipped": true,
         "type": "ability",
         "prices": {
             "toUnlock": 300,
