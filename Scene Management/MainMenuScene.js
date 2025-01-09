@@ -11,7 +11,7 @@ class MainMenuScene extends Scene {
         let y = H/2-100;
 
         if(hasCompletedFirstLevel()) {
-            let continueButton = createButton("Continue Game", W/2-100, y, 200,70);
+            let continueButton = createButton("Continue Game", W/2-125, y, 250,70);
             continueButton.onPress = () => {nextScene = new MapScene();};
             y+=100;
         }
@@ -30,6 +30,8 @@ class MainMenuScene extends Scene {
         if(!hasCompletedAllLevels()) {
             survivalButton.enabled = false;
             enemyRushButton.enabled = false;
+            survivalButton.setStyle('fillBg', color(75))
+            enemyRushButton.setStyle('fillBg', color(75))
         }
     }
 
