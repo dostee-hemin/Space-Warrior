@@ -163,7 +163,7 @@ class GameScene extends Scene {
             if (attack.isFinished()) attacks.splice(i,1);
         }
 
-        if(player.isFinished() && !this.hasPlayerLost()) {
+        if(player.isFinished() && player.isPlayable) {
             p5.tween.manager.addTween(this)
                 .addMotion('gameOverAnimation', 1, 3000)
                 .onEnd(() => {this.gameOverPanel.open();})
