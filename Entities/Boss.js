@@ -1,6 +1,6 @@
 class Boss extends Entity {
     constructor() {
-        super(2, false, 2000);
+        super(300, false, 2000);
 
         this.FLY_IN_STAGE = 0;
         this.SHIELD_STAGE = 1;

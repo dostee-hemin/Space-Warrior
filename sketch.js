@@ -26,7 +26,7 @@ function setup() {
     strokeWeight: 0
   };
 
-  nextScene = new SurvivalMode();
+  nextScene = new MainMenuScene();
   currentScene = new Scene();
 }
 

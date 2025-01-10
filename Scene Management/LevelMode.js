@@ -5,6 +5,7 @@ class LevelMode extends GameScene {
         this.levelNumber = levelNumber;
         this.levelInfo = null;
         this.currentWaveIndex = 0;
+        this.levelStartTime = 0;
 
         // Get all pieces of armor that haven't been unlocked yet
         this.lockedArmorPieces = [];
@@ -57,6 +58,12 @@ class LevelMode extends GameScene {
         })
     }
 
+    start() {
+        super.start();
+
+        this.levelStartTime = millis();
+    }
+
     
 
     createNextWave() {
@@ -68,11 +75,19 @@ class LevelMode extends GameScene {
     }
 
     playerWon() {
-       super.playerWon();
+        super.playerWon();
 
-       if(this.levelNumber == 0) achievementManager.unlock(AchievementManager.COMPLETED_FIRST_LEVEL);
-       unlockLevel(this.levelNumber + 1);
-       completeLevel(this.levelNumber);
+        unlockLevel(this.levelNumber + 1);
+        completeLevel(this.levelNumber);
+
+        // Check to see if achievements are unlocked
+        if(millis() - this.levelStartTime < 1000 * 60 * 2) achievementManager.unlock(AchievementManager.COMPLETE_LEVEL_UNDER_TIME_LIMIT)
+        if(this.isDamageFree) achievementManager.unlock(AchievementManager.TAKE_NO_DAMAGE)
+        if(hasCompletedAllLevels()) {
+            achievementManager.unlock(AchievementManager.COMPLETE_ALL_LEVELS)
+            if(selectedDifficulty == 1) 
+                achievementManager.unlock(AchievementManager.COMPLETE_ALL_LEVELS_ON_HARD)
+        }
     }
 
     display() {

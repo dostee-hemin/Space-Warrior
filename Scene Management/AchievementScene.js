@@ -18,12 +18,12 @@ class AchievementScene extends Scene {
         noStroke();
         textSize(30);
         textAlign(CENTER, CENTER);
-        text('Achievements', W/2, H/6);
+        text('Achievements', W/2, H/6-100);
 
         // Loop through all the achievements and display them vertically on the left, with their name and description shown on the right of the achievement icon, and the icon is either locked or unlocked
         for(let i=0; i<achievementInfo.length; i++) {
             let x = W/4;
-            let y = H/4 + i*100;
+            let y = H/6 + i*100;
             let achievement = achievementInfo[i];
 
             // Draw the achievement icon

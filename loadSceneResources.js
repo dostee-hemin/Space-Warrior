@@ -69,7 +69,6 @@ function loadArmorInfo() {
             armorInfo = Object.values(loadedData);
             for(let i=0; i<armorInfo.length; i++) {
                 armorInfo[i].equipped = false;
-                armorInfo[i].numPieces = 0;
                 for (let j = 0; j < armorInfo[i].pieces.length; j++) {
                     armorInfo[i].pieces[j].icon = loadImage("./Assets/Images/"+armorInfo[i].pieces[j].iconPath);
                     armorInfo[i].pieces[j].unlocked = false;

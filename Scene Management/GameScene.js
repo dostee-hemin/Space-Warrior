@@ -17,6 +17,9 @@ class GameScene extends Scene {
         this.currencyGained = 0;
 
         this.obstacleSpawners = [];
+
+        this.numTroopsKilledWithoutTakingDamage = 0;
+        this.isDamageFree = true;
     }
 
     preload() {
@@ -111,8 +114,11 @@ class GameScene extends Scene {
             if (entity.isFinished()) {
                 // If a troop is defeated, there's a slight chance it will drop a random armor piece
                 if(entity instanceof Troop) {
+                    this.numTroopsKilledWithoutTakingDamage++;
+                    if(this.numTroopsKilledWithoutTakingDamage == 10) 
+                        achievementManager.unlock(AchievementManager.GET_10_KILLS_WITH_NO_DAMAGE)
+                    
                     this.totalEnemies--;
-                    achievementManager.unlock(AchievementManager.KILLED_FIRST_ENEMY);
                     if(Math.random(1) <= this.numArmorPiecesLeft/this.totalEnemies) {
                         let armorPiece = this.lockedArmorPieces.splice(Math.floor(Math.random()*this.lockedArmorPieces.length),1)[0];
                         this.numArmorPiecesLeft--;
@@ -148,6 +154,11 @@ class GameScene extends Scene {
                 let entity = entities[j];
                 if(attack.hits(entity)) {
                     attack.interact(entity);
+
+                    if(entity == player) {
+                        this.numTroopsKilledWithoutTakingDamage = 0;
+                        this.isDamageFree = false;
+                    }
                 }
 
                 // This implements the logic where the warship's rockets damage its forcefield

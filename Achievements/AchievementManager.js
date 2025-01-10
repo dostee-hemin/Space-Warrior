@@ -1,7 +1,11 @@
 class AchievementManager {
-    static KILLED_FIRST_ENEMY = 0;
-    static COMPLETED_FIRST_LEVEL = 1;
-    static DODGED = 2;
+    static COMPLETE_ALL_LEVELS = 0
+    static TAKE_NO_DAMAGE = 1
+    static UNLOCK_ALL_ARMOR = 2
+    static MAX_OUT_ALL_WEAPONS = 3
+    static COMPLETE_LEVEL_UNDER_TIME_LIMIT = 4
+    static GET_10_KILLS_WITH_NO_DAMAGE = 5
+    static COMPLETE_ALL_LEVELS_ON_HARD = 6
 
     constructor() {
         this.notificationsToDisplay = [];
