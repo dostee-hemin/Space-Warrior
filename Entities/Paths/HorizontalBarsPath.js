@@ -3,10 +3,10 @@ class HorizontalBarsPath extends PathGenerator {
         super();
     }
 
-    generatePath() {
+    generatePath(startsAtLeft = true) {
         let y = 40;
         let barGap = 25;
-        let right = true;
+        let right = startsAtLeft;
         let direction = 1;
         do{
             if(right) {

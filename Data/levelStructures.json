@@ -4,10 +4,34 @@
         "obstacles": ["asteroid"],
         "waveStructure": [
             {
-                "waitDuration": 4000,
+                "waitDuration": 6000,
                 "troops": [
-                    {"type": "small", "amount": 10, "path": "XP"},
-                    {"type": "medium", "amount": 5, "path": "HBP"}
+                    {"type": "small", "amount": 3, "path": "XP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "small", "amount": 8, "path": "XP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "small", "amount": 5, "path": "RP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "medium", "amount": 3, "path": "HBP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "small", "amount": 5, "path": "RP"},
+                    {"type": "medium", "amount": 3, "path": "HBP"}
                 ]
             }
         ]
@@ -19,8 +43,26 @@
             {
                 "waitDuration": 4000,
                 "troops": [
-                    {"type": "small", "amount": 5, "path": "RP"},
-                    {"type": "medium", "amount": 3, "path": "VBP"}
+                    {"type": "small", "amount": 10, "path": "HBP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "medium", "amount": 5, "path": "HBP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "medium", "amount": 15, "path": "VBP"}
+                ]
+            },
+            {
+                "waitDuration": 2000,
+                "troops": [
+                    {"type": "small", "amount": 8, "path": "XP"},
+                    {"type": "small", "amount": 4, "path": "RP"}
                 ]
             },
             {
@@ -38,7 +80,35 @@
             {
                 "waitDuration": 4000,
                 "troops": [
-                    {"type": "large", "amount": 4, "path": "HLP"}
+                    {"type": "large", "amount": 1, "path": "RP"}
+                ]
+            },
+            {
+                "waitDuration": 1000,
+                "troops": [
+                    {"type": "small", "amount": 5, "path": "XP"},
+                    {"type": "large", "amount": 2, "path": "HLP"}
+                ]
+            },
+            {
+                "waitDuration": 1000,
+                "troops": [
+                    {"type": "small", "amount": 8, "path": "RP"},
+                    {"type": "medium", "amount": 15, "path": "HLP"}
+                ]
+            },
+            {
+                "waitDuration": 1000,
+                "troops": [
+                    {"type": "medium", "amount": 5, "path": "HBP"},
+                    {"type": "large", "amount": 3, "path": "HLP"}
+                ]
+            },
+            {
+                "waitDuration": 1000,
+                "troops": [
+                    {"type": "large", "amount": 3, "path": "HLP"},
+                    {"type": "large", "amount": 3, "path": "HLP"}
                 ]
             }
         ]
