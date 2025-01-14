@@ -1,14 +1,30 @@
 [
     {
-        "name": "First Blood",
-        "description": "Get your first kill."
+        "name": "Protector of the World",
+        "description": "Complete all levels and defeat Balsius"
     },
     {
-        "name": "The Story Begins",
-        "description": "Complete your first level."
+        "name": "Damage Free",
+        "description": "Finish a level without taking any damage"
     },
     {
-        "name": "Gymnastics",
-        "description": "Dodge in any direction."
+        "name": "Armor Collector",
+        "description": "Collect all armor pieces"
+    },
+    {
+        "name": "Weapon Master",
+        "description": "Unlock and fully upgrade all weapons"
+    },
+    {
+        "name": "Time Master",
+        "description": "Complete a level under 2 minutes"
+    },
+    {
+        "name": "10 Plus",
+        "description": "Achieve a combo streak of 10 kills without taking damage"
+    },
+    {
+        "name": "Legend",
+        "description": "Complete the game on the hardest difficulty"
     }
 ]

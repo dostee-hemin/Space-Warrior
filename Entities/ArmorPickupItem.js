@@ -9,6 +9,15 @@ class ArmorPickupItem extends PickupItem {
     if(!(otherEntity instanceof Player)) return;
 
     this.armor.unlocked = true;
+    
+    // Check to see if achievement is unlocked
+    let allArmorUnlocked = true;
+    for(let i=0; i<armorInfo.length; i++) {
+      for(let j=0; j<armorInfo[i].pieces.length; j++) {
+        if(!armorInfo[i].pieces[j].unlocked) allArmorUnlocked = false;
+      }
+    }
+    if(allArmorUnlocked) achievementManager.unlock(AchievementManager.UNLOCK_ALL_ARMOR)
   }
 
   isPickedUp() {

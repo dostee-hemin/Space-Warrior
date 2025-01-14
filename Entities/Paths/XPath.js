@@ -3,11 +3,13 @@ class XPath extends PathGenerator {
         super();
     }
 
-    generatePath() {
-        this.points.push(createVector(50,50));
-        this.points.push(createVector(W-50,150));
-        this.points.push(createVector(W-50,50));
-        this.points.push(createVector(50,150));
+    generatePath(startsAtLeft=true) {
+        let firstX = startsAtLeft ? 50 : W-50;
+        let secondX = startsAtLeft ? W-50 : 50;
+        this.points.push(createVector(firstX,50));
+        this.points.push(createVector(secondX,150));
+        this.points.push(createVector(secondX,50));
+        this.points.push(createVector(firstX,150));
         return this.points;
     }
 }

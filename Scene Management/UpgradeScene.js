@@ -39,6 +39,14 @@ class UpgradeScene extends Scene {
 
                 currency -= cost;
                 upgrade.currentLevel++;
+
+                // Check to see if achievement is unlocked
+                let allWeaponsMaxedOut = true;
+                for(let j=0; j<upgradeInfo.length; j++) {
+                    if(!upgradeInfo[j].type.includes("weapon")) continue;
+                    if(upgradeInfo[j].currentLevel != upgradeInfo[j].maxLevel) allWeaponsMaxedOut = false;
+                }
+                if(allWeaponsMaxedOut) achievementManager.unlock(AchievementManager.MAX_OUT_ALL_WEAPONS)
             };
 
             let equipButton = createButton("Equip",0,0,80,25);
